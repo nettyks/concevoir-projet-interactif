@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Atelier de projet</title>
+  <style>
+    :root{--bg:#f4f1ea;--surface:#fffdf8;--surface-2:#ece7dc;--text:#20231f;--muted:#646a63;--primary:#245c4f;--accent:#d88a3d;--line:#c8c0b3;--positive:#277a56;--negative:#a94a46;--warning:#8c570c;--attention:var(--warning);--focus:#0b57d0;--radius:18px;--max:1120px;--font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    *{box-sizing:border-box}[hidden]{display:none!important}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 10% 0%,color-mix(in srgb,var(--primary) 14%,transparent),transparent 28rem),var(--bg);color:var(--text);font-family:var(--font);line-height:1.5}
+    button,input,textarea,select{font:inherit}.shell{width:min(var(--max),calc(100% - 28px));margin:auto}.hero{padding:52px 0 24px}.eyebrow{color:var(--primary);font-size:.78rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.hero h1{font-size:clamp(2rem,6vw,4.5rem);line-height:.96;max-width:850px;margin:.3rem 0 1rem}.hero p{color:var(--muted);font-size:1.05rem;max-width:760px}
+    .toolbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);border-block:1px solid var(--line);padding:12px 0}.toolbar-row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.stats{display:flex;gap:8px;margin-right:auto}.stat{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 11px;font-size:.84rem;white-space:nowrap}.stat strong{color:var(--primary)}
+    .control,.action{border:1px solid var(--line);background:var(--surface);color:var(--text);padding:9px 12px;border-radius:11px;min-height:42px}.action{cursor:pointer;font-weight:700}.action.primary{background:var(--primary);color:white;border-color:var(--primary)}.action.danger{color:var(--negative);border-color:color-mix(in srgb,var(--negative) 45%,var(--line))}.action:hover{border-color:var(--primary)}.action:focus-visible,.choice:focus-within,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.search{min-width:190px}
+    .intro,.privacy,.restore,.storage-warning{margin:22px 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px}.intro p,.privacy p{margin:.55rem 0 0}.privacy{background:color-mix(in srgb,var(--primary) 6%,var(--surface))}.privacy strong{color:var(--primary)}.restore{border-color:var(--accent)}.storage-warning{border-color:var(--attention);background:color-mix(in srgb,var(--attention) 9%,var(--surface))}.sections{display:grid;gap:16px;padding:0 0 120px}.section{background:color-mix(in srgb,var(--surface) 94%,var(--primary));border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}.section summary{cursor:pointer;padding:20px 22px;font-size:1.15rem;font-weight:850;display:flex;align-items:center;gap:12px}.section summary::-webkit-details-marker{display:none}.section summary:after{content:"+";margin-left:auto;color:var(--primary);font-size:1.4rem}.section[open] summary:after{content:"−"}.section-desc{color:var(--muted);font-size:.92rem;font-weight:400}
+    .questions{display:grid;gap:12px;padding:0 14px 14px}.question{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:17px}.question.hidden{display:none}.question.note-required{border-color:var(--attention)}.question-head{display:flex;gap:12px}.qid{flex:0 0 auto;color:var(--primary);background:color-mix(in srgb,var(--primary) 10%,white);border-radius:8px;padding:4px 8px;height:max-content;font-size:.75rem;font-weight:850}.question h3{margin:0;font-size:1rem}.question p{margin:.4rem 0 0;color:var(--muted);font-size:.9rem}.answer{margin-top:14px}.answer-fieldset,.ranking-fieldset{border:0;padding:0;margin:0;min-width:0}.field-label{display:block;font-weight:800;font-size:.86rem;margin:0 0 7px}.required-mark{color:var(--negative)}
+    .choices{display:flex;gap:8px;flex-wrap:wrap}.choice{position:relative}.choice input{position:absolute;opacity:0;inset:50% auto auto 50%;width:1px;height:1px}.choice span{display:block;border:1px solid var(--line);border-radius:999px;padding:9px 13px;cursor:pointer;font-weight:750;font-size:.88rem;background:var(--surface)}.choice input:checked+span{background:var(--primary);border-color:var(--primary);color:white}.choice[data-tone="positive"] input:checked+span,.choice[data-tone="yes"] input:checked+span{background:var(--positive);border-color:var(--positive)}.choice[data-tone="negative"] input:checked+span,.choice[data-tone="no"] input:checked+span{background:var(--negative);border-color:var(--negative)}.choice[data-tone="warning"] input:checked+span,.choice[data-tone="attention"] input:checked+span,.choice[data-tone="maybe"] input:checked+span{background:var(--warning);border-color:var(--warning)}
+    textarea{width:100%;min-height:86px;resize:vertical;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb,var(--surface) 80%,var(--bg));color:var(--text);padding:10px}.note-block{margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}.note-block textarea{min-height:72px}.note-hint{color:var(--attention);font-size:.8rem;margin-top:6px}.help{color:var(--muted);font-size:.82rem;margin:6px 0 0}
+    .scale-wrap{display:grid;grid-template-columns:1fr auto;gap:8px 14px;align-items:center}.scale-value{font-weight:850;color:var(--primary);min-width:8ch;text-align:right}.scale-input{grid-column:1/-1;width:100%;accent-color:var(--primary)}.scale-ends{grid-column:1/-1;display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:.78rem}.scale-ends span:last-child{text-align:right}
+    .ranking-help{margin:.2rem 0 10px;color:var(--muted);font-size:.84rem}.ranking-list{list-style:none;padding:0;margin:0;display:grid;gap:8px}.ranking-item{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;border:1px solid var(--line);border-radius:11px;padding:9px;background:color-mix(in srgb,var(--surface) 82%,var(--bg))}.ranking-position{display:grid;place-items:center;width:29px;height:29px;border-radius:8px;background:var(--surface-2);font-weight:900;color:var(--primary)}.ranking-label{font-weight:750}.ranking-controls{display:flex;gap:6px}.ranking-controls .action{padding:7px 9px;min-height:36px}.ranking-controls .action:disabled{opacity:.38;cursor:not-allowed}.ranking-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}.ranking-status{color:var(--muted);font-size:.82rem}
+    .empty{text-align:center;padding:40px;color:var(--muted)}.footer{position:fixed;inset:auto 0 0;z-index:25;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:10px}.footer .shell{display:flex;align-items:center;gap:9px;justify-content:flex-end;flex-wrap:wrap}.save-state{margin-right:auto;color:var(--muted);font-size:.83rem}
+    dialog{border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--text);max-width:min(620px,calc(100% - 28px));padding:22px;box-shadow:0 22px 80px #0004}dialog::backdrop{background:#1118}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;flex-wrap:wrap}.back-to-top{position:fixed;left:16px;bottom:78px;z-index:30;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:999px;padding:10px 13px;font-weight:800;box-shadow:0 9px 30px #0002;cursor:pointer}.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+    @media(max-width:820px){html{scroll-behavior:auto}.hero{padding-top:34px}.toolbar{position:static}.stats{width:100%;overflow:auto}.search{flex:1}.section summary{display:block}.section-desc{display:block;margin-top:5px}.sections{padding-bottom:28px}.footer{position:static;padding:14px 0;background:var(--surface);backdrop-filter:none}.footer .shell{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.footer .action{width:100%}.footer .action.primary{grid-column:1/-1}.save-state{grid-column:1/-1;margin:0}.back-to-top{bottom:16px}.ranking-item{grid-template-columns:auto 1fr}.ranking-controls{grid-column:1/-1;justify-content:flex-end}.ranking-controls .action{flex:1}.scale-wrap{grid-template-columns:1fr}.scale-value{text-align:left}.scale-input,.scale-ends{grid-column:1}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+  <header class="hero shell">
+    <div class="eyebrow" id="round"></div>
+    <h1 id="title"></h1>
+    <p id="subtitle"></p>
+  </header>
+  <div class="toolbar">
+    <div class="shell toolbar-row">
+      <div class="stats" aria-live="polite" aria-atomic="true">
+        <span class="stat"><strong id="answered">0</strong>/<span id="total">0</span> répondues</span>
+        <span class="stat"><strong id="clarificationCount">0</strong> à préciser</span>
+        <span class="stat"><strong id="noteCount">0</strong> notes</span>
+      </div>
+      <label><span class="sr-only">Rechercher dans les questions</span><input class="control search" id="search" type="search" placeholder="Rechercher…"></label>
+      <label><span class="sr-only">Filtrer les questions</span><select class="control" id="filter">
+        <option value="all">Toutes</option>
+        <option value="unanswered">Sans réponse</option>
+        <option value="clarification">À préciser</option>
+        <option value="noted">Avec une note</option>
+      </select></label>
+    </div>
+  </div>
+  <main class="shell">
+    <section class="intro" id="intro"></section>
+    <aside class="privacy" id="privacy"><strong>Confidentialité</strong><p>Cette fiche fonctionne hors ligne. Vos réponses restent dans le stockage local de ce navigateur et ne sont envoyées nulle part, mais elles ne sont pas chiffrées par la fiche. N’y saisissez aucun secret; sur un appareil partagé, effacez-les après export.</p></aside>
+    <section class="restore" id="restore" hidden>Une sauvegarde locale compatible a été restaurée automatiquement pour cette fiche.</section>
+    <section class="storage-warning" id="storageWarning" role="alert" hidden></section>
+    <div class="sections" id="sections"></div>
+    <div class="empty" id="empty" hidden>Aucune question ne correspond à ce filtre.</div>
+  </main>
+  <footer class="footer">
+    <div class="shell">
+      <span class="save-state" id="saveState" aria-live="polite">Sauvegarde locale prête</span>
+      <button class="action danger" id="clearButton" type="button">Effacer mes réponses</button>
+      <button class="action" id="importButton" type="button">Importer</button>
+      <button class="action" id="jsonButton" type="button">Sauvegarde JSON</button>
+      <button class="action primary" id="markdownButton" type="button">Exporter pour l’échange</button>
+      <input id="fileInput" type="file" accept="application/json,.json" hidden tabindex="-1" aria-hidden="true">
+    </div>
+  </footer>
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Remonter tout en haut de la fiche" hidden tabindex="-1">↑ Haut</button>
+  <dialog id="dialog" aria-labelledby="dialogTitle">
+    <h2 id="dialogTitle">Questions encore incomplètes</h2>
+    <p id="dialogText"></p>
+    <div class="dialog-actions">
+      <button class="action" id="dialogClose" type="button">Continuer à répondre</button>
+      <button class="action primary" id="dialogExport" type="button">Exporter quand même</button>
+    </div>
+  </dialog>
+  <script>
+    "use strict";
+    const EXPECTED_SCHEMA="project-workshop-questionnaire-v2";
+    const ANSWERS_SCHEMA="project-workshop-answers-v2";
+    const DATA=__PROJECT_DATA__;
+    if(DATA.schema!==EXPECTED_SCHEMA)throw new Error(`Schéma de questionnaire invalide : ${DATA.schema||"absent"}`);
+    if(typeof DATA.round_id!=="string"||!DATA.round_id.trim())throw new Error("round_id est obligatoire");
+    if(typeof DATA.storage_key!=="string"||!DATA.storage_key.trim())throw new Error("storage_key est obligatoire");
+
+    const defaultDecisionChoices=[
+      {id:"yes",label:"Oui",tone:"positive",needs_clarification:false},
+      {id:"no",label:"Non",tone:"negative",needs_clarification:false},
+      {id:"maybe",label:"Peut-être",tone:"warning",needs_clarification:true}
+    ];
+    const allowedTypes=new Set(["open","decision","single_choice","multi_choice","scale","ranking"]);
+    const state=Object.create(null);
+    state.answers=Object.create(null);
+    state.notes=Object.create(null);
+    const rankingDrafts=Object.create(null);
+    let storageAvailable=true;
+    const byId=id=>document.getElementById(id);
+    const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    const questions=DATA.sections.flatMap(section=>section.questions.map(question=>({...question,sectionId:section.id,sectionTitle:section.title})));
+    const questionById=new Map(questions.map(question=>[question.id,question]));
+    if(questionById.size!==questions.length)throw new Error("Les identifiants de questions doivent être uniques");
+    questions.forEach(question=>{if(!allowedTypes.has(question.type))throw new Error(`Type inconnu pour ${question.id} : ${question.type}`)});
+
+    document.title=DATA.project.title+" — atelier";
+    byId("title").textContent=DATA.project.title;
+    byId("subtitle").textContent=DATA.project.subtitle||"Fiche de décisions interactive";
+    byId("round").textContent=DATA.round||DATA.round_id;
+    byId("intro").innerHTML="<strong>"+esc(DATA.intro_title||"Comment répondre")+"</strong><p>"+esc(DATA.intro||"Répondez seulement aux choix utiles. Vos réponses sont conservées localement dans ce navigateur et peuvent être exportées à tout moment.")+"</p>";
+    const theme=DATA.theme||{};
+    Object.entries(theme).forEach(([key,value])=>document.documentElement.style.setProperty("--"+key.replaceAll("_","-"),value));
+
+    function choicesFor(question){return question.type==="decision"&&(!Array.isArray(question.choices)||!question.choices.length)?defaultDecisionChoices:(Array.isArray(question.choices)?question.choices:[])}
+    function scaleFor(question){
+      const source=question.scale||{};
+      const min=Number.isFinite(source.min)?source.min:1;
+      const max=Number.isFinite(source.max)?source.max:5;
+      const step=Number.isFinite(source.step)&&source.step>0?source.step:1;
+      const fallback=Math.min(max,Math.max(min,min+Math.round((max-min)/(2*step))*step));
+      const initial=Number.isFinite(source.default)?source.default:fallback;
+      return {min,max,step,initial,minLabel:source.min_label||String(min),maxLabel:source.max_label||String(max)};
+    }
+    function supportsNote(question){return question.allow_note===true||typeof question.note_placeholder==="string"||choicesFor(question).some(choice=>choice.needs_clarification===true)}
+    function answerId(question){return `answer-${question.id}`}
+    function noteId(question){return `note-${question.id}`}
+    function titleId(question){return `question-title-${question.id}`}
+    function choiceInput(question,choice,kind){
+      const id=`choice-${question.id}-${choice.id}`;
+      return `<label class="choice" data-tone="${esc(choice.tone||"neutral")}"><input id="${esc(id)}" type="${kind}" name="${esc(question.id)}" value="${esc(choice.id)}" data-answer-question="${esc(question.id)}"><span>${esc(choice.label)}</span></label>`;
+    }
+    function renderAnswer(question){
+      const title=esc(question.title);
+      if(question.type==="open"){
+        return `<div class="answer"><label class="field-label" for="${esc(answerId(question))}">Votre réponse à « ${title} » <span class="required-mark" aria-hidden="true">*</span></label><textarea id="${esc(answerId(question))}" data-open-answer="${esc(question.id)}" required aria-required="true" placeholder="${esc(question.answer_placeholder||"Décrivez votre réponse…")}"></textarea></div>`;
+      }
+      if(question.type==="decision"||question.type==="single_choice"){
+        return `<fieldset class="answer answer-fieldset"><legend class="sr-only">Réponse à « ${title} »</legend><div class="choices">${choicesFor(question).map(choice=>choiceInput(question,choice,"radio")).join("")}</div></fieldset>`;
+      }
+      if(question.type==="multi_choice"){
+        return `<fieldset class="answer answer-fieldset"><legend class="field-label">Sélectionnez une ou plusieurs réponses<span class="sr-only"> pour « ${title} »</span> <span class="required-mark" aria-hidden="true">*</span></legend><div class="choices">${choicesFor(question).map(choice=>choiceInput(question,choice,"checkbox")).join("")}</div></fieldset>`;
+      }
+      if(question.type==="scale"){
+        const scale=scaleFor(question);
+        return `<div class="answer scale-wrap"><label class="field-label" for="${esc(answerId(question))}">Votre note pour « ${title} » <span class="required-mark" aria-hidden="true">*</span></label><output class="scale-value" id="scale-value-${esc(question.id)}" for="${esc(answerId(question))}" aria-live="polite">Non répondu</output><input class="scale-input" id="${esc(answerId(question))}" data-scale-answer="${esc(question.id)}" type="range" min="${scale.min}" max="${scale.max}" step="${scale.step}" value="${scale.initial}" aria-valuetext="Non répondu, valeur proposée ${scale.initial}" aria-describedby="scale-help-${esc(question.id)} scale-value-${esc(question.id)}" aria-required="true"><div class="scale-ends" id="scale-help-${esc(question.id)}"><span>${esc(scale.minLabel)}</span><span>${esc(scale.maxLabel)}</span></div></div>`;
+      }
+      const descriptionId=`ranking-help-${question.id}`;
+      return `<fieldset class="answer ranking-fieldset"><legend class="field-label">Classez toutes les propositions<span class="sr-only"> pour « ${title} »</span> <span class="required-mark" aria-hidden="true">*</span></legend><p class="ranking-help" id="${esc(descriptionId)}">Utilisez les boutons Monter et Descendre, puis validez le classement.</p><div data-ranking-list="${esc(question.id)}"></div><div class="ranking-actions"><button class="action" type="button" data-ranking-validate="${esc(question.id)}" aria-describedby="${esc(descriptionId)}">Valider ce classement</button><span class="ranking-status" id="ranking-status-${esc(question.id)}" role="status" aria-live="polite">Classement non validé</span></div></fieldset>`;
+    }
+    function renderNote(question){
+      if(!supportsNote(question))return "";
+      const hintId=`note-hint-${question.id}`;
+      const mayNeedClarification=choicesFor(question).some(choice=>choice.needs_clarification===true);
+      const noteQualifier=mayNeedClarification?"(facultative, sauf choix à préciser)":"(facultative)";
+      return `<div class="note-block"><label class="field-label" for="${esc(noteId(question))}">Précision complémentaire<span class="sr-only"> pour « ${esc(question.title)} »</span> <span class="help">${noteQualifier}</span></label><textarea id="${esc(noteId(question))}" data-note="${esc(question.id)}" aria-describedby="${esc(hintId)}" placeholder="${esc(question.note_placeholder||"Ajoutez une nuance, une variante ou une précision…")}"></textarea><div class="note-hint" id="${esc(hintId)}" role="status" aria-live="polite" hidden>Ce choix demande une précision pour pouvoir être consolidé.</div></div>`;
+    }
+    function render(){
+      byId("sections").innerHTML=DATA.sections.map((section,index)=>`<details class="section" data-section="${esc(section.id)}" ${index<2?"open":""}><summary><span>${esc(section.title)}</span><span class="section-desc">${esc(section.description||"")}</span></summary><div class="questions">${section.questions.map(question=>`<article class="question" data-question="${esc(question.id)}" data-search="${esc((question.title+" "+(question.description||"")+" "+section.title).toLowerCase())}"><div class="question-head"><span class="qid">${esc(question.id)}</span><div><h3 id="${esc(titleId(question))}">${esc(question.title)}</h3>${question.description?`<p>${esc(question.description)}</p>`:""}</div></div>${renderAnswer(question)}${renderNote(question)}</article>`).join("")}</div></details>`).join("");
+      byId("total").textContent=questions.length;
+      applyState();
+    }
+    function emptyMap(){return Object.create(null)}
+    function replaceMap(target,key,source){target[key]=emptyMap();Object.entries(source).forEach(([id,value])=>{target[key][id]=value})}
+    function choice(question,value){return choicesFor(question).find(item=>item.id===value)}
+    function answerNeedsClarification(question,value){
+      if(question.type==="decision"||question.type==="single_choice")return choice(question,value)?.needs_clarification===true;
+      if(question.type==="multi_choice"&&Array.isArray(value))return value.some(id=>choice(question,id)?.needs_clarification===true);
+      return false;
+    }
+    function validScaleValue(question,value){
+      if(typeof value!=="number"||!Number.isFinite(value))return false;
+      const scale=scaleFor(question);
+      const aligned=Math.abs((value-scale.min)/scale.step-Math.round((value-scale.min)/scale.step))<1e-8;
+      return value>=scale.min&&value<=scale.max&&aligned;
+    }
+    function validRankingValue(question,value){
+      const ids=choicesFor(question).map(item=>item.id);
+      return Array.isArray(value)&&value.length===ids.length&&new Set(value).size===ids.length&&value.every(id=>ids.includes(id));
+    }
+    function isAnswered(question){
+      const value=state.answers[question.id];
+      if(question.type==="open")return typeof value==="string"&&value.trim().length>0;
+      if(question.type==="decision"||question.type==="single_choice")return typeof value==="string"&&Boolean(choice(question,value));
+      if(question.type==="multi_choice")return Array.isArray(value)&&value.length>0&&value.every(id=>Boolean(choice(question,id)));
+      if(question.type==="scale")return validScaleValue(question,value);
+      return validRankingValue(question,value);
+    }
+    function renderRankingList(question,focusChoice,focusDirection){
+      const canonical=choicesFor(question).map(item=>item.id);
+      const current=Array.isArray(rankingDrafts[question.id])&&rankingDrafts[question.id].length===canonical.length?rankingDrafts[question.id]:canonical;
+      rankingDrafts[question.id]=[...current];
+      const labels=new Map(choicesFor(question).map(item=>[item.id,item.label]));
+      const host=document.querySelector(`[data-ranking-list="${CSS.escape(question.id)}"]`);
+      if(!host)return;
+      host.innerHTML=`<ol class="ranking-list">${current.map((id,index)=>`<li class="ranking-item"><span class="ranking-position" aria-hidden="true">${index+1}</span><span class="ranking-label">${esc(labels.get(id)||id)}</span><span class="ranking-controls"><button class="action" type="button" data-ranking-move="up" data-ranking-question="${esc(question.id)}" data-ranking-choice="${esc(id)}" aria-label="Monter ${esc(labels.get(id)||id)} dans le classement" ${index===0?"disabled":""}>↑ Monter</button><button class="action" type="button" data-ranking-move="down" data-ranking-question="${esc(question.id)}" data-ranking-choice="${esc(id)}" aria-label="Descendre ${esc(labels.get(id)||id)} dans le classement" ${index===current.length-1?"disabled":""}>↓ Descendre</button></span></li>`).join("")}</ol>`;
+      if(focusChoice){
+        requestAnimationFrame(()=>{
+          const selector=`button[data-ranking-question="${CSS.escape(question.id)}"][data-ranking-choice="${CSS.escape(focusChoice)}"][data-ranking-move="${focusDirection}"]`;
+          const preferred=host.querySelector(selector);
+          const fallback=host.querySelector(`button[data-ranking-question="${CSS.escape(question.id)}"][data-ranking-choice="${CSS.escape(focusChoice)}"]:not(:disabled)`);
+          (preferred&&!preferred.disabled?preferred:fallback)?.focus();
+        });
+      }
+    }
+    function applyState(){
+      questions.forEach(question=>{
+        const value=state.answers[question.id];
+        document.querySelectorAll(`input[data-answer-question="${CSS.escape(question.id)}"]`).forEach(input=>{input.checked=Array.isArray(value)?value.includes(input.value):value===input.value});
+        const open=document.querySelector(`[data-open-answer="${CSS.escape(question.id)}"]`);if(open)open.value=typeof value==="string"?value:"";
+        const scale=document.querySelector(`[data-scale-answer="${CSS.escape(question.id)}"]`);if(scale){const config=scaleFor(question);const answered=validScaleValue(question,value);scale.value=answered?String(value):String(config.initial);scale.setAttribute("aria-valuetext",answered?String(value):`Non répondu, valeur proposée ${config.initial}`);byId(`scale-value-${question.id}`).textContent=answered?String(value):"Non répondu"}
+        if(question.type==="ranking"){rankingDrafts[question.id]=validRankingValue(question,value)?[...value]:choicesFor(question).map(item=>item.id);renderRankingList(question);byId(`ranking-status-${question.id}`).textContent=validRankingValue(question,value)?"Classement validé":"Classement non validé"}
+        const note=document.querySelector(`[data-note="${CSS.escape(question.id)}"]`);if(note)note.value=typeof state.notes[question.id]==="string"?state.notes[question.id]:"";
+      });
+      update();
+    }
+    function storagePayload(){return {schema:ANSWERS_SCHEMA,kind:"project-workshop-answers",saved_at:new Date().toISOString(),project:DATA.project,round_id:DATA.round_id,storage_key:DATA.storage_key,answers:state.answers,notes:state.notes}}
+    function showStorageWarning(message,degraded=false){byId("storageWarning").textContent=message;byId("storageWarning").hidden=false;if(degraded){storageAvailable=false;byId("saveState").textContent="Mode sans sauvegarde locale"}}
+    function save(){
+      if(!storageAvailable)return;
+      try{localStorage.setItem(DATA.storage_key,JSON.stringify(storagePayload()));byId("saveState").textContent="Sauvegardé à "+new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})}
+      catch(error){console.warn("Sauvegarde locale indisponible",error);showStorageWarning("Le stockage local est indisponible. Vos réponses restent dans cette page, mais elles seront perdues à sa fermeture : utilisez la sauvegarde JSON.",true)}
+    }
+    function validateAnswerValue(question,value){
+      if(question.type==="open"){if(typeof value!=="string")throw new Error(`${question.id} doit contenir un texte`);return value}
+      if(question.type==="decision"||question.type==="single_choice"){if(typeof value!=="string"||!choice(question,value))throw new Error(`Valeur inconnue pour ${question.id}`);return value}
+      if(question.type==="multi_choice"){
+        if(!Array.isArray(value)||new Set(value).size!==value.length||!value.every(id=>typeof id==="string"&&choice(question,id)))throw new Error(`Sélection invalide pour ${question.id}`);
+        return [...value];
+      }
+      if(question.type==="scale"){if(!validScaleValue(question,value))throw new Error(`Note invalide pour ${question.id}`);return value}
+      if(!validRankingValue(question,value))throw new Error(`Classement invalide pour ${question.id}`);
+      return [...value];
+    }
+    function validatePayload(saved){
+      if(!saved||typeof saved!=="object"||Array.isArray(saved))throw new Error("Le fichier ne contient pas un objet JSON");
+      if(saved.schema!==ANSWERS_SCHEMA)throw new Error("Schéma incompatible");
+      if(!saved.project||typeof saved.project!=="object"||saved.project.slug!==DATA.project.slug)throw new Error("Cette sauvegarde appartient à un autre projet");
+      if(saved.round_id!==DATA.round_id)throw new Error("Cette sauvegarde appartient à un autre tour");
+      if(saved.storage_key!==DATA.storage_key)throw new Error("La clé de fiche ne correspond pas");
+      if(!saved.answers||typeof saved.answers!=="object"||Array.isArray(saved.answers))throw new Error("Le bloc answers est invalide");
+      if(!saved.notes||typeof saved.notes!=="object"||Array.isArray(saved.notes))throw new Error("Le bloc notes est invalide");
+      const answers=emptyMap();
+      for(const [id,value] of Object.entries(saved.answers)){const question=questionById.get(id);if(!question)throw new Error(`Question inconnue dans l’import : ${id}`);answers[id]=validateAnswerValue(question,value)}
+      const notes=emptyMap();
+      for(const [id,value] of Object.entries(saved.notes)){const question=questionById.get(id);if(!question)throw new Error(`Note liée à une question inconnue : ${id}`);if(!supportsNote(question))throw new Error(`La question ${id} n’accepte pas de note séparée`);if(typeof value!=="string")throw new Error(`La note de ${id} doit être un texte`);notes[id]=value}
+      return {answers,notes};
+    }
+    function load(){
+      let raw;
+      try{raw=localStorage.getItem(DATA.storage_key)}catch(error){console.warn("Lecture locale indisponible",error);showStorageWarning("Le stockage local est indisponible. Travaillez dans cette page puis exportez une sauvegarde JSON.",true);return}
+      if(!raw)return;
+      try{const restored=validatePayload(JSON.parse(raw));replaceMap(state,"answers",restored.answers);replaceMap(state,"notes",restored.notes);byId("restore").hidden=false}
+      catch(error){console.warn("Sauvegarde locale ignorée",error);showStorageWarning("Une sauvegarde locale incompatible ou endommagée a été ignorée. Vous pouvez l’effacer ou importer un export compatible.")}
+    }
+    function update(){
+      const answered=questions.filter(isAnswered).length;
+      const clarification=questions.filter(question=>answerNeedsClarification(question,state.answers[question.id])&&!(state.notes[question.id]||"").trim()).length;
+      const notes=questions.filter(question=>(state.notes[question.id]||"").trim()).length;
+      byId("answered").textContent=answered;byId("clarificationCount").textContent=clarification;byId("noteCount").textContent=notes;
+      const search=byId("search").value.trim().toLowerCase();
+      const filter=byId("filter").value;
+      let visible=0;
+      document.querySelectorAll(".question").forEach(card=>{
+        const id=card.dataset.question;
+        const question=questionById.get(id);
+        const note=(state.notes[id]||"").trim();
+        const needsClarification=answerNeedsClarification(question,state.answers[id]);
+        const matchSearch=!search||card.dataset.search.includes(search);
+        const matchFilter=filter==="all"||(filter==="unanswered"&&!isAnswered(question))||(filter==="clarification"&&needsClarification&&!note)||(filter==="noted"&&note);
+        const show=matchSearch&&matchFilter;
+        card.classList.toggle("hidden",!show);
+        card.classList.toggle("note-required",needsClarification&&!note);
+        const hint=byId(`note-hint-${id}`);if(hint)hint.hidden=!(needsClarification&&!note);
+        const noteInput=byId(noteId(question));if(noteInput){noteInput.setAttribute("aria-required",needsClarification?"true":"false");noteInput.setAttribute("aria-invalid",needsClarification&&!note?"true":"false")}
+        if(show)visible++;
+      });
+      document.querySelectorAll(".section").forEach(section=>{const has=[...section.querySelectorAll(".question")].some(card=>!card.classList.contains("hidden"));section.hidden=!has;if(search&&has)section.open=true});
+      byId("empty").hidden=visible!==0;
+    }
+    function setAnswer(question,value){state.answers[question.id]=value;save();update()}
+    function onInput(event){
+      const target=event.target;
+      if(target.matches("[data-open-answer]")){const id=target.dataset.openAnswer;if(target.value==="")delete state.answers[id];else state.answers[id]=target.value;save();update();return}
+      if(target.matches("[data-note]")){const id=target.dataset.note;if(target.value==="")delete state.notes[id];else state.notes[id]=target.value;save();update();return}
+      if(target.matches("[data-scale-answer]")){const question=questionById.get(target.dataset.scaleAnswer);const value=Number(target.value);target.setAttribute("aria-valuetext",String(value));byId(`scale-value-${question.id}`).textContent=String(value);setAnswer(question,value)}
+    }
+    function onChange(event){
+      const target=event.target;
+      if(!target.matches("[data-answer-question]"))return;
+      const question=questionById.get(target.dataset.answerQuestion);
+      if(question.type==="multi_choice"){
+        const values=choicesFor(question).filter(item=>document.querySelector(`input[data-answer-question="${CSS.escape(question.id)}"][value="${CSS.escape(item.id)}"]`)?.checked).map(item=>item.id);
+        if(values.length)state.answers[question.id]=values;else delete state.answers[question.id];save();update();
+      }else setAnswer(question,target.value);
+    }
+    function onClick(event){
+      const move=event.target.closest("[data-ranking-move]");
+      if(move){
+        const question=questionById.get(move.dataset.rankingQuestion);const order=rankingDrafts[question.id];const index=order.indexOf(move.dataset.rankingChoice);const delta=move.dataset.rankingMove==="up"?-1:1;const next=index+delta;if(next<0||next>=order.length)return;[order[index],order[next]]=[order[next],order[index]];delete state.answers[question.id];save();update();byId(`ranking-status-${question.id}`).textContent="Classement modifié : validez-le pour l’enregistrer";renderRankingList(question,move.dataset.rankingChoice,move.dataset.rankingMove);return;
+      }
+      const validate=event.target.closest("[data-ranking-validate]");
+      if(validate){const question=questionById.get(validate.dataset.rankingValidate);state.answers[question.id]=[...rankingDrafts[question.id]];save();update();byId(`ranking-status-${question.id}`).textContent="Classement validé"}
+    }
+    function exportPayload(){return {...storagePayload(),exported_at:new Date().toISOString()}}
+    function download(name,content,type){const link=document.createElement("a");link.href=URL.createObjectURL(new Blob([content],{type}));link.download=name;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(link.href),1000)}
+    function labelFor(question,id){return choice(question,id)?.label||id}
+    function formatAnswer(question,value){
+      if(!isAnswered(question))return "Sans réponse";
+      if(question.type==="open")return value.trim();
+      if(question.type==="decision"||question.type==="single_choice")return labelFor(question,value);
+      if(question.type==="multi_choice")return value.map(id=>labelFor(question,id)).join(", ");
+      if(question.type==="scale"){const scale=scaleFor(question);return `${value} sur ${scale.max}`}
+      return value.map((id,index)=>`${index+1}. ${labelFor(question,id)}`).join(" → ");
+    }
+    function markdown(){
+      const lines=[`# ${DATA.project.title}`,"",`Export du ${new Date().toLocaleString("fr-FR")}`,"",`Tour : ${DATA.round||DATA.round_id}`,`Identifiant du tour : ${DATA.round_id}`,""];
+      DATA.sections.forEach(section=>{lines.push(`## ${section.title}`,"");section.questions.forEach(raw=>{const question=questionById.get(raw.id);lines.push(`### ${question.id} — ${question.title}`,`Type : ${question.type}`,`Réponse : ${formatAnswer(question,state.answers[question.id])}`);if((state.notes[question.id]||"").trim())lines.push(`Précision : ${state.notes[question.id].trim()}`);lines.push("")})});
+      const unanswered=questions.filter(question=>!isAnswered(question)).length;
+      const unclear=questions.filter(question=>answerNeedsClarification(question,state.answers[question.id])&&!(state.notes[question.id]||"").trim()).length;
+      lines.push("## État de complétion","",`- Répondues : ${questions.length-unanswered}/${questions.length}`,`- Sans réponse : ${unanswered}`,`- Choix à préciser : ${unclear}`,"");
+      return lines.join("\n");
+    }
+    function fileStem(){return `${DATA.project.slug}-${DATA.round_id}`.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9-]+/g,"-").replace(/^-+|-+$/g,"")}
+    function requestMarkdown(){
+      const incomplete=questions.filter(question=>!isAnswered(question));
+      const unclear=questions.filter(question=>answerNeedsClarification(question,state.answers[question.id])&&!(state.notes[question.id]||"").trim());
+      if(incomplete.length||unclear.length){byId("dialogText").textContent=`${incomplete.length} question(s) sans réponse et ${unclear.length} choix demandant une précision. Rien ne sera perdu : vous pouvez exporter maintenant ou continuer plus tard.`;byId("dialog").showModal()}else exportMarkdown();
+    }
+    function exportMarkdown(){download(fileStem()+"-reponses.md",markdown(),"text/markdown;charset=utf-8")}
+    function clearAnswers(){
+      if(!window.confirm("Effacer toutes les réponses et notes de ce tour dans ce navigateur ?"))return;
+      replaceMap(state,"answers",emptyMap());replaceMap(state,"notes",emptyMap());Object.keys(rankingDrafts).forEach(id=>delete rankingDrafts[id]);
+      try{localStorage.removeItem(DATA.storage_key)}catch(error){console.warn("Effacement local impossible",error);showStorageWarning("Les réponses visibles ont été effacées, mais le stockage local reste indisponible.",true)}
+      byId("restore").hidden=true;applyState();byId("saveState").textContent="Réponses effacées";
+    }
+
+    byId("sections").addEventListener("input",onInput);
+    byId("sections").addEventListener("change",onChange);
+    byId("sections").addEventListener("click",onClick);
+    byId("search").addEventListener("input",update);
+    byId("filter").addEventListener("change",update);
+    byId("markdownButton").addEventListener("click",requestMarkdown);
+    byId("jsonButton").addEventListener("click",()=>download(fileStem()+"-sauvegarde.json",JSON.stringify(exportPayload(),null,2),"application/json"));
+    byId("importButton").addEventListener("click",()=>byId("fileInput").click());
+    byId("clearButton").addEventListener("click",clearAnswers);
+    byId("fileInput").addEventListener("change",async event=>{
+      const file=event.target.files[0];if(!file)return;
+      try{const imported=validatePayload(JSON.parse(await file.text()));replaceMap(state,"answers",imported.answers);replaceMap(state,"notes",imported.notes);applyState();save()}
+      catch(error){window.alert("Import impossible : "+error.message)}
+      event.target.value="";
+    });
+    byId("dialogClose").addEventListener("click",()=>byId("dialog").close());
+    byId("dialogExport").addEventListener("click",()=>{byId("dialog").close();exportMarkdown()});
+    const backToTop=byId("backToTop");
+    function updateBackToTop(){const show=window.scrollY>500;backToTop.hidden=!show;backToTop.tabIndex=show?0:-1}
+    window.addEventListener("scroll",updateBackToTop,{passive:true});
+    backToTop.addEventListener("click",()=>window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}));
+
+    load();render();updateBackToTop();
+  </script>
+</body>
+</html>

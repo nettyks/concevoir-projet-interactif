@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+  <title>Plan de réalisation</title>
+  <style>
+    :root{--bg:#eef2f1;--surface:#fff;--surface-2:#e3ebe8;--text:#17231f;--muted:#66716d;--primary:#155f50;--accent:#db7d35;--line:#ccd8d4;--danger:#a74646;--radius:18px;--max:1440px;--font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(145deg,color-mix(in srgb,var(--primary) 9%,var(--bg)),var(--bg) 24rem);color:var(--text);font-family:var(--font);line-height:1.45}button,input,select{font:inherit}.shell{width:min(var(--max),calc(100% - 28px));margin:auto}.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+    .hero{padding:48px 0 26px}.eyebrow{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;font-weight:850;color:var(--primary)}h1{font-size:clamp(2rem,5vw,4rem);line-height:1;margin:.4rem 0 .8rem}.subtitle{max-width:800px;color:var(--muted);font-size:1.05rem}.metrics{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}.metric{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-size:.85rem}.metric strong{color:var(--primary)}
+    .toolbar{position:sticky;top:0;z-index:10;padding:11px 0;border-block:1px solid var(--line);background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(14px)}.tools,.action-row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.plan-label{margin-right:auto;font-weight:850}.tool-field{display:flex;min-width:0}.tool-field.search-field{flex:1 1 220px;max-width:360px}.control,.button,.view-button{min-height:42px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:11px;padding:9px 12px}.control{width:100%;min-width:0}.button,.view-button{cursor:pointer;font-weight:750;white-space:normal}.button.primary{background:var(--primary);border-color:var(--primary);color:white}.action-row{margin-top:9px}.save-state{margin-right:auto;color:var(--muted);font-size:.83rem}.save-state[data-tone="error"]{color:var(--danger);font-weight:750}.view-switch{display:inline-flex;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:3px;gap:3px}.view-button{min-height:34px;border:0;padding:6px 10px;background:transparent}.view-button[aria-pressed="true"]{background:var(--primary);color:#fff}.recommendation{display:block;font-size:.62rem;font-weight:800;line-height:1.1;opacity:.78}.data-warning{margin:18px 0;padding:12px 14px;border:1px solid var(--danger);border-radius:12px;background:color-mix(in srgb,var(--danger) 7%,var(--surface));color:var(--danger);font-weight:700}
+    :where(button,input,select,summary,.scroll-region):focus-visible{outline:3px solid var(--accent);outline-offset:3px}.view-button[aria-pressed="true"]:focus-visible,.button.primary:focus-visible{outline-color:var(--text)}
+    .open-questions{margin:22px 0;background:color-mix(in srgb,var(--accent) 9%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 42%,var(--line));border-radius:var(--radius);padding:18px}.open-questions h2{margin:0 0 9px;font-size:1.08rem}.open-questions ul{margin:0;padding-left:20px}.open-questions li+li{margin-top:7px}.question-meta{color:var(--muted);font-size:.82rem}.view{padding:0 0 70px}.empty{padding:50px;text-align:center;color:var(--muted)}.scroll-hint{margin:5px 0 8px;color:var(--muted);font-size:.8rem}.scroll-region{scrollbar-gutter:stable}
+    .kanban{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(285px,1fr);gap:14px;overflow-x:auto;padding:4px 4px 22px}.column{background:color-mix(in srgb,var(--surface-2) 75%,transparent);border:1px solid var(--line);border-radius:var(--radius);padding:12px;min-height:300px}.column.fallback{border-color:var(--danger)}.column-head{display:flex;align-items:center;gap:8px;padding:4px 3px 12px}.column-head h2{font-size:.96rem;margin:0}.count{margin-left:auto;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:2px 8px;font-size:.77rem}
+    .cards{display:grid;gap:10px}.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 7px 25px #17231f0a}.card.hidden{display:none}.card-top{display:flex;gap:9px;align-items:flex-start}.id{background:color-mix(in srgb,var(--primary) 11%,white);color:var(--primary);border-radius:7px;padding:3px 7px;font-size:.72rem;font-weight:900}.phase{margin-left:auto;color:var(--muted);font-size:.72rem;text-align:right}.card h3{font-size:.98rem;margin:10px 0 6px}.objective{font-size:.88rem;margin:0 0 7px}.summary{color:var(--muted);font-size:.86rem;margin:0 0 10px}.metadata,.deps{display:flex;gap:5px;flex-wrap:wrap;font-size:.72rem}.metadata{margin:0 0 9px}.meta,.dep,.status-badge{background:var(--surface-2);border-radius:7px;padding:3px 7px}.dep.none{color:var(--muted)}.status-badge{display:inline-block;margin:0 0 9px;color:var(--primary);font-weight:800}.status-editor{margin:11px 0 0}.status-editor label{display:block;margin-bottom:4px;color:var(--muted);font-size:.73rem;font-weight:800}.status-editor select{width:100%}details{border-top:1px solid var(--line);margin-top:11px;padding-top:8px}summary{cursor:pointer;font-size:.8rem;font-weight:800;color:var(--primary)}.detail{font-size:.8rem;margin-top:8px}.detail h4{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;margin:10px 0 4px;color:var(--muted)}.detail ul{margin:0;padding-left:18px}.question-list{color:var(--danger)}
+    .roadmap{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(310px,1fr);gap:0;overflow-x:auto;padding:8px 4px 30px}.lane{position:relative;padding:0 12px}.lane.fallback .lane-head{border-color:var(--danger)}.lane:not(:last-child):after{content:"→";position:absolute;right:-9px;top:20px;color:var(--accent);font-size:1.35rem;font-weight:900;z-index:2}.lane-head{min-height:58px;border-bottom:3px solid var(--primary);margin-bottom:12px}.lane-head .index{color:var(--accent);font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.1em}.lane-head h2{font-size:1rem;margin:3px 0}.roadmap .card{margin-bottom:10px}.milestone{background:var(--primary);color:white;border-radius:12px;padding:10px 12px;margin:12px 0;font-size:.82rem;font-weight:750}
+    .back-to-top{position:fixed;left:16px;bottom:16px;z-index:30;border:1px solid var(--line);background:color-mix(in srgb,var(--surface) 94%,transparent);color:var(--text);border-radius:999px;padding:10px 13px;font-weight:800;box-shadow:0 9px 30px #0002;cursor:pointer;opacity:0;transform:translateY(10px);pointer-events:none;transition:.2s}.back-to-top.show{opacity:1;transform:none;pointer-events:auto}
+    @media(max-width:760px){.hero{padding-top:32px}.toolbar{position:static}.tools>*{flex:1 1 100%;max-width:none!important}.plan-label{margin:0}.view-switch{display:flex}.view-button{flex:1 1 50%}.tool-field{width:100%}.action-row .button{flex:1 1 calc(50% - 9px)}.save-state{flex:1 1 100%;order:10;margin:2px 0 0}.open-questions{padding:14px}.kanban,.roadmap{grid-auto-columns:minmax(88vw,1fr)}}
+    @media(max-width:430px){.action-row .button{flex-basis:100%}.shell{width:min(var(--max),calc(100% - 20px))}}
+    @media print{.toolbar,.back-to-top,.scroll-hint,.data-warning{display:none}.kanban,.roadmap{display:block;overflow:visible}.column,.lane{break-inside:avoid;margin-bottom:14px}.lane:not(:last-child):after{display:none}.card details{display:block}.card details>summary{display:none}.status-editor{display:none}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+  <header class="hero shell">
+    <div class="eyebrow" id="viewLabel"></div>
+    <h1 id="title"></h1>
+    <p class="subtitle" id="subtitle"></p>
+    <div class="metrics">
+      <span class="metric"><strong id="segmentCount">0</strong> segments</span>
+      <span class="metric"><strong id="phaseCount">0</strong> phases</span>
+      <span class="metric"><strong id="openCount">0</strong> points à préciser</span>
+      <span class="metric"><strong id="doneCount">0</strong> terminés</span>
+    </div>
+  </header>
+  <div class="toolbar">
+    <div class="shell tools">
+      <span class="plan-label" id="planStateLabel">Plan de réalisation</span>
+      <div class="view-switch" role="group" aria-label="Choisir la vue du plan">
+        <button class="view-button" id="kanbanButton" type="button" data-view="kanban" aria-pressed="false">Kanban<span class="recommendation" id="kanbanRecommendation" hidden>Vue recommandée</span></button>
+        <button class="view-button" id="roadmapButton" type="button" data-view="roadmap" aria-pressed="false">Roadmap<span class="recommendation" id="roadmapRecommendation" hidden>Vue recommandée</span></button>
+      </div>
+      <label class="tool-field search-field"><span class="sr-only">Rechercher un segment</span><input class="control" id="search" type="search" placeholder="Rechercher un segment…"></label>
+      <label class="tool-field"><span class="sr-only">Filtrer par phase</span><select class="control" id="phaseFilter"><option value="all">Toutes les phases</option></select></label>
+    </div>
+    <div class="shell action-row">
+      <span class="save-state" id="saveState" aria-live="polite">État local prêt</span>
+      <button class="button" id="jsonExportButton" type="button">Exporter l’état JSON</button>
+      <button class="button" id="importButton" type="button">Importer un état JSON</button>
+      <button class="button" id="resetButton" type="button">Réinitialiser l’état</button>
+      <button class="button" id="printButton" type="button">Imprimer / PDF</button>
+      <button class="button primary" id="markdownButton" type="button">Exporter le plan Markdown</button>
+      <input id="fileInput" type="file" accept="application/json,.json" hidden tabindex="-1" aria-hidden="true">
+    </div>
+  </div>
+  <main class="shell">
+    <p class="data-warning" id="dataWarning" hidden></p>
+    <section class="open-questions" id="openPanel" aria-labelledby="openTitle">
+      <h2 id="openTitle">À préciser avec l’utilisateur</h2>
+      <ul id="openQuestions"></ul>
+    </section>
+    <section class="view" id="view"></section>
+  </main>
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Remonter tout en haut de la fiche" aria-hidden="true" tabindex="-1">↑ Haut</button>
+  <script>
+    const DATA=__PROJECT_DATA__;
+    const PLAN_SCHEMA="project-workshop-planning-v2";
+    const STATE_SCHEMA="project-workshop-planning-state-v2";
+    const byId=id=>document.getElementById(id);
+    const esc=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+    const array=value=>Array.isArray(value)?value:[];
+    const text=value=>typeof value==="string"?value.trim():"";
+    const metricText=value=>typeof value==="number"&&Number.isFinite(value)?String(value):text(value);
+    const orderOf=value=>Number.isFinite(Number(value))?Number(value):Number.MAX_SAFE_INTEGER;
+    const validView=value=>value==="kanban"||value==="roadmap";
+    const project=DATA.project&&typeof DATA.project==="object"?DATA.project:{};
+    const projectTitle=text(project.title)||"Projet sans titre";
+    const projectSlug=text(project.slug)||"projet";
+    const storageKey=text(DATA.storage_key);
+    const initialView=validView(DATA.view)?DATA.view:"roadmap";
+    const defaultColumns=[
+      {id:"a-preciser",title:"À préciser"},
+      {id:"pret",title:"Prêt"},
+      {id:"en-cours",title:"En cours"},
+      {id:"verification",title:"Vérification"},
+      {id:"termine",title:"Terminé"}
+    ];
+    const baseColumns=(array(DATA.columns).length?DATA.columns:defaultColumns).map((item,index)=>({id:text(item?.id)||`etat-${index+1}`,title:text(item?.title)||text(item?.id)||`État ${index+1}`}));
+    const normalizeSegment=(item,index)=>{
+      const source=item&&typeof item==="object"?item:{};
+      return {...source,id:text(source.id)||`segment-sans-id-${index+1}`,title:text(source.title)||"Segment sans titre",phase:text(source.phase)||"__phase_non_renseignee",status:text(source.status)||"__statut_non_renseigne",order:orderOf(source.order),__index:index};
+    };
+    const segments=array(DATA.segments).map(normalizeSegment);
+    const declaredPhases=array(DATA.phases).filter(item=>item&&typeof item==="object"&&text(item.id)).map((item,index)=>({...item,id:text(item.id),title:text(item.title)||text(item.id),order:orderOf(item.order),__declared:true,__index:index}));
+    const declaredPhaseIds=new Set(declaredPhases.map(item=>item.id));
+    const orphanPhaseIds=[...new Set(segments.map(item=>item.phase).filter(id=>!declaredPhaseIds.has(id)))];
+    const orphanPhases=orphanPhaseIds.map((id,index)=>({id,title:id==="__phase_non_renseignee"?"Phase non renseignée":`Phase non référencée : ${id}`,order:Number.MAX_SAFE_INTEGER,__declared:false,__index:index}));
+    const phases=[...declaredPhases,...orphanPhases].sort((a,b)=>a.order-b.order||a.__index-b.__index||a.title.localeCompare(b.title,"fr"));
+    const phaseIndex=new Map(phases.map((phase,index)=>[phase.id,index]));
+    const phaseById=id=>phases.find(phase=>phase.id===id)||{id,title:`Phase non référencée : ${id}`,__declared:false};
+    const sortedSegments=()=>[...segments].sort((a,b)=>(phaseIndex.get(a.phase)??Number.MAX_SAFE_INTEGER)-(phaseIndex.get(b.phase)??Number.MAX_SAFE_INTEGER)||a.order-b.order||a.id.localeCompare(b.id,"fr")||a.__index-b.__index);
+    const initialStatuses=Object.fromEntries(segments.map(segment=>[segment.id,segment.status]));
+    const segmentIds=new Set(segments.map(segment=>segment.id));
+    const allowedStatusIds=new Set(baseColumns.map(column=>column.id));
+    const state={view:initialView,statuses:{...initialStatuses}};
+    const theme=DATA.theme||{};
+    Object.entries(theme).forEach(([key,value])=>document.documentElement.style.setProperty("--"+key.replaceAll("_","-"),value));
+
+    function normalizeOpenQuestion(item,index,sourceSegment=""){
+      if(item&&typeof item==="object")return {id:text(item.id)||`Q${index+1}`,text:text(item.text)||"Point ouvert sans libellé",severity:text(item.severity)||"à préciser",segment:text(item.segment)||sourceSegment};
+      return {id:sourceSegment?`${sourceSegment}-Q${index+1}`:`Q${index+1}`,text:text(item)||"Point ouvert sans libellé",severity:"à préciser",segment:sourceSegment};
+    }
+    const globalQuestions=array(DATA.open_questions).map((item,index)=>normalizeOpenQuestion(item,index));
+    const segmentQuestions=segments.flatMap(segment=>array(segment.questions).map((item,index)=>normalizeOpenQuestion(item,index,segment.id)));
+    const allQuestions=[...globalQuestions,...segmentQuestions];
+
+    function statusOf(segment){return text(state.statuses[segment.id])||"__statut_non_renseigne"}
+    function statusLabel(status){return baseColumns.find(column=>column.id===status)?.title||(status==="__statut_non_renseigne"?"Statut non renseigné":`Statut non reconnu : ${status}`)}
+    function columnsForState(){
+      const known=new Set(baseColumns.map(column=>column.id));
+      const extras=[...new Set(segments.map(statusOf).filter(status=>!known.has(status)))].map(status=>({id:status,title:statusLabel(status),fallback:true}));
+      return [...baseColumns,...extras];
+    }
+    function setSaveState(message,tone="ok"){
+      byId("saveState").textContent=message;
+      byId("saveState").dataset.tone=tone;
+    }
+    function statePayload(){
+      return {schema:STATE_SCHEMA,source_schema:DATA.schema||"",exported_at:new Date().toISOString(),project:{title:projectTitle,slug:projectSlug},storage_key:storageKey,view:state.view,statuses:Object.fromEntries(segments.map(segment=>[segment.id,statusOf(segment)]))};
+    }
+    function validateStatePayload(saved){
+      if(!saved||typeof saved!=="object"||Array.isArray(saved))throw new Error("le fichier ne contient pas un objet JSON");
+      if(saved.schema!==STATE_SCHEMA)throw new Error("schéma d’état incompatible");
+      if(saved.source_schema!==PLAN_SCHEMA)throw new Error("schéma du plan source incompatible");
+      if(!saved.project||saved.project.slug!==projectSlug)throw new Error("cet état appartient à un autre projet");
+      if(saved.storage_key!==storageKey)throw new Error("la clé de plan ne correspond pas");
+      if(!validView(saved.view))throw new Error("vue inconnue");
+      if(!saved.statuses||typeof saved.statuses!=="object"||Array.isArray(saved.statuses))throw new Error("la liste des statuts est invalide");
+      const keys=Object.keys(saved.statuses);
+      if(keys.length!==segmentIds.size||keys.some(id=>!segmentIds.has(id)))throw new Error("la liste des segments ne correspond pas à ce plan");
+      const statuses=Object.create(null);
+      segments.forEach(segment=>{
+        const status=saved.statuses[segment.id];
+        if(typeof status!=="string"||!allowedStatusIds.has(status))throw new Error(`statut invalide pour ${segment.id}`);
+        statuses[segment.id]=status;
+      });
+      return {view:saved.view,statuses};
+    }
+    function persist(message=""){
+      if(!storageKey){setSaveState("Sauvegarde locale indisponible : storage_key absent.","error");return false}
+      try{
+        localStorage.setItem(storageKey,JSON.stringify({...statePayload(),saved_at:new Date().toISOString()}));
+        setSaveState(message||`Sauvegardé localement à ${new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})}`);
+        return true;
+      }catch(error){setSaveState(`Sauvegarde locale impossible : ${error.message}`,"error");return false}
+    }
+    function loadState(){
+      if(!storageKey){setSaveState("Sauvegarde locale indisponible : storage_key absent.","error");return}
+      try{
+        const raw=localStorage.getItem(storageKey);
+        if(!raw){setSaveState("Aucun état local enregistré.");return}
+        const saved=validateStatePayload(JSON.parse(raw));
+        state.statuses={...saved.statuses};
+        state.view=saved.view;
+        setSaveState("État local restauré.");
+      }catch(error){setSaveState(`État local illisible : ${error.message}`,"error")}
+    }
+    function updateHeader(){
+      document.title=projectTitle+" — plan";
+      byId("title").textContent=projectTitle;
+      byId("subtitle").textContent=text(project.subtitle)||"Vue complète de la réalisation et de son ordre logique.";
+      byId("viewLabel").textContent=state.view==="kanban"?"Kanban pilotable":"Roadmap horizontale";
+      byId("planStateLabel").textContent=allQuestions.length?"Plan de réalisation — cadrage à compléter":"Plan de réalisation";
+      byId("segmentCount").textContent=segments.length;
+      byId("phaseCount").textContent=phases.length;
+      byId("openCount").textContent=allQuestions.length;
+      byId("doneCount").textContent=segments.filter(segment=>statusOf(segment)==="termine").length;
+      document.querySelectorAll("[data-view]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.view===state.view)));
+      byId("kanbanRecommendation").hidden=initialView!=="kanban";
+      byId("roadmapRecommendation").hidden=initialView!=="roadmap";
+    }
+    function renderOpenQuestions(){
+      if(!allQuestions.length){byId("openPanel").hidden=true;return}
+      byId("openPanel").hidden=false;
+      byId("openQuestions").innerHTML=allQuestions.map(item=>`<li><strong>${esc(item.id)}</strong> — ${esc(item.text)} <span class="question-meta">${item.segment?`Segment ${esc(item.segment)} · `:""}${esc(item.severity)}</span></li>`).join("");
+    }
+    function renderWarnings(){
+      const warnings=[];
+      if(DATA.schema!==PLAN_SCHEMA)warnings.push(`Schéma inattendu : ${text(DATA.schema)||"absent"}. La fiche affiche les données avec ses mécanismes de repli.`);
+      const orphanCount=segments.filter(segment=>!declaredPhaseIds.has(segment.phase)).length;
+      if(orphanCount)warnings.push(`${orphanCount} segment(s) utilisent une phase absente du référentiel.`);
+      const warning=byId("dataWarning");
+      warning.hidden=!warnings.length;
+      warning.textContent=warnings.join(" ");
+    }
+    function list(title,items,className=""){
+      return array(items).length?`<h4>${esc(title)}</h4><ul class="${esc(className)}">${items.map(item=>`<li>${esc(item&&typeof item==="object"?(item.text||JSON.stringify(item)):item)}</li>`).join("")}</ul>`:"";
+    }
+    function metadata(segment){
+      const items=[];
+      if(text(segment.owner))items.push(`Responsable : ${segment.owner}`);
+      if(metricText(segment.effort))items.push(`Effort : ${metricText(segment.effort)}`);
+      if(metricText(segment.priority))items.push(`Priorité : ${metricText(segment.priority)}`);
+      return items.length?`<div class="metadata">${items.map(item=>`<span class="meta">${esc(item)}</span>`).join("")}</div>`:"";
+    }
+    function statusOptions(current){
+      const options=[...baseColumns];
+      if(!options.some(option=>option.id===current))options.push({id:current,title:statusLabel(current)});
+      return options.map(option=>`<option value="${esc(option.id)}" ${option.id===current?"selected":""}>${esc(option.title)}</option>`).join("");
+    }
+    function card(segment,editable=false){
+      const deps=array(segment.dependencies);
+      const currentStatus=statusOf(segment);
+      const phase=phaseById(segment.phase);
+      const searchable=[segment.id,segment.title,segment.objective,segment.summary,segment.phase,currentStatus,segment.owner,segment.effort,segment.priority,...array(segment.decision_refs),...deps,...array(segment.deliverables),...array(segment.acceptance),...array(segment.prerequisites),...array(segment.risks),...array(segment.questions)].join(" ").toLowerCase();
+      const statusControl=editable?`<div class="status-editor"><label for="status-${segment.__index}">État de ${esc(segment.id)}</label><select class="control" id="status-${segment.__index}" data-status-segment="${esc(segment.id)}">${statusOptions(currentStatus)}</select></div>`:`<span class="status-badge">${esc(statusLabel(currentStatus))}</span>`;
+      return `<article class="card" data-phase="${esc(segment.phase)}" data-search="${esc(searchable)}">
+        <div class="card-top"><span class="id">${esc(segment.id)}</span><span class="phase">${esc(phase.title)}</span></div>
+        <h3>${esc(segment.title)}</h3>
+        <p class="objective"><strong>Objectif :</strong> ${esc(text(segment.objective)||"Objectif non renseigné")}</p>
+        ${text(segment.summary)?`<p class="summary">${esc(segment.summary)}</p>`:""}
+        ${metadata(segment)}
+        ${statusControl}
+        <div class="deps">${deps.length?deps.map(dep=>`<span class="dep">Après ${esc(dep)}</span>`).join(""):`<span class="dep none">Aucune dépendance interne</span>`}</div>
+        <details><summary>Voir les livrables et validations</summary><div class="detail">
+          ${list("Décisions couvertes",segment.decision_refs)}
+          ${list("Livrables",segment.deliverables)}
+          ${list("Critères d’acceptation",segment.acceptance)}
+          ${list("Prérequis externes",segment.prerequisites)}
+          ${list("Risques",segment.risks)}
+          ${list("À préciser",segment.questions,"question-list")}
+        </div></details>
+      </article>`;
+    }
+    function renderKanban(){
+      const columns=columnsForState();
+      const ordered=sortedSegments();
+      return `<p class="scroll-hint">Le tableau défile horizontalement. Placez le focus ici puis utilisez les flèches ou le défilement de votre appareil.</p><div class="kanban scroll-region" tabindex="0" role="region" aria-label="Tableau Kanban du plan de réalisation">${columns.map(column=>{
+        const items=ordered.filter(segment=>statusOf(segment)===column.id);
+        return `<section class="column ${column.fallback?"fallback":""}"><header class="column-head"><h2>${esc(column.title)}</h2><span class="count">${items.length}</span></header><div class="cards">${items.map(segment=>card(segment,true)).join("")}</div></section>`;
+      }).join("")}</div><p class="empty" id="empty" hidden>Aucun segment ne correspond aux filtres.</p>`;
+    }
+    function renderRoadmap(){
+      const ordered=sortedSegments();
+      return `<p class="scroll-hint">La roadmap défile horizontalement. Placez le focus ici puis utilisez les flèches ou le défilement de votre appareil.</p><div class="roadmap scroll-region" tabindex="0" role="region" aria-label="Roadmap horizontale du plan de réalisation">${phases.map((phase,index)=>{
+        const items=ordered.filter(segment=>segment.phase===phase.id);
+        return `<section class="lane ${phase.__declared?"":"fallback"}"><header class="lane-head"><span class="index">Phase ${index+1}</span><h2>${esc(phase.title)}</h2></header>${text(phase.milestone)?`<div class="milestone">Jalon : ${esc(phase.milestone)}</div>`:""}<div class="cards">${items.map(segment=>card(segment,false)).join("")}</div></section>`;
+      }).join("")}</div><p class="empty" id="empty" hidden>Aucun segment ne correspond aux filtres.</p>`;
+    }
+    function filter(){
+      const search=byId("search").value.trim().toLowerCase();
+      const phase=byId("phaseFilter").value;
+      let visible=0;
+      document.querySelectorAll(".card").forEach(item=>{
+        const show=(!search||item.dataset.search.includes(search))&&(phase==="all"||item.dataset.phase===phase);
+        item.classList.toggle("hidden",!show);
+        if(show)visible++;
+      });
+      const empty=byId("empty");
+      if(empty)empty.hidden=visible>0;
+    }
+    function render(){
+      updateHeader();
+      byId("view").innerHTML=state.view==="kanban"?renderKanban():renderRoadmap();
+      filter();
+    }
+    function populatePhaseFilter(){
+      byId("phaseFilter").innerHTML='<option value="all">Toutes les phases</option>'+phases.map(phase=>`<option value="${esc(phase.id)}">${esc(phase.title)}</option>`).join("");
+    }
+    function markdownList(lines,title,items){
+      lines.push(`${title} :`);
+      if(array(items).length)lines.push(...items.map(item=>`- ${item&&typeof item==="object"?(item.text||JSON.stringify(item)):item}`));
+      else lines.push("- Aucun");
+    }
+    function markdown(){
+      const lines=[`# ${projectTitle} — plan de réalisation`,"",`Vue affichée lors de l’export : ${state.view==="kanban"?"Kanban":"Roadmap horizontale"}`,`Vue initiale recommandée : ${initialView==="kanban"?"Kanban":"Roadmap horizontale"}`,`Points ouverts : ${allQuestions.length}`,""];
+      phases.forEach((phase,index)=>{
+        lines.push(`## Phase ${index+1} — ${phase.title}`,"");
+        lines.push(`Jalon : ${text(phase.milestone)||"Non renseigné"}`,"");
+        sortedSegments().filter(segment=>segment.phase===phase.id).forEach(segment=>{
+          lines.push(`### ${segment.id} — ${segment.title}`,`Objectif : ${text(segment.objective)||"Non renseigné"}`,`Résumé : ${text(segment.summary)||"Non renseigné"}`,`État : ${statusLabel(statusOf(segment))}`,`Ordre : ${segment.order===Number.MAX_SAFE_INTEGER?"Non renseigné":segment.order}`);
+          if(text(segment.owner))lines.push(`Responsable : ${segment.owner}`);
+          if(metricText(segment.effort))lines.push(`Effort : ${metricText(segment.effort)}`);
+          if(metricText(segment.priority))lines.push(`Priorité : ${metricText(segment.priority)}`);
+          markdownList(lines,"Dépendances",segment.dependencies);
+          markdownList(lines,"Décisions couvertes",segment.decision_refs);
+          markdownList(lines,"Livrables",segment.deliverables);
+          markdownList(lines,"Critères d’acceptation",segment.acceptance);
+          markdownList(lines,"Prérequis externes",segment.prerequisites);
+          markdownList(lines,"Risques",segment.risks);
+          markdownList(lines,"Questions du segment",segment.questions);
+          lines.push("");
+        });
+      });
+      lines.push("## Points ouverts","");
+      if(allQuestions.length)allQuestions.forEach(item=>lines.push(`- ${item.id} — ${item.text} [${item.severity}${item.segment?` · ${item.segment}`:""}]`));
+      else lines.push("- Aucun");
+      lines.push("");
+      return lines.join("\n");
+    }
+    function downloadFile(name,content,type){
+      const link=document.createElement("a");
+      link.href=URL.createObjectURL(new Blob([content],{type}));
+      link.download=name;
+      link.click();
+      setTimeout(()=>URL.revokeObjectURL(link.href),1000);
+    }
+    function importState(saved){
+      const imported=validateStatePayload(saved);
+      state.statuses={...imported.statuses};
+      state.view=imported.view;
+      persist("État JSON importé et sauvegardé localement.");
+      render();
+    }
+
+    loadState();
+    populatePhaseFilter();
+    renderOpenQuestions();
+    renderWarnings();
+    render();
+
+    document.querySelectorAll("[data-view]").forEach(button=>button.addEventListener("click",()=>{
+      state.view=button.dataset.view;
+      persist();
+      render();
+      byId("view").querySelector(".scroll-region")?.focus();
+    }));
+    byId("view").addEventListener("change",event=>{
+      const select=event.target.closest("select[data-status-segment]");
+      if(!select)return;
+      state.statuses[select.dataset.statusSegment]=select.value;
+      const segmentId=select.dataset.statusSegment;
+      persist();
+      render();
+      const replacement=[...document.querySelectorAll("select[data-status-segment]")].find(item=>item.dataset.statusSegment===segmentId);
+      replacement?.focus();
+    });
+    byId("search").addEventListener("input",filter);
+    byId("phaseFilter").addEventListener("change",filter);
+    byId("printButton").addEventListener("click",()=>window.print());
+    byId("markdownButton").addEventListener("click",()=>downloadFile(`${projectSlug}-plan-${state.view}.md`,markdown(),"text/markdown;charset=utf-8"));
+    byId("jsonExportButton").addEventListener("click",()=>downloadFile(`${projectSlug}-etat-planning.json`,JSON.stringify(statePayload(),null,2),"application/json;charset=utf-8"));
+    byId("importButton").addEventListener("click",()=>byId("fileInput").click());
+    byId("fileInput").addEventListener("change",async event=>{
+      const file=event.target.files[0];
+      if(!file)return;
+      try{importState(JSON.parse(await file.text()))}catch(error){setSaveState(`Import impossible : ${error.message}`,"error")}
+      event.target.value="";
+    });
+    byId("resetButton").addEventListener("click",()=>{
+      if(!window.confirm("Réinitialiser tous les statuts et revenir à la vue recommandée ?"))return;
+      state.view=initialView;
+      state.statuses={...initialStatuses};
+      try{if(storageKey)localStorage.removeItem(storageKey);setSaveState("État réinitialisé. Les valeurs du plan source sont affichées.")}catch(error){setSaveState(`État réinitialisé en mémoire, mais la sauvegarde locale n’a pas pu être effacée : ${error.message}`,"error")}
+      render();
+    });
+    let printDetails=[];
+    window.addEventListener("beforeprint",()=>{printDetails=[...document.querySelectorAll("details")].map(item=>item.open);document.querySelectorAll("details").forEach(item=>item.open=true)});
+    window.addEventListener("afterprint",()=>{document.querySelectorAll("details").forEach((item,index)=>item.open=printDetails[index]??false)});
+    const backToTop=byId("backToTop");
+    const updateBackToTop=()=>{
+      const visible=window.scrollY>500;
+      backToTop.classList.toggle("show",visible);
+      backToTop.tabIndex=visible?0:-1;
+      backToTop.setAttribute("aria-hidden",String(!visible));
+    };
+    window.addEventListener("scroll",updateBackToTop,{passive:true});
+    backToTop.addEventListener("click",()=>window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}));
+    updateBackToTop();
+  </script>
+</body>
+</html>

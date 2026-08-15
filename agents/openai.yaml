@@ -1,0 +1,4 @@
+interface:
+  display_name: "Concevoir un projet numérique"
+  short_description: "Cadre une idée numérique et ordonne sa réalisation"
+  default_prompt: "Utilise $concevoir-projet-interactif pour cadrer progressivement ce projet numérique et produire uniquement le niveau d’artefacts utile."

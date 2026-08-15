@@ -1,0 +1,9 @@
+{
+  "schema": "project-workshop-decisions-v2",
+  "project": {
+    "title": "{{PROJECT_TITLE}}",
+    "slug": "{{PROJECT_SLUG}}"
+  },
+  "updated_at": null,
+  "decisions": []
+}

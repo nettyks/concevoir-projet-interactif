@@ -1,0 +1,334 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "questionnaire.schema.json",
+  "title": "Questionnaire de cadrage interactif V2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "project",
+    "round_id",
+    "round",
+    "storage_key",
+    "sections"
+  ],
+  "properties": {
+    "schema": {
+      "const": "project-workshop-questionnaire-v2"
+    },
+    "project": {
+      "$ref": "#/$defs/project"
+    },
+    "round_id": {
+      "$ref": "#/$defs/id"
+    },
+    "round": {
+      "$ref": "#/$defs/text"
+    },
+    "storage_key": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S+$"
+    },
+    "intro_title": {
+      "$ref": "#/$defs/text"
+    },
+    "intro": {
+      "$ref": "#/$defs/text"
+    },
+    "theme": {
+      "$ref": "#/$defs/theme"
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/section"
+      }
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "slug"],
+      "properties": {
+        "title": {
+          "$ref": "#/$defs/text"
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "subtitle": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "themeValue": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "allOf": [
+        {
+          "not": {
+            "pattern": "[uU][rR][lL]\\s*\\("
+          }
+        },
+        {
+          "not": {
+            "pattern": "(?:[hH][tT][tT][pP][sS]?|[fF][iI][lL][eE]|[dD][aA][tT][aA]|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT])\\s*:"
+          }
+        },
+        {
+          "not": {
+            "pattern": "@[iI][mM][pP][oO][rR][tT]"
+          }
+        }
+      ]
+    },
+    "theme": {
+      "type": "object",
+      "propertyNames": {
+        "enum": [
+          "accent",
+          "bg",
+          "danger",
+          "font",
+          "focus",
+          "line",
+          "max",
+          "maybe",
+          "muted",
+          "negative",
+          "neutral",
+          "no",
+          "positive",
+          "primary",
+          "radius",
+          "surface",
+          "surface_2",
+          "text",
+          "warning",
+          "yes"
+        ]
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/themeValue"
+      }
+    },
+    "choice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "tone", "needs_clarification"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "tone": {
+          "enum": ["neutral", "positive", "warning", "negative"]
+        },
+        "needs_clarification": {
+          "type": "boolean"
+        }
+      }
+    },
+    "scale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max", "step", "default", "min_label", "max_label"],
+      "properties": {
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "step": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "default": {
+          "type": "number"
+        },
+        "min_label": {
+          "$ref": "#/$defs/text"
+        },
+        "max_label": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "title"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "enum": [
+            "open",
+            "decision",
+            "single_choice",
+            "multi_choice",
+            "scale",
+            "ranking"
+          ]
+        },
+        "title": {
+          "$ref": "#/$defs/text"
+        },
+        "description": {
+          "$ref": "#/$defs/text"
+        },
+        "note_placeholder": {
+          "$ref": "#/$defs/text"
+        },
+        "answer_placeholder": {
+          "$ref": "#/$defs/text"
+        },
+        "allow_note": {
+          "type": "boolean"
+        },
+        "scale": {
+          "$ref": "#/$defs/scale"
+        },
+        "choices": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/choice"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "open"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {"required": ["choices"]},
+                {"required": ["scale"]}
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "decision"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "allOf": [
+              {
+                "not": {
+                  "required": ["scale"]
+                }
+              },
+              {
+                "properties": {
+                  "choices": {
+                    "maxItems": 3
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "enum": ["single_choice", "multi_choice", "ranking"]
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "allOf": [
+              {
+                "required": ["choices"]
+              },
+              {
+                "not": {
+                  "required": ["scale"]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "scale"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "allOf": [
+              {
+                "required": ["scale"]
+              },
+              {
+                "not": {
+                  "required": ["choices"]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "questions"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "$ref": "#/$defs/text"
+        },
+        "description": {
+          "$ref": "#/$defs/text"
+        },
+        "questions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/question"
+          }
+        }
+      }
+    }
+  }
+}

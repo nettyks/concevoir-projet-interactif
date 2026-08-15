@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "decisions.schema.json",
+  "title": "Registre de décisions d'un projet numérique",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "project", "updated_at", "decisions"],
+  "properties": {
+    "schema": {"const": "project-workshop-decisions-v2"},
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "slug"],
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"}
+      }
+    },
+    "updated_at": {
+      "anyOf": [
+        {"type": "null"},
+        {"type": "string", "format": "date"}
+      ]
+    },
+    "decisions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/decision"}
+    }
+  },
+  "$defs": {
+    "safeId": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"},
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "kind", "status", "title", "rationale", "source_round",
+        "source_questions", "evidence", "confidence", "owner", "priority",
+        "supersedes", "created_at", "updated_at"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/safeId"},
+        "kind": {"enum": ["fact", "decision", "constraint", "hypothesis", "open_question"]},
+        "status": {"enum": ["proposed", "accepted", "rejected", "deferred", "superseded"]},
+        "title": {"type": "string", "minLength": 1},
+        "rationale": {"type": "string"},
+        "source_round": {
+          "anyOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/safeId"}
+          ]
+        },
+        "source_questions": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/safeId"},
+          "uniqueItems": true
+        },
+        "evidence": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "confidence": {"enum": ["verified", "high", "medium", "low", "unknown"]},
+        "owner": {"type": ["string", "null"]},
+        "priority": {
+          "anyOf": [
+            {"type": "null"},
+            {"enum": ["indispensable", "important", "differable"]}
+          ]
+        },
+        "supersedes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/safeId"},
+          "uniqueItems": true
+        },
+        "created_at": {"type": "string", "format": "date"},
+        "updated_at": {"type": "string", "format": "date"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"confidence": {"const": "verified"}}},
+          "then": {"properties": {"evidence": {"minItems": 1}}}
+        }
+      ]
+    }
+  }
+}

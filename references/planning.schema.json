@@ -1,0 +1,306 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "planning.schema.json",
+  "title": "Plan de réalisation interactif V2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "project",
+    "storage_key",
+    "view",
+    "phases",
+    "open_questions",
+    "segments"
+  ],
+  "properties": {
+    "schema": {
+      "const": "project-workshop-planning-v2"
+    },
+    "project": {
+      "$ref": "#/$defs/project"
+    },
+    "storage_key": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S+$"
+    },
+    "view": {
+      "enum": ["kanban", "roadmap"]
+    },
+    "theme": {
+      "$ref": "#/$defs/theme"
+    },
+    "phases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/phase"
+      }
+    },
+    "columns": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/column"
+      }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/openQuestion"
+      }
+    },
+    "segments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/segment"
+      }
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "slug"],
+      "properties": {
+        "title": {
+          "$ref": "#/$defs/text"
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "subtitle": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "themeValue": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "allOf": [
+        {
+          "not": {
+            "pattern": "[uU][rR][lL]\\s*\\("
+          }
+        },
+        {
+          "not": {
+            "pattern": "(?:[hH][tT][tT][pP][sS]?|[fF][iI][lL][eE]|[dD][aA][tT][aA]|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT])\\s*:"
+          }
+        },
+        {
+          "not": {
+            "pattern": "@[iI][mM][pP][oO][rR][tT]"
+          }
+        }
+      ]
+    },
+    "theme": {
+      "type": "object",
+      "propertyNames": {
+        "enum": [
+          "accent",
+          "bg",
+          "danger",
+          "font",
+          "focus",
+          "line",
+          "max",
+          "maybe",
+          "muted",
+          "negative",
+          "neutral",
+          "no",
+          "positive",
+          "primary",
+          "radius",
+          "surface",
+          "surface_2",
+          "text",
+          "warning",
+          "yes"
+        ]
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/themeValue"
+      }
+    },
+    "phase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "order"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "$ref": "#/$defs/text"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "milestone": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "column": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "openQuestion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "severity"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "text": {
+          "$ref": "#/$defs/text"
+        },
+        "severity": {
+          "enum": ["bloquant", "avant-segment", "differable"]
+        },
+        "segment": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "textArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/text"
+      }
+    },
+    "uniqueTextArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/text"
+      }
+    },
+    "nonEmptyUniqueTextArray": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/id"
+      }
+    },
+    "nonEmptyTextArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/text"
+      }
+    },
+    "metric": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/text"
+        },
+        {
+          "type": "number",
+          "minimum": 0
+        }
+      ]
+    },
+    "segment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "objective",
+        "phase",
+        "status",
+        "order",
+        "dependencies",
+        "decision_refs",
+        "deliverables",
+        "acceptance",
+        "prerequisites",
+        "risks",
+        "questions"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "$ref": "#/$defs/text"
+        },
+        "objective": {
+          "$ref": "#/$defs/text"
+        },
+        "summary": {
+          "$ref": "#/$defs/text"
+        },
+        "phase": {
+          "$ref": "#/$defs/id"
+        },
+        "status": {
+          "$ref": "#/$defs/id"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "dependencies": {
+          "$ref": "#/$defs/uniqueTextArray"
+        },
+        "decision_refs": {
+          "$ref": "#/$defs/nonEmptyUniqueTextArray"
+        },
+        "deliverables": {
+          "$ref": "#/$defs/nonEmptyTextArray"
+        },
+        "acceptance": {
+          "$ref": "#/$defs/nonEmptyTextArray"
+        },
+        "prerequisites": {
+          "$ref": "#/$defs/textArray"
+        },
+        "risks": {
+          "$ref": "#/$defs/textArray"
+        },
+        "questions": {
+          "$ref": "#/$defs/textArray"
+        },
+        "owner": {
+          "$ref": "#/$defs/text"
+        },
+        "effort": {
+          "$ref": "#/$defs/metric"
+        },
+        "priority": {
+          "$ref": "#/$defs/metric"
+        }
+      }
+    }
+  }
+}

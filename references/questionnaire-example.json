@@ -1,0 +1,112 @@
+{
+  "schema": "project-workshop-questionnaire-v2",
+  "project": {
+    "title": "Atelier de quartier",
+    "slug": "atelier-quartier",
+    "subtitle": "Premier tour : comprendre l’idée avant de choisir une solution"
+  },
+  "round_id": "orientation-01",
+  "round": "Tour 1 — Orientation",
+  "storage_key": "atelier-quartier-orientation-01-v2",
+  "intro_title": "Il n’est pas nécessaire d’avoir déjà toutes les réponses",
+  "intro": "Ce premier tour sert à faire émerger le besoin, les bénéficiaires et les preuves d’utilité. Les questions techniques viendront seulement quand l’intention sera assez claire.",
+  "theme": {
+    "bg": "#f3efe8",
+    "surface": "#fffdf9",
+    "surface_2": "#e9e2d7",
+    "text": "#24241f",
+    "muted": "#625f57",
+    "primary": "#315f52",
+    "accent": "#d4833e",
+    "focus": "#0b57d0",
+    "radius": "20px",
+    "max": "1080px"
+  },
+  "sections": [
+    {
+      "id": "intention",
+      "title": "Intention",
+      "description": "Décrire le changement recherché avant d’imaginer sa forme",
+      "questions": [
+        {
+          "id": "O01",
+          "type": "open",
+          "title": "Quel changement concret aimeriez-vous observer grâce à ce projet ?",
+          "description": "Décrivez un résultat visible dans la vie réelle, même si la manière d’y parvenir reste inconnue.",
+          "answer_placeholder": "Par exemple : les habitants trouvent plus facilement une aide proche de chez eux…"
+        },
+        {
+          "id": "O02",
+          "type": "decision",
+          "title": "Le premier objectif doit-il être de vérifier que le besoin existe réellement ?",
+          "description": "Un premier essai pourrait chercher à confirmer le problème avant de construire une solution complète.",
+          "note_placeholder": "Si vous hésitez, qu’aimeriez-vous vérifier en priorité ?"
+        }
+      ]
+    },
+    {
+      "id": "usage-preuve",
+      "title": "Usage et preuve",
+      "description": "Préciser pour qui le projet doit être utile et comment le constater",
+      "questions": [
+        {
+          "id": "U01",
+          "type": "single_choice",
+          "title": "Qui devrait bénéficier en premier d’un essai du projet ?",
+          "description": "Choisissez le premier cercle à comprendre, sans décider encore comment le projet sera réalisé.",
+          "choices": [
+            {"id": "moi", "label": "Moi-même", "tone": "neutral", "needs_clarification": false},
+            {"id": "proches", "label": "Quelques proches", "tone": "neutral", "needs_clarification": false},
+            {"id": "quartier", "label": "Des personnes du quartier", "tone": "neutral", "needs_clarification": false},
+            {"id": "inconnu", "label": "Pas encore défini", "tone": "neutral", "needs_clarification": true}
+          ],
+          "note_placeholder": "Qui imaginez-vous concrètement, ou qu’est-ce qui reste à déterminer ?"
+        },
+        {
+          "id": "U02",
+          "type": "multi_choice",
+          "title": "Quels signes montreraient que le projet devient utile ?",
+          "description": "Plusieurs preuves peuvent être pertinentes en même temps.",
+          "choices": [
+            {"id": "temps", "label": "Du temps gagné", "tone": "neutral", "needs_clarification": false},
+            {"id": "erreurs", "label": "Moins d’erreurs ou d’oublis", "tone": "neutral", "needs_clarification": false},
+            {"id": "retour", "label": "Des personnes qui reviennent", "tone": "neutral", "needs_clarification": false},
+            {"id": "recommandation", "label": "Des recommandations spontanées", "tone": "neutral", "needs_clarification": false}
+          ],
+          "allow_note": true,
+          "note_placeholder": "Ajoutez un autre signe observable si nécessaire."
+        },
+        {
+          "id": "U03",
+          "type": "scale",
+          "title": "À quel point le problème de départ vous paraît-il déjà bien compris ?",
+          "description": "Cette note aide à décider si le prochain tour doit encore explorer le besoin ou préciser le projet.",
+          "scale": {
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "default": 3,
+            "min_label": "1 — Très incertain",
+            "max_label": "5 — Très clair"
+          },
+          "allow_note": true,
+          "note_placeholder": "Qu’est-ce qui explique cette note ?"
+        },
+        {
+          "id": "U04",
+          "type": "ranking",
+          "title": "Dans quel ordre faut-il réduire les incertitudes du projet ?",
+          "description": "Classez les sujets du plus important au moins urgent pour préparer le prochain tour.",
+          "choices": [
+            {"id": "besoin", "label": "Comprendre précisément le besoin", "tone": "neutral", "needs_clarification": false},
+            {"id": "public", "label": "Identifier les premiers bénéficiaires", "tone": "neutral", "needs_clarification": false},
+            {"id": "preuve", "label": "Définir une preuve d’utilité", "tone": "neutral", "needs_clarification": false},
+            {"id": "limites", "label": "Nommer ce que le projet ne doit pas faire", "tone": "neutral", "needs_clarification": false}
+          ],
+          "allow_note": true,
+          "note_placeholder": "Pourquoi cet ordre vous paraît-il juste ?"
+        }
+      ]
+    }
+  ]
+}
