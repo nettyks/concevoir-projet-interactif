@@ -1,0 +1,96 @@
+{
+  "schema": "project-workshop-planning-v2",
+  "locale": "en",
+  "storage_key": "shared-equipment-booking-plan-v2",
+  "project": {
+    "title": "Shared equipment booking",
+    "slug": "shared-equipment-booking",
+    "subtitle": "A delivery sequence that validates the booking flow before expanding it"
+  },
+  "view": "kanban",
+  "theme": {
+    "bg": "#edf2ef",
+    "surface": "#ffffff",
+    "surface_2": "#dfe9e4",
+    "text": "#17231f",
+    "muted": "#68736e",
+    "primary": "#245d4d",
+    "accent": "#d17a36",
+    "radius": "18px"
+  },
+  "phases": [
+    {"id": "prototype", "title": "Prove the booking flow", "order": 1, "milestone": "Five users complete a booking without assistance"},
+    {"id": "pilot", "title": "Run a controlled pilot", "order": 2, "milestone": "One location manages real bookings for two weeks"},
+    {"id": "reliability", "title": "Make the service reliable", "order": 3, "milestone": "Bookings can be restored and important incidents are visible"}
+  ],
+  "open_questions": [
+    {"id": "Q-POLICY-01", "text": "Who may override or cancel another user’s booking?", "severity": "avant-segment", "segment": "S02"},
+    {"id": "Q-RETENTION-01", "text": "How long should completed bookings remain searchable?", "severity": "differable", "segment": "S04"}
+  ],
+  "segments": [
+    {
+      "id": "S01",
+      "title": "Validate the core booking journey",
+      "objective": "Confirm that users understand availability and can complete a booking without assistance.",
+      "summary": "Test the central promise before building the full service.",
+      "phase": "prototype",
+      "status": "termine",
+      "order": 1,
+      "dependencies": [],
+      "decision_refs": ["D-001", "D-002"],
+      "deliverables": ["Clickable prototype", "Anonymised report from five user sessions"],
+      "acceptance": ["Five users understand the availability view", "At least four complete a booking"],
+      "prerequisites": ["Recruit five representative users"],
+      "risks": ["Test participants may be more comfortable with digital tools than the wider audience"],
+      "questions": []
+    },
+    {
+      "id": "S02",
+      "title": "Deliver bookings for one location",
+      "objective": "Let authenticated users browse equipment, book a time slot and cancel their own booking.",
+      "summary": "Create the first usable end-to-end release.",
+      "phase": "pilot",
+      "status": "en-cours",
+      "order": 1,
+      "dependencies": ["S01"],
+      "decision_refs": ["D-003", "D-004"],
+      "deliverables": ["Equipment catalogue", "Availability calendar", "Booking and cancellation flow"],
+      "acceptance": ["Two users cannot book the same equipment and time slot", "A cancellation immediately restores availability"],
+      "prerequisites": ["Confirm the minimum equipment data", "Resolve Q-POLICY-01"],
+      "risks": ["Unclear ownership rules may delay support decisions"],
+      "questions": ["Should a pending booking expire automatically?"]
+    },
+    {
+      "id": "S03",
+      "title": "Notify users of important changes",
+      "objective": "Keep users informed when a booking is created, changed or cancelled.",
+      "summary": "Reduce missed handovers during the pilot.",
+      "phase": "pilot",
+      "status": "pret",
+      "order": 2,
+      "dependencies": ["S02"],
+      "decision_refs": ["D-005"],
+      "deliverables": ["Booking confirmation", "Change and cancellation notifications"],
+      "acceptance": ["Every booking change produces one clear notification", "A notification never exposes another user’s private details"],
+      "prerequisites": [],
+      "risks": ["Too many notifications may cause users to ignore them"],
+      "questions": []
+    },
+    {
+      "id": "S04",
+      "title": "Protect and restore booking data",
+      "objective": "Make the pilot recoverable before adding more locations or users.",
+      "summary": "Add backup, restoration and essential monitoring.",
+      "phase": "reliability",
+      "status": "a-preciser",
+      "order": 1,
+      "dependencies": ["S02", "S03"],
+      "decision_refs": ["D-006", "D-007"],
+      "deliverables": ["Automated backups", "Documented restoration procedure", "Incident alerts"],
+      "acceptance": ["A backup restores into an isolated environment", "A failed backup is visible to the operator"],
+      "prerequisites": ["Define the recovery target"],
+      "risks": ["A backup is not useful until restoration has been tested"],
+      "questions": ["What recovery time is acceptable during the pilot?"]
+    }
+  ]
+}

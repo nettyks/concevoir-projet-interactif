@@ -1,0 +1,101 @@
+{
+  "schema": "project-workshop-questionnaire-v2",
+  "locale": "en",
+  "project": {
+    "title": "Shared equipment booking",
+    "slug": "shared-equipment-booking",
+    "subtitle": "Orientation round: clarify the service before choosing a solution"
+  },
+  "round_id": "orientation-01",
+  "round": "Round 1 — Orientation",
+  "storage_key": "shared-equipment-booking-orientation-01-v2",
+  "intro_title": "You do not need to have every answer yet",
+  "intro": "This first round identifies the core need, the first users and the evidence that would make the service worth building.",
+  "theme": {
+    "bg": "#f3efe8",
+    "surface": "#fffdf9",
+    "surface_2": "#e9e2d7",
+    "text": "#24241f",
+    "muted": "#625f57",
+    "primary": "#315f52",
+    "accent": "#d4833e",
+    "focus": "#0b57d0",
+    "radius": "20px",
+    "max": "1080px"
+  },
+  "sections": [
+    {
+      "id": "intent",
+      "title": "Intent",
+      "description": "Define the expected change before selecting features",
+      "questions": [
+        {
+          "id": "I01",
+          "type": "open",
+          "title": "What should become easier thanks to this service?",
+          "description": "Describe an observable outcome in the users’ daily work.",
+          "answer_placeholder": "For example: team members can find and reserve available equipment without asking around."
+        },
+        {
+          "id": "I02",
+          "type": "decision",
+          "title": "Should the first release focus on a single location?",
+          "description": "A limited pilot may validate the booking rules before a wider rollout.",
+          "note_placeholder": "If you are unsure, explain what should be validated first."
+        }
+      ]
+    },
+    {
+      "id": "priorities",
+      "title": "Users and priorities",
+      "description": "Identify the first audience and the most important constraints",
+      "questions": [
+        {
+          "id": "P01",
+          "type": "single_choice",
+          "title": "Who should use the pilot first?",
+          "choices": [
+            {"id": "staff", "label": "Internal staff", "tone": "neutral", "needs_clarification": false},
+            {"id": "partners", "label": "Partner organisations", "tone": "neutral", "needs_clarification": false},
+            {"id": "unknown", "label": "Not decided yet", "tone": "warning", "needs_clarification": true}
+          ],
+          "note_placeholder": "Describe the first user group more precisely if needed."
+        },
+        {
+          "id": "P02",
+          "type": "multi_choice",
+          "title": "Which outcomes would prove the pilot is useful?",
+          "choices": [
+            {"id": "time", "label": "Less time spent coordinating", "tone": "neutral", "needs_clarification": false},
+            {"id": "conflicts", "label": "Fewer booking conflicts", "tone": "neutral", "needs_clarification": false},
+            {"id": "reuse", "label": "Users return without assistance", "tone": "neutral", "needs_clarification": false}
+          ],
+          "allow_note": true
+        },
+        {
+          "id": "P03",
+          "type": "scale",
+          "title": "How well are the current booking rules understood?",
+          "scale": {
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "default": 3,
+            "min_label": "1 — Very unclear",
+            "max_label": "5 — Fully documented"
+          }
+        },
+        {
+          "id": "P04",
+          "type": "ranking",
+          "title": "Rank the priorities for the first usable release",
+          "choices": [
+            {"id": "availability", "label": "See availability", "tone": "neutral", "needs_clarification": false},
+            {"id": "booking", "label": "Create a booking", "tone": "neutral", "needs_clarification": false},
+            {"id": "history", "label": "Review booking history", "tone": "neutral", "needs_clarification": false}
+          ]
+        }
+      ]
+    }
+  ]
+}

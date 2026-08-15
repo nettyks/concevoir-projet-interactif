@@ -33,44 +33,44 @@
   <div class="toolbar">
     <div class="shell toolbar-row">
       <div class="stats" aria-live="polite" aria-atomic="true">
-        <span class="stat"><strong id="answered">0</strong>/<span id="total">0</span> répondues</span>
-        <span class="stat"><strong id="clarificationCount">0</strong> à préciser</span>
-        <span class="stat"><strong id="noteCount">0</strong> notes</span>
+        <span class="stat"><strong id="answered">0</strong>/<span id="total">0</span> <span data-i18n="answeredStat">répondues</span></span>
+        <span class="stat"><strong id="clarificationCount">0</strong> <span data-i18n="clarificationStat">à préciser</span></span>
+        <span class="stat"><strong id="noteCount">0</strong> <span data-i18n="notesStat">notes</span></span>
       </div>
-      <label><span class="sr-only">Rechercher dans les questions</span><input class="control search" id="search" type="search" placeholder="Rechercher…"></label>
-      <label><span class="sr-only">Filtrer les questions</span><select class="control" id="filter">
-        <option value="all">Toutes</option>
-        <option value="unanswered">Sans réponse</option>
-        <option value="clarification">À préciser</option>
-        <option value="noted">Avec une note</option>
+      <label><span class="sr-only" data-i18n="searchLabel">Rechercher dans les questions</span><input class="control search" id="search" type="search" placeholder="Rechercher…" data-i18n-placeholder="searchPlaceholder"></label>
+      <label><span class="sr-only" data-i18n="filterLabel">Filtrer les questions</span><select class="control" id="filter">
+        <option value="all" data-i18n="filterAll">Toutes</option>
+        <option value="unanswered" data-i18n="filterUnanswered">Sans réponse</option>
+        <option value="clarification" data-i18n="filterClarification">À préciser</option>
+        <option value="noted" data-i18n="filterNoted">Avec une note</option>
       </select></label>
     </div>
   </div>
   <main class="shell">
     <section class="intro" id="intro"></section>
-    <aside class="privacy" id="privacy"><strong>Confidentialité</strong><p>Cette fiche fonctionne hors ligne. Vos réponses restent dans le stockage local de ce navigateur et ne sont envoyées nulle part, mais elles ne sont pas chiffrées par la fiche. N’y saisissez aucun secret; sur un appareil partagé, effacez-les après export.</p></aside>
-    <section class="restore" id="restore" hidden>Une sauvegarde locale compatible a été restaurée automatiquement pour cette fiche.</section>
+    <aside class="privacy" id="privacy"><strong data-i18n="privacyTitle">Confidentialité</strong><p data-i18n="privacyText">Cette fiche fonctionne hors ligne. Vos réponses restent dans le stockage local de ce navigateur et ne sont envoyées nulle part, mais elles ne sont pas chiffrées par la fiche. N’y saisissez aucun secret; sur un appareil partagé, effacez-les après export.</p></aside>
+    <section class="restore" id="restore" hidden data-i18n="restored">Une sauvegarde locale compatible a été restaurée automatiquement pour cette fiche.</section>
     <section class="storage-warning" id="storageWarning" role="alert" hidden></section>
     <div class="sections" id="sections"></div>
-    <div class="empty" id="empty" hidden>Aucune question ne correspond à ce filtre.</div>
+    <div class="empty" id="empty" hidden data-i18n="empty">Aucune question ne correspond à ce filtre.</div>
   </main>
   <footer class="footer">
     <div class="shell">
-      <span class="save-state" id="saveState" aria-live="polite">Sauvegarde locale prête</span>
-      <button class="action danger" id="clearButton" type="button">Effacer mes réponses</button>
-      <button class="action" id="importButton" type="button">Importer</button>
-      <button class="action" id="jsonButton" type="button">Sauvegarde JSON</button>
-      <button class="action primary" id="markdownButton" type="button">Exporter pour l’échange</button>
+      <span class="save-state" id="saveState" aria-live="polite" data-i18n="saveReady">Sauvegarde locale prête</span>
+      <button class="action danger" id="clearButton" type="button" data-i18n="clearAnswers">Effacer mes réponses</button>
+      <button class="action" id="importButton" type="button" data-i18n="import">Importer</button>
+      <button class="action" id="jsonButton" type="button" data-i18n="jsonBackup">Sauvegarde JSON</button>
+      <button class="action primary" id="markdownButton" type="button" data-i18n="exportExchange">Exporter pour l’échange</button>
       <input id="fileInput" type="file" accept="application/json,.json" hidden tabindex="-1" aria-hidden="true">
     </div>
   </footer>
-  <button class="back-to-top" id="backToTop" type="button" aria-label="Remonter tout en haut de la fiche" hidden tabindex="-1">↑ Haut</button>
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Remonter tout en haut de la fiche" data-i18n-aria-label="backToTopAria" hidden tabindex="-1">↑ <span data-i18n="backToTop">Haut</span></button>
   <dialog id="dialog" aria-labelledby="dialogTitle">
-    <h2 id="dialogTitle">Questions encore incomplètes</h2>
+    <h2 id="dialogTitle" data-i18n="dialogTitle">Questions encore incomplètes</h2>
     <p id="dialogText"></p>
     <div class="dialog-actions">
-      <button class="action" id="dialogClose" type="button">Continuer à répondre</button>
-      <button class="action primary" id="dialogExport" type="button">Exporter quand même</button>
+      <button class="action" id="dialogClose" type="button" data-i18n="dialogClose">Continuer à répondre</button>
+      <button class="action primary" id="dialogExport" type="button" data-i18n="dialogExport">Exporter quand même</button>
     </div>
   </dialog>
   <script>
@@ -78,14 +78,39 @@
     const EXPECTED_SCHEMA="project-workshop-questionnaire-v2";
     const ANSWERS_SCHEMA="project-workshop-answers-v2";
     const DATA=__PROJECT_DATA__;
-    if(DATA.schema!==EXPECTED_SCHEMA)throw new Error(`Schéma de questionnaire invalide : ${DATA.schema||"absent"}`);
-    if(typeof DATA.round_id!=="string"||!DATA.round_id.trim())throw new Error("round_id est obligatoire");
-    if(typeof DATA.storage_key!=="string"||!DATA.storage_key.trim())throw new Error("storage_key est obligatoire");
+    const I18N={
+      fr:{
+        dateLocale:"fr-FR",workshop:"atelier",defaultSubtitle:"Fiche de décisions interactive",defaultIntroTitle:"Comment répondre",defaultIntro:"Répondez seulement aux choix utiles. Vos réponses sont conservées localement dans ce navigateur et peuvent être exportées à tout moment.",
+        yes:"Oui",no:"Non",maybe:"Peut-être",answeredStat:"répondues",clarificationStat:"à préciser",notesStat:"notes",searchLabel:"Rechercher dans les questions",searchPlaceholder:"Rechercher…",filterLabel:"Filtrer les questions",filterAll:"Toutes",filterUnanswered:"Sans réponse",filterClarification:"À préciser",filterNoted:"Avec une note",
+        privacyTitle:"Confidentialité",privacyText:"Cette fiche fonctionne hors ligne. Vos réponses restent dans le stockage local de ce navigateur et ne sont envoyées nulle part, mais elles ne sont pas chiffrées par la fiche. N’y saisissez aucun secret; sur un appareil partagé, effacez-les après export.",restored:"Une sauvegarde locale compatible a été restaurée automatiquement pour cette fiche.",empty:"Aucune question ne correspond à ce filtre.",saveReady:"Sauvegarde locale prête",clearAnswers:"Effacer mes réponses",import:"Importer",jsonBackup:"Sauvegarde JSON",exportExchange:"Exporter pour l’échange",backToTop:"Haut",backToTopAria:"Remonter tout en haut de la fiche",dialogTitle:"Questions encore incomplètes",dialogClose:"Continuer à répondre",dialogExport:"Exporter quand même",
+        invalidSchema:value=>`Schéma de questionnaire invalide : ${value||"absent"}`,roundRequired:"round_id est obligatoire",storageRequired:"storage_key est obligatoire",duplicateIds:"Les identifiants de questions doivent être uniques",unknownType:(id,type)=>`Type inconnu pour ${id} : ${type}`,
+        openAnswer:title=>`Votre réponse à « ${title} »`,openPlaceholder:"Décrivez votre réponse…",answerLegend:title=>`Réponse à « ${title} »`,multiLegend:"Sélectionnez une ou plusieurs réponses",forTitle:title=>` pour « ${title} »`,scaleLabel:title=>`Votre note pour « ${title} »`,notAnswered:"Non répondu",scaleProposed:value=>`Non répondu, valeur proposée ${value}`,rankingLegend:"Classez toutes les propositions",rankingHelp:"Utilisez les boutons Monter et Descendre, puis validez le classement.",rankingValidate:"Valider ce classement",rankingNotValidated:"Classement non validé",rankingValidated:"Classement validé",rankingChanged:"Classement modifié : validez-le pour l’enregistrer",moveUp:"Monter",moveDown:"Descendre",moveUpAria:label=>`Monter ${label} dans le classement`,moveDownAria:label=>`Descendre ${label} dans le classement`,
+        noteOptionalClarification:"(facultative, sauf choix à préciser)",noteOptional:"(facultative)",noteLabel:"Précision complémentaire",notePlaceholder:"Ajoutez une nuance, une variante ou une précision…",noteRequired:"Ce choix demande une précision pour pouvoir être consolidé.",noLocalMode:"Mode sans sauvegarde locale",savedAt:time=>`Sauvegardé à ${time}`,storageUnavailable:"Le stockage local est indisponible. Vos réponses restent dans cette page, mais elles seront perdues à sa fermeture : utilisez la sauvegarde JSON.",storageReadUnavailable:"Le stockage local est indisponible. Travaillez dans cette page puis exportez une sauvegarde JSON.",storageIgnored:"Une sauvegarde locale incompatible ou endommagée a été ignorée. Vous pouvez l’effacer ou importer un export compatible.",
+        invalidJsonObject:"Le fichier ne contient pas un objet JSON",incompatibleSchema:"Schéma incompatible",otherProject:"Cette sauvegarde appartient à un autre projet",otherRound:"Cette sauvegarde appartient à un autre tour",wrongStorageKey:"La clé de fiche ne correspond pas",invalidAnswers:"Le bloc answers est invalide",invalidNotes:"Le bloc notes est invalide",unknownQuestion:id=>`Question inconnue dans l’import : ${id}`,unknownNote:id=>`Note liée à une question inconnue : ${id}`,noteNotAllowed:id=>`La question ${id} n’accepte pas de note séparée`,noteMustText:id=>`La note de ${id} doit être un texte`,answerMustText:id=>`${id} doit contenir un texte`,unknownValue:id=>`Valeur inconnue pour ${id}`,invalidSelection:id=>`Sélection invalide pour ${id}`,invalidScale:id=>`Note invalide pour ${id}`,invalidRanking:id=>`Classement invalide pour ${id}`,
+        withoutAnswer:"Sans réponse",outOf:max=>`sur ${max}`,exportedAt:date=>`Export du ${date}`,round:"Tour",roundId:"Identifiant du tour",type:"Type",answer:"Réponse",note:"Précision",completionTitle:"État de complétion",answered:"Répondues",unanswered:"Sans réponse",needsClarification:"Choix à préciser",incomplete:(missing,unclear)=>`${missing} question(s) sans réponse et ${unclear} choix demandant une précision. Rien ne sera perdu : vous pouvez exporter maintenant ou continuer plus tard.`,answersSuffix:"reponses",backupSuffix:"sauvegarde",confirmClear:"Effacer toutes les réponses et notes de ce tour dans ce navigateur ?",clearStorageError:"Les réponses visibles ont été effacées, mais le stockage local reste indisponible.",answersCleared:"Réponses effacées",importImpossible:error=>`Import impossible : ${error}`
+      },
+      en:{
+        dateLocale:"en-GB",workshop:"workshop",defaultSubtitle:"Interactive decision sheet",defaultIntroTitle:"How to answer",defaultIntro:"Answer only the questions that are useful. Your responses are stored locally in this browser and can be exported at any time.",
+        yes:"Yes",no:"No",maybe:"Maybe",answeredStat:"answered",clarificationStat:"to clarify",notesStat:"notes",searchLabel:"Search the questions",searchPlaceholder:"Search…",filterLabel:"Filter questions",filterAll:"All",filterUnanswered:"Unanswered",filterClarification:"To clarify",filterNoted:"With a note",
+        privacyTitle:"Privacy",privacyText:"This sheet works offline. Your responses remain in this browser’s local storage and are not sent anywhere, but the sheet does not encrypt them. Do not enter secrets; on a shared device, clear them after exporting.",restored:"A compatible local backup was automatically restored for this sheet.",empty:"No question matches this filter.",saveReady:"Local save ready",clearAnswers:"Clear my answers",import:"Import",jsonBackup:"JSON backup",exportExchange:"Export for sharing",backToTop:"Top",backToTopAria:"Back to the top of the sheet",dialogTitle:"Questions still incomplete",dialogClose:"Keep answering",dialogExport:"Export anyway",
+        invalidSchema:value=>`Invalid questionnaire schema: ${value||"missing"}`,roundRequired:"round_id is required",storageRequired:"storage_key is required",duplicateIds:"Question identifiers must be unique",unknownType:(id,type)=>`Unknown type for ${id}: ${type}`,
+        openAnswer:title=>`Your answer to “${title}”`,openPlaceholder:"Describe your answer…",answerLegend:title=>`Answer to “${title}”`,multiLegend:"Select one or more answers",forTitle:title=>` for “${title}”`,scaleLabel:title=>`Your rating for “${title}”`,notAnswered:"Not answered",scaleProposed:value=>`Not answered, proposed value ${value}`,rankingLegend:"Rank all options",rankingHelp:"Use the Move up and Move down buttons, then confirm the ranking.",rankingValidate:"Confirm this ranking",rankingNotValidated:"Ranking not confirmed",rankingValidated:"Ranking confirmed",rankingChanged:"Ranking changed: confirm it to save",moveUp:"Move up",moveDown:"Move down",moveUpAria:label=>`Move ${label} up in the ranking`,moveDownAria:label=>`Move ${label} down in the ranking`,
+        noteOptionalClarification:"(optional, except for choices requiring clarification)",noteOptional:"(optional)",noteLabel:"Additional detail",notePlaceholder:"Add nuance, an alternative or more detail…",noteRequired:"This choice needs clarification before it can be consolidated.",noLocalMode:"No local save mode",savedAt:time=>`Saved at ${time}`,storageUnavailable:"Local storage is unavailable. Your responses remain on this page but will be lost when it closes: use the JSON backup.",storageReadUnavailable:"Local storage is unavailable. Work on this page, then export a JSON backup.",storageIgnored:"An incompatible or damaged local backup was ignored. You can clear it or import a compatible export.",
+        invalidJsonObject:"The file does not contain a JSON object",incompatibleSchema:"Incompatible schema",otherProject:"This backup belongs to another project",otherRound:"This backup belongs to another round",wrongStorageKey:"The sheet key does not match",invalidAnswers:"The answers block is invalid",invalidNotes:"The notes block is invalid",unknownQuestion:id=>`Unknown question in import: ${id}`,unknownNote:id=>`Note linked to an unknown question: ${id}`,noteNotAllowed:id=>`Question ${id} does not accept a separate note`,noteMustText:id=>`The note for ${id} must be text`,answerMustText:id=>`${id} must contain text`,unknownValue:id=>`Unknown value for ${id}`,invalidSelection:id=>`Invalid selection for ${id}`,invalidScale:id=>`Invalid rating for ${id}`,invalidRanking:id=>`Invalid ranking for ${id}`,
+        withoutAnswer:"Unanswered",outOf:max=>`out of ${max}`,exportedAt:date=>`Exported on ${date}`,round:"Round",roundId:"Round identifier",type:"Type",answer:"Answer",note:"Detail",completionTitle:"Completion status",answered:"Answered",unanswered:"Unanswered",needsClarification:"Choices to clarify",incomplete:(missing,unclear)=>`${missing} unanswered question(s) and ${unclear} choice(s) requiring clarification. Nothing will be lost: you can export now or continue later.`,answersSuffix:"answers",backupSuffix:"backup",confirmClear:"Clear all answers and notes for this round in this browser?",clearStorageError:"The visible answers were cleared, but local storage remains unavailable.",answersCleared:"Answers cleared",importImpossible:error=>`Import failed: ${error}`
+      }
+    };
+    const locale=DATA.locale==="en"?"en":"fr";
+    const t=I18N[locale];
+    document.documentElement.lang=locale;
+    if(DATA.schema!==EXPECTED_SCHEMA)throw new Error(t.invalidSchema(DATA.schema));
+    if(typeof DATA.round_id!=="string"||!DATA.round_id.trim())throw new Error(t.roundRequired);
+    if(typeof DATA.storage_key!=="string"||!DATA.storage_key.trim())throw new Error(t.storageRequired);
 
     const defaultDecisionChoices=[
-      {id:"yes",label:"Oui",tone:"positive",needs_clarification:false},
-      {id:"no",label:"Non",tone:"negative",needs_clarification:false},
-      {id:"maybe",label:"Peut-être",tone:"warning",needs_clarification:true}
+      {id:"yes",label:t.yes,tone:"positive",needs_clarification:false},
+      {id:"no",label:t.no,tone:"negative",needs_clarification:false},
+      {id:"maybe",label:t.maybe,tone:"warning",needs_clarification:true}
     ];
     const allowedTypes=new Set(["open","decision","single_choice","multi_choice","scale","ranking"]);
     const state=Object.create(null);
@@ -95,16 +120,19 @@
     let storageAvailable=true;
     const byId=id=>document.getElementById(id);
     const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    document.querySelectorAll("[data-i18n]").forEach(element=>{element.textContent=t[element.dataset.i18n]});
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(element=>{element.placeholder=t[element.dataset.i18nPlaceholder]});
+    document.querySelectorAll("[data-i18n-aria-label]").forEach(element=>{element.setAttribute("aria-label",t[element.dataset.i18nAriaLabel])});
     const questions=DATA.sections.flatMap(section=>section.questions.map(question=>({...question,sectionId:section.id,sectionTitle:section.title})));
     const questionById=new Map(questions.map(question=>[question.id,question]));
-    if(questionById.size!==questions.length)throw new Error("Les identifiants de questions doivent être uniques");
-    questions.forEach(question=>{if(!allowedTypes.has(question.type))throw new Error(`Type inconnu pour ${question.id} : ${question.type}`)});
+    if(questionById.size!==questions.length)throw new Error(t.duplicateIds);
+    questions.forEach(question=>{if(!allowedTypes.has(question.type))throw new Error(t.unknownType(question.id,question.type))});
 
-    document.title=DATA.project.title+" — atelier";
+    document.title=DATA.project.title+" — "+t.workshop;
     byId("title").textContent=DATA.project.title;
-    byId("subtitle").textContent=DATA.project.subtitle||"Fiche de décisions interactive";
+    byId("subtitle").textContent=DATA.project.subtitle||t.defaultSubtitle;
     byId("round").textContent=DATA.round||DATA.round_id;
-    byId("intro").innerHTML="<strong>"+esc(DATA.intro_title||"Comment répondre")+"</strong><p>"+esc(DATA.intro||"Répondez seulement aux choix utiles. Vos réponses sont conservées localement dans ce navigateur et peuvent être exportées à tout moment.")+"</p>";
+    byId("intro").innerHTML="<strong>"+esc(DATA.intro_title||t.defaultIntroTitle)+"</strong><p>"+esc(DATA.intro||t.defaultIntro)+"</p>";
     const theme=DATA.theme||{};
     Object.entries(theme).forEach(([key,value])=>document.documentElement.style.setProperty("--"+key.replaceAll("_","-"),value));
 
@@ -127,29 +155,28 @@
       return `<label class="choice" data-tone="${esc(choice.tone||"neutral")}"><input id="${esc(id)}" type="${kind}" name="${esc(question.id)}" value="${esc(choice.id)}" data-answer-question="${esc(question.id)}"><span>${esc(choice.label)}</span></label>`;
     }
     function renderAnswer(question){
-      const title=esc(question.title);
       if(question.type==="open"){
-        return `<div class="answer"><label class="field-label" for="${esc(answerId(question))}">Votre réponse à « ${title} » <span class="required-mark" aria-hidden="true">*</span></label><textarea id="${esc(answerId(question))}" data-open-answer="${esc(question.id)}" required aria-required="true" placeholder="${esc(question.answer_placeholder||"Décrivez votre réponse…")}"></textarea></div>`;
+        return `<div class="answer"><label class="field-label" for="${esc(answerId(question))}">${esc(t.openAnswer(question.title))} <span class="required-mark" aria-hidden="true">*</span></label><textarea id="${esc(answerId(question))}" data-open-answer="${esc(question.id)}" required aria-required="true" placeholder="${esc(question.answer_placeholder||t.openPlaceholder)}"></textarea></div>`;
       }
       if(question.type==="decision"||question.type==="single_choice"){
-        return `<fieldset class="answer answer-fieldset"><legend class="sr-only">Réponse à « ${title} »</legend><div class="choices">${choicesFor(question).map(choice=>choiceInput(question,choice,"radio")).join("")}</div></fieldset>`;
+        return `<fieldset class="answer answer-fieldset"><legend class="sr-only">${esc(t.answerLegend(question.title))}</legend><div class="choices">${choicesFor(question).map(choice=>choiceInput(question,choice,"radio")).join("")}</div></fieldset>`;
       }
       if(question.type==="multi_choice"){
-        return `<fieldset class="answer answer-fieldset"><legend class="field-label">Sélectionnez une ou plusieurs réponses<span class="sr-only"> pour « ${title} »</span> <span class="required-mark" aria-hidden="true">*</span></legend><div class="choices">${choicesFor(question).map(choice=>choiceInput(question,choice,"checkbox")).join("")}</div></fieldset>`;
+        return `<fieldset class="answer answer-fieldset"><legend class="field-label">${esc(t.multiLegend)}<span class="sr-only">${esc(t.forTitle(question.title))}</span> <span class="required-mark" aria-hidden="true">*</span></legend><div class="choices">${choicesFor(question).map(choice=>choiceInput(question,choice,"checkbox")).join("")}</div></fieldset>`;
       }
       if(question.type==="scale"){
         const scale=scaleFor(question);
-        return `<div class="answer scale-wrap"><label class="field-label" for="${esc(answerId(question))}">Votre note pour « ${title} » <span class="required-mark" aria-hidden="true">*</span></label><output class="scale-value" id="scale-value-${esc(question.id)}" for="${esc(answerId(question))}" aria-live="polite">Non répondu</output><input class="scale-input" id="${esc(answerId(question))}" data-scale-answer="${esc(question.id)}" type="range" min="${scale.min}" max="${scale.max}" step="${scale.step}" value="${scale.initial}" aria-valuetext="Non répondu, valeur proposée ${scale.initial}" aria-describedby="scale-help-${esc(question.id)} scale-value-${esc(question.id)}" aria-required="true"><div class="scale-ends" id="scale-help-${esc(question.id)}"><span>${esc(scale.minLabel)}</span><span>${esc(scale.maxLabel)}</span></div></div>`;
+        return `<div class="answer scale-wrap"><label class="field-label" for="${esc(answerId(question))}">${esc(t.scaleLabel(question.title))} <span class="required-mark" aria-hidden="true">*</span></label><output class="scale-value" id="scale-value-${esc(question.id)}" for="${esc(answerId(question))}" aria-live="polite">${esc(t.notAnswered)}</output><input class="scale-input" id="${esc(answerId(question))}" data-scale-answer="${esc(question.id)}" type="range" min="${scale.min}" max="${scale.max}" step="${scale.step}" value="${scale.initial}" aria-valuetext="${esc(t.scaleProposed(scale.initial))}" aria-describedby="scale-help-${esc(question.id)} scale-value-${esc(question.id)}" aria-required="true"><div class="scale-ends" id="scale-help-${esc(question.id)}"><span>${esc(scale.minLabel)}</span><span>${esc(scale.maxLabel)}</span></div></div>`;
       }
       const descriptionId=`ranking-help-${question.id}`;
-      return `<fieldset class="answer ranking-fieldset"><legend class="field-label">Classez toutes les propositions<span class="sr-only"> pour « ${title} »</span> <span class="required-mark" aria-hidden="true">*</span></legend><p class="ranking-help" id="${esc(descriptionId)}">Utilisez les boutons Monter et Descendre, puis validez le classement.</p><div data-ranking-list="${esc(question.id)}"></div><div class="ranking-actions"><button class="action" type="button" data-ranking-validate="${esc(question.id)}" aria-describedby="${esc(descriptionId)}">Valider ce classement</button><span class="ranking-status" id="ranking-status-${esc(question.id)}" role="status" aria-live="polite">Classement non validé</span></div></fieldset>`;
+      return `<fieldset class="answer ranking-fieldset"><legend class="field-label">${esc(t.rankingLegend)}<span class="sr-only">${esc(t.forTitle(question.title))}</span> <span class="required-mark" aria-hidden="true">*</span></legend><p class="ranking-help" id="${esc(descriptionId)}">${esc(t.rankingHelp)}</p><div data-ranking-list="${esc(question.id)}"></div><div class="ranking-actions"><button class="action" type="button" data-ranking-validate="${esc(question.id)}" aria-describedby="${esc(descriptionId)}">${esc(t.rankingValidate)}</button><span class="ranking-status" id="ranking-status-${esc(question.id)}" role="status" aria-live="polite">${esc(t.rankingNotValidated)}</span></div></fieldset>`;
     }
     function renderNote(question){
       if(!supportsNote(question))return "";
       const hintId=`note-hint-${question.id}`;
       const mayNeedClarification=choicesFor(question).some(choice=>choice.needs_clarification===true);
-      const noteQualifier=mayNeedClarification?"(facultative, sauf choix à préciser)":"(facultative)";
-      return `<div class="note-block"><label class="field-label" for="${esc(noteId(question))}">Précision complémentaire<span class="sr-only"> pour « ${esc(question.title)} »</span> <span class="help">${noteQualifier}</span></label><textarea id="${esc(noteId(question))}" data-note="${esc(question.id)}" aria-describedby="${esc(hintId)}" placeholder="${esc(question.note_placeholder||"Ajoutez une nuance, une variante ou une précision…")}"></textarea><div class="note-hint" id="${esc(hintId)}" role="status" aria-live="polite" hidden>Ce choix demande une précision pour pouvoir être consolidé.</div></div>`;
+      const noteQualifier=mayNeedClarification?t.noteOptionalClarification:t.noteOptional;
+      return `<div class="note-block"><label class="field-label" for="${esc(noteId(question))}">${esc(t.noteLabel)}<span class="sr-only">${esc(t.forTitle(question.title))}</span> <span class="help">${esc(noteQualifier)}</span></label><textarea id="${esc(noteId(question))}" data-note="${esc(question.id)}" aria-describedby="${esc(hintId)}" placeholder="${esc(question.note_placeholder||t.notePlaceholder)}"></textarea><div class="note-hint" id="${esc(hintId)}" role="status" aria-live="polite" hidden>${esc(t.noteRequired)}</div></div>`;
     }
     function render(){
       byId("sections").innerHTML=DATA.sections.map((section,index)=>`<details class="section" data-section="${esc(section.id)}" ${index<2?"open":""}><summary><span>${esc(section.title)}</span><span class="section-desc">${esc(section.description||"")}</span></summary><div class="questions">${section.questions.map(question=>`<article class="question" data-question="${esc(question.id)}" data-search="${esc((question.title+" "+(question.description||"")+" "+section.title).toLowerCase())}"><div class="question-head"><span class="qid">${esc(question.id)}</span><div><h3 id="${esc(titleId(question))}">${esc(question.title)}</h3>${question.description?`<p>${esc(question.description)}</p>`:""}</div></div>${renderAnswer(question)}${renderNote(question)}</article>`).join("")}</div></details>`).join("");
@@ -189,7 +216,7 @@
       const labels=new Map(choicesFor(question).map(item=>[item.id,item.label]));
       const host=document.querySelector(`[data-ranking-list="${CSS.escape(question.id)}"]`);
       if(!host)return;
-      host.innerHTML=`<ol class="ranking-list">${current.map((id,index)=>`<li class="ranking-item"><span class="ranking-position" aria-hidden="true">${index+1}</span><span class="ranking-label">${esc(labels.get(id)||id)}</span><span class="ranking-controls"><button class="action" type="button" data-ranking-move="up" data-ranking-question="${esc(question.id)}" data-ranking-choice="${esc(id)}" aria-label="Monter ${esc(labels.get(id)||id)} dans le classement" ${index===0?"disabled":""}>↑ Monter</button><button class="action" type="button" data-ranking-move="down" data-ranking-question="${esc(question.id)}" data-ranking-choice="${esc(id)}" aria-label="Descendre ${esc(labels.get(id)||id)} dans le classement" ${index===current.length-1?"disabled":""}>↓ Descendre</button></span></li>`).join("")}</ol>`;
+      host.innerHTML=`<ol class="ranking-list">${current.map((id,index)=>{const label=labels.get(id)||id;return `<li class="ranking-item"><span class="ranking-position" aria-hidden="true">${index+1}</span><span class="ranking-label">${esc(label)}</span><span class="ranking-controls"><button class="action" type="button" data-ranking-move="up" data-ranking-question="${esc(question.id)}" data-ranking-choice="${esc(id)}" aria-label="${esc(t.moveUpAria(label))}" ${index===0?"disabled":""}>↑ ${esc(t.moveUp)}</button><button class="action" type="button" data-ranking-move="down" data-ranking-question="${esc(question.id)}" data-ranking-choice="${esc(id)}" aria-label="${esc(t.moveDownAria(label))}" ${index===current.length-1?"disabled":""}>↓ ${esc(t.moveDown)}</button></span></li>`}).join("")}</ol>`;
       if(focusChoice){
         requestAnimationFrame(()=>{
           const selector=`button[data-ranking-question="${CSS.escape(question.id)}"][data-ranking-choice="${CSS.escape(focusChoice)}"][data-ranking-move="${focusDirection}"]`;
@@ -204,50 +231,50 @@
         const value=state.answers[question.id];
         document.querySelectorAll(`input[data-answer-question="${CSS.escape(question.id)}"]`).forEach(input=>{input.checked=Array.isArray(value)?value.includes(input.value):value===input.value});
         const open=document.querySelector(`[data-open-answer="${CSS.escape(question.id)}"]`);if(open)open.value=typeof value==="string"?value:"";
-        const scale=document.querySelector(`[data-scale-answer="${CSS.escape(question.id)}"]`);if(scale){const config=scaleFor(question);const answered=validScaleValue(question,value);scale.value=answered?String(value):String(config.initial);scale.setAttribute("aria-valuetext",answered?String(value):`Non répondu, valeur proposée ${config.initial}`);byId(`scale-value-${question.id}`).textContent=answered?String(value):"Non répondu"}
-        if(question.type==="ranking"){rankingDrafts[question.id]=validRankingValue(question,value)?[...value]:choicesFor(question).map(item=>item.id);renderRankingList(question);byId(`ranking-status-${question.id}`).textContent=validRankingValue(question,value)?"Classement validé":"Classement non validé"}
+        const scale=document.querySelector(`[data-scale-answer="${CSS.escape(question.id)}"]`);if(scale){const config=scaleFor(question);const answered=validScaleValue(question,value);scale.value=answered?String(value):String(config.initial);scale.setAttribute("aria-valuetext",answered?String(value):t.scaleProposed(config.initial));byId(`scale-value-${question.id}`).textContent=answered?String(value):t.notAnswered}
+        if(question.type==="ranking"){rankingDrafts[question.id]=validRankingValue(question,value)?[...value]:choicesFor(question).map(item=>item.id);renderRankingList(question);byId(`ranking-status-${question.id}`).textContent=validRankingValue(question,value)?t.rankingValidated:t.rankingNotValidated}
         const note=document.querySelector(`[data-note="${CSS.escape(question.id)}"]`);if(note)note.value=typeof state.notes[question.id]==="string"?state.notes[question.id]:"";
       });
       update();
     }
     function storagePayload(){return {schema:ANSWERS_SCHEMA,kind:"project-workshop-answers",saved_at:new Date().toISOString(),project:DATA.project,round_id:DATA.round_id,storage_key:DATA.storage_key,answers:state.answers,notes:state.notes}}
-    function showStorageWarning(message,degraded=false){byId("storageWarning").textContent=message;byId("storageWarning").hidden=false;if(degraded){storageAvailable=false;byId("saveState").textContent="Mode sans sauvegarde locale"}}
+    function showStorageWarning(message,degraded=false){byId("storageWarning").textContent=message;byId("storageWarning").hidden=false;if(degraded){storageAvailable=false;byId("saveState").textContent=t.noLocalMode}}
     function save(){
       if(!storageAvailable)return;
-      try{localStorage.setItem(DATA.storage_key,JSON.stringify(storagePayload()));byId("saveState").textContent="Sauvegardé à "+new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})}
-      catch(error){console.warn("Sauvegarde locale indisponible",error);showStorageWarning("Le stockage local est indisponible. Vos réponses restent dans cette page, mais elles seront perdues à sa fermeture : utilisez la sauvegarde JSON.",true)}
+      try{localStorage.setItem(DATA.storage_key,JSON.stringify(storagePayload()));byId("saveState").textContent=t.savedAt(new Date().toLocaleTimeString(t.dateLocale,{hour:"2-digit",minute:"2-digit"}))}
+      catch(error){console.warn(t.storageUnavailable,error);showStorageWarning(t.storageUnavailable,true)}
     }
     function validateAnswerValue(question,value){
-      if(question.type==="open"){if(typeof value!=="string")throw new Error(`${question.id} doit contenir un texte`);return value}
-      if(question.type==="decision"||question.type==="single_choice"){if(typeof value!=="string"||!choice(question,value))throw new Error(`Valeur inconnue pour ${question.id}`);return value}
+      if(question.type==="open"){if(typeof value!=="string")throw new Error(t.answerMustText(question.id));return value}
+      if(question.type==="decision"||question.type==="single_choice"){if(typeof value!=="string"||!choice(question,value))throw new Error(t.unknownValue(question.id));return value}
       if(question.type==="multi_choice"){
-        if(!Array.isArray(value)||new Set(value).size!==value.length||!value.every(id=>typeof id==="string"&&choice(question,id)))throw new Error(`Sélection invalide pour ${question.id}`);
+        if(!Array.isArray(value)||new Set(value).size!==value.length||!value.every(id=>typeof id==="string"&&choice(question,id)))throw new Error(t.invalidSelection(question.id));
         return [...value];
       }
-      if(question.type==="scale"){if(!validScaleValue(question,value))throw new Error(`Note invalide pour ${question.id}`);return value}
-      if(!validRankingValue(question,value))throw new Error(`Classement invalide pour ${question.id}`);
+      if(question.type==="scale"){if(!validScaleValue(question,value))throw new Error(t.invalidScale(question.id));return value}
+      if(!validRankingValue(question,value))throw new Error(t.invalidRanking(question.id));
       return [...value];
     }
     function validatePayload(saved){
-      if(!saved||typeof saved!=="object"||Array.isArray(saved))throw new Error("Le fichier ne contient pas un objet JSON");
-      if(saved.schema!==ANSWERS_SCHEMA)throw new Error("Schéma incompatible");
-      if(!saved.project||typeof saved.project!=="object"||saved.project.slug!==DATA.project.slug)throw new Error("Cette sauvegarde appartient à un autre projet");
-      if(saved.round_id!==DATA.round_id)throw new Error("Cette sauvegarde appartient à un autre tour");
-      if(saved.storage_key!==DATA.storage_key)throw new Error("La clé de fiche ne correspond pas");
-      if(!saved.answers||typeof saved.answers!=="object"||Array.isArray(saved.answers))throw new Error("Le bloc answers est invalide");
-      if(!saved.notes||typeof saved.notes!=="object"||Array.isArray(saved.notes))throw new Error("Le bloc notes est invalide");
+      if(!saved||typeof saved!=="object"||Array.isArray(saved))throw new Error(t.invalidJsonObject);
+      if(saved.schema!==ANSWERS_SCHEMA)throw new Error(t.incompatibleSchema);
+      if(!saved.project||typeof saved.project!=="object"||saved.project.slug!==DATA.project.slug)throw new Error(t.otherProject);
+      if(saved.round_id!==DATA.round_id)throw new Error(t.otherRound);
+      if(saved.storage_key!==DATA.storage_key)throw new Error(t.wrongStorageKey);
+      if(!saved.answers||typeof saved.answers!=="object"||Array.isArray(saved.answers))throw new Error(t.invalidAnswers);
+      if(!saved.notes||typeof saved.notes!=="object"||Array.isArray(saved.notes))throw new Error(t.invalidNotes);
       const answers=emptyMap();
-      for(const [id,value] of Object.entries(saved.answers)){const question=questionById.get(id);if(!question)throw new Error(`Question inconnue dans l’import : ${id}`);answers[id]=validateAnswerValue(question,value)}
+      for(const [id,value] of Object.entries(saved.answers)){const question=questionById.get(id);if(!question)throw new Error(t.unknownQuestion(id));answers[id]=validateAnswerValue(question,value)}
       const notes=emptyMap();
-      for(const [id,value] of Object.entries(saved.notes)){const question=questionById.get(id);if(!question)throw new Error(`Note liée à une question inconnue : ${id}`);if(!supportsNote(question))throw new Error(`La question ${id} n’accepte pas de note séparée`);if(typeof value!=="string")throw new Error(`La note de ${id} doit être un texte`);notes[id]=value}
+      for(const [id,value] of Object.entries(saved.notes)){const question=questionById.get(id);if(!question)throw new Error(t.unknownNote(id));if(!supportsNote(question))throw new Error(t.noteNotAllowed(id));if(typeof value!=="string")throw new Error(t.noteMustText(id));notes[id]=value}
       return {answers,notes};
     }
     function load(){
       let raw;
-      try{raw=localStorage.getItem(DATA.storage_key)}catch(error){console.warn("Lecture locale indisponible",error);showStorageWarning("Le stockage local est indisponible. Travaillez dans cette page puis exportez une sauvegarde JSON.",true);return}
+      try{raw=localStorage.getItem(DATA.storage_key)}catch(error){console.warn(t.storageReadUnavailable,error);showStorageWarning(t.storageReadUnavailable,true);return}
       if(!raw)return;
       try{const restored=validatePayload(JSON.parse(raw));replaceMap(state,"answers",restored.answers);replaceMap(state,"notes",restored.notes);byId("restore").hidden=false}
-      catch(error){console.warn("Sauvegarde locale ignorée",error);showStorageWarning("Une sauvegarde locale incompatible ou endommagée a été ignorée. Vous pouvez l’effacer ou importer un export compatible.")}
+      catch(error){console.warn(t.storageIgnored,error);showStorageWarning(t.storageIgnored)}
     }
     function update(){
       const answered=questions.filter(isAnswered).length;
@@ -293,42 +320,42 @@
     function onClick(event){
       const move=event.target.closest("[data-ranking-move]");
       if(move){
-        const question=questionById.get(move.dataset.rankingQuestion);const order=rankingDrafts[question.id];const index=order.indexOf(move.dataset.rankingChoice);const delta=move.dataset.rankingMove==="up"?-1:1;const next=index+delta;if(next<0||next>=order.length)return;[order[index],order[next]]=[order[next],order[index]];delete state.answers[question.id];save();update();byId(`ranking-status-${question.id}`).textContent="Classement modifié : validez-le pour l’enregistrer";renderRankingList(question,move.dataset.rankingChoice,move.dataset.rankingMove);return;
+        const question=questionById.get(move.dataset.rankingQuestion);const order=rankingDrafts[question.id];const index=order.indexOf(move.dataset.rankingChoice);const delta=move.dataset.rankingMove==="up"?-1:1;const next=index+delta;if(next<0||next>=order.length)return;[order[index],order[next]]=[order[next],order[index]];delete state.answers[question.id];save();update();byId(`ranking-status-${question.id}`).textContent=t.rankingChanged;renderRankingList(question,move.dataset.rankingChoice,move.dataset.rankingMove);return;
       }
       const validate=event.target.closest("[data-ranking-validate]");
-      if(validate){const question=questionById.get(validate.dataset.rankingValidate);state.answers[question.id]=[...rankingDrafts[question.id]];save();update();byId(`ranking-status-${question.id}`).textContent="Classement validé"}
+      if(validate){const question=questionById.get(validate.dataset.rankingValidate);state.answers[question.id]=[...rankingDrafts[question.id]];save();update();byId(`ranking-status-${question.id}`).textContent=t.rankingValidated}
     }
     function exportPayload(){return {...storagePayload(),exported_at:new Date().toISOString()}}
     function download(name,content,type){const link=document.createElement("a");link.href=URL.createObjectURL(new Blob([content],{type}));link.download=name;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(link.href),1000)}
     function labelFor(question,id){return choice(question,id)?.label||id}
     function formatAnswer(question,value){
-      if(!isAnswered(question))return "Sans réponse";
+      if(!isAnswered(question))return t.withoutAnswer;
       if(question.type==="open")return value.trim();
       if(question.type==="decision"||question.type==="single_choice")return labelFor(question,value);
       if(question.type==="multi_choice")return value.map(id=>labelFor(question,id)).join(", ");
-      if(question.type==="scale"){const scale=scaleFor(question);return `${value} sur ${scale.max}`}
+      if(question.type==="scale"){const scale=scaleFor(question);return `${value} ${t.outOf(scale.max)}`}
       return value.map((id,index)=>`${index+1}. ${labelFor(question,id)}`).join(" → ");
     }
     function markdown(){
-      const lines=[`# ${DATA.project.title}`,"",`Export du ${new Date().toLocaleString("fr-FR")}`,"",`Tour : ${DATA.round||DATA.round_id}`,`Identifiant du tour : ${DATA.round_id}`,""];
-      DATA.sections.forEach(section=>{lines.push(`## ${section.title}`,"");section.questions.forEach(raw=>{const question=questionById.get(raw.id);lines.push(`### ${question.id} — ${question.title}`,`Type : ${question.type}`,`Réponse : ${formatAnswer(question,state.answers[question.id])}`);if((state.notes[question.id]||"").trim())lines.push(`Précision : ${state.notes[question.id].trim()}`);lines.push("")})});
+      const lines=[`# ${DATA.project.title}`,"",t.exportedAt(new Date().toLocaleString(t.dateLocale)),"",`${t.round} : ${DATA.round||DATA.round_id}`,`${t.roundId} : ${DATA.round_id}`,""];
+      DATA.sections.forEach(section=>{lines.push(`## ${section.title}`,"");section.questions.forEach(raw=>{const question=questionById.get(raw.id);lines.push(`### ${question.id} — ${question.title}`,`${t.type} : ${question.type}`,`${t.answer} : ${formatAnswer(question,state.answers[question.id])}`);if((state.notes[question.id]||"").trim())lines.push(`${t.note} : ${state.notes[question.id].trim()}`);lines.push("")})});
       const unanswered=questions.filter(question=>!isAnswered(question)).length;
       const unclear=questions.filter(question=>answerNeedsClarification(question,state.answers[question.id])&&!(state.notes[question.id]||"").trim()).length;
-      lines.push("## État de complétion","",`- Répondues : ${questions.length-unanswered}/${questions.length}`,`- Sans réponse : ${unanswered}`,`- Choix à préciser : ${unclear}`,"");
+      lines.push(`## ${t.completionTitle}`,"",`- ${t.answered} : ${questions.length-unanswered}/${questions.length}`,`- ${t.unanswered} : ${unanswered}`,`- ${t.needsClarification} : ${unclear}`,"");
       return lines.join("\n");
     }
     function fileStem(){return `${DATA.project.slug}-${DATA.round_id}`.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9-]+/g,"-").replace(/^-+|-+$/g,"")}
     function requestMarkdown(){
       const incomplete=questions.filter(question=>!isAnswered(question));
       const unclear=questions.filter(question=>answerNeedsClarification(question,state.answers[question.id])&&!(state.notes[question.id]||"").trim());
-      if(incomplete.length||unclear.length){byId("dialogText").textContent=`${incomplete.length} question(s) sans réponse et ${unclear.length} choix demandant une précision. Rien ne sera perdu : vous pouvez exporter maintenant ou continuer plus tard.`;byId("dialog").showModal()}else exportMarkdown();
+      if(incomplete.length||unclear.length){byId("dialogText").textContent=t.incomplete(incomplete.length,unclear.length);byId("dialog").showModal()}else exportMarkdown();
     }
-    function exportMarkdown(){download(fileStem()+"-reponses.md",markdown(),"text/markdown;charset=utf-8")}
+    function exportMarkdown(){download(fileStem()+`-${t.answersSuffix}.md`,markdown(),"text/markdown;charset=utf-8")}
     function clearAnswers(){
-      if(!window.confirm("Effacer toutes les réponses et notes de ce tour dans ce navigateur ?"))return;
+      if(!window.confirm(t.confirmClear))return;
       replaceMap(state,"answers",emptyMap());replaceMap(state,"notes",emptyMap());Object.keys(rankingDrafts).forEach(id=>delete rankingDrafts[id]);
-      try{localStorage.removeItem(DATA.storage_key)}catch(error){console.warn("Effacement local impossible",error);showStorageWarning("Les réponses visibles ont été effacées, mais le stockage local reste indisponible.",true)}
-      byId("restore").hidden=true;applyState();byId("saveState").textContent="Réponses effacées";
+      try{localStorage.removeItem(DATA.storage_key)}catch(error){console.warn(t.clearStorageError,error);showStorageWarning(t.clearStorageError,true)}
+      byId("restore").hidden=true;applyState();byId("saveState").textContent=t.answersCleared;
     }
 
     byId("sections").addEventListener("input",onInput);
@@ -337,13 +364,13 @@
     byId("search").addEventListener("input",update);
     byId("filter").addEventListener("change",update);
     byId("markdownButton").addEventListener("click",requestMarkdown);
-    byId("jsonButton").addEventListener("click",()=>download(fileStem()+"-sauvegarde.json",JSON.stringify(exportPayload(),null,2),"application/json"));
+    byId("jsonButton").addEventListener("click",()=>download(fileStem()+`-${t.backupSuffix}.json`,JSON.stringify(exportPayload(),null,2),"application/json"));
     byId("importButton").addEventListener("click",()=>byId("fileInput").click());
     byId("clearButton").addEventListener("click",clearAnswers);
     byId("fileInput").addEventListener("change",async event=>{
       const file=event.target.files[0];if(!file)return;
       try{const imported=validatePayload(JSON.parse(await file.text()));replaceMap(state,"answers",imported.answers);replaceMap(state,"notes",imported.notes);applyState();save()}
-      catch(error){window.alert("Import impossible : "+error.message)}
+      catch(error){window.alert(t.importImpossible(error.message))}
       event.target.value="";
     });
     byId("dialogClose").addEventListener("click",()=>byId("dialog").close());

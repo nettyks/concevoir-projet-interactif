@@ -1,5 +1,6 @@
 {
   "schema": "project-workshop-planning-v2",
+  "locale": "fr",
   "storage_key": "atelier-quartier-planning-v2",
   "project": {
     "title": "Atelier de quartier",

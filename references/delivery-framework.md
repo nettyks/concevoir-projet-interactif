@@ -1,5 +1,11 @@
 # Cadre de réalisation d'un projet numérique
 
+## Langue du plan
+
+Utiliser `locale: "fr"` ou `locale: "en"`. Le modèle traduit l'interface, les états par défaut, les sévérités affichées, les messages et l'export Markdown. Rédiger dans la même langue les titres, objectifs, livrables, critères, risques, questions et jalons.
+
+Conserver les identifiants techniques lors d'une traduction : phases, segments, décisions, statuts (`a-preciser`, `pret`, `en-cours`, `verification`, `termine`) et sévérités (`bloquant`, `avant-segment`, `differable`). Ils restent indépendants de la langue et garantissent la compatibilité des dépendances et des états sauvegardés. Consulter `planning-example.en.json` pour un exemple complet.
+
 ## Source de vérité après validation
 
 Maintenir une spécification courte contenant vision, utilisateurs, parcours essentiels, périmètre, hors périmètre, exigences techniques, risques, hypothèses, décisions différées et critères de réussite. Relier chaque exigence à ses décisions d'origine.

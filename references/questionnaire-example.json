@@ -1,5 +1,6 @@
 {
   "schema": "project-workshop-questionnaire-v2",
+  "locale": "fr",
   "project": {
     "title": "Atelier de quartier",
     "slug": "atelier-quartier",

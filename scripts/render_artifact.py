@@ -35,6 +35,7 @@ QUESTION_TYPES = {
     "scale",
     "ranking",
 }
+LOCALES = {"fr", "en"}
 CHOICE_TONES = {"neutral", "positive", "warning", "negative"}
 OPEN_QUESTION_SEVERITIES = {"bloquant", "avant-segment", "differable"}
 DEFAULT_STATUSES = {
@@ -66,26 +67,18 @@ THEME_KEYS = {
     "warning",
     "yes",
 }
-DEFAULT_DECISION_CHOICES = [
-    {
-        "id": "yes",
-        "label": "Oui",
-        "tone": "positive",
-        "needs_clarification": False,
-    },
-    {
-        "id": "no",
-        "label": "Non",
-        "tone": "negative",
-        "needs_clarification": False,
-    },
-    {
-        "id": "maybe",
-        "label": "Peut-être",
-        "tone": "warning",
-        "needs_clarification": True,
-    },
-]
+DEFAULT_DECISION_CHOICES = {
+    "fr": [
+        {"id": "yes", "label": "Oui", "tone": "positive", "needs_clarification": False},
+        {"id": "no", "label": "Non", "tone": "negative", "needs_clarification": False},
+        {"id": "maybe", "label": "Peut-être", "tone": "warning", "needs_clarification": True},
+    ],
+    "en": [
+        {"id": "yes", "label": "Yes", "tone": "positive", "needs_clarification": False},
+        {"id": "no", "label": "No", "tone": "negative", "needs_clarification": False},
+        {"id": "maybe", "label": "Maybe", "tone": "warning", "needs_clarification": True},
+    ],
+}
 
 
 class ConfigError(ValueError):
@@ -217,6 +210,14 @@ def validate_storage_key(data: dict[str, Any]) -> None:
         raise ConfigError("storage_key ne doit pas contenir d'espace")
 
 
+def validate_locale(data: dict[str, Any]) -> None:
+    if "locale" not in data:
+        return
+    locale = require_text(data, "locale", "racine")
+    if locale not in LOCALES:
+        raise ConfigError("locale doit valoir fr ou en")
+
+
 def validate_theme(data: dict[str, Any]) -> None:
     if "theme" not in data:
         return
@@ -344,6 +345,7 @@ def validate_questionnaire(data: dict[str, Any]) -> None:
         data,
         {
             "schema",
+            "locale",
             "project",
             "round_id",
             "round",
@@ -359,6 +361,7 @@ def validate_questionnaire(data: dict[str, Any]) -> None:
     if schema != QUESTIONNAIRE_SCHEMA:
         raise ConfigError(f"schema doit valoir {QUESTIONNAIRE_SCHEMA}")
     validate_project(data)
+    validate_locale(data)
     require_id(data, "round_id", "racine")
     require_text(data, "round", "racine")
     validate_storage_key(data)
@@ -459,6 +462,7 @@ def validate_planning(data: dict[str, Any]) -> None:
         data,
         {
             "schema",
+            "locale",
             "project",
             "storage_key",
             "view",
@@ -474,6 +478,7 @@ def validate_planning(data: dict[str, Any]) -> None:
     if schema != PLANNING_SCHEMA:
         raise ConfigError(f"schema doit valoir {PLANNING_SCHEMA}")
     validate_project(data)
+    validate_locale(data)
     validate_storage_key(data)
     validate_theme(data)
     view = require_text(data, "view", "racine")
@@ -678,10 +683,11 @@ def atomic_write_text(output: Path, content: str) -> None:
 def normalized_for_render(kind: str, data: dict[str, Any]) -> dict[str, Any]:
     normalized = copy.deepcopy(data)
     if kind == "questionnaire":
+        locale = normalized.get("locale", "fr")
         for section in normalized["sections"]:
             for question in section["questions"]:
                 if question["type"] == "decision" and "choices" not in question:
-                    question["choices"] = copy.deepcopy(DEFAULT_DECISION_CHOICES)
+                    question["choices"] = copy.deepcopy(DEFAULT_DECISION_CHOICES[locale])
         return normalized
 
     phase_orders = {phase["id"]: phase["order"] for phase in normalized["phases"]}

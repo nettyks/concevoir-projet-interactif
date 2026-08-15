@@ -1,6 +1,6 @@
 ---
 name: concevoir-projet-interactif
-description: Cadrage progressif de projets numériques au moyen de questionnaires HTML interactifs, depuis une idée vague ou déjà précise jusqu'à une spécification traçable et, si demandé, un plan de réalisation pilotable en Kanban ou lisible en roadmap. Utiliser ce skill pour explorer une idée d'application, site, jeu, service en ligne, outil interne, automatisation, produit connecté ou projet IA/data; adapter le nombre et le type de questions, conserver les réponses entre plusieurs tours, comparer des options fonctionnelles ou techniques, arbitrer le périmètre, consolider les décisions et ordonner le développement par dépendances sans imposer un parcours complet inutile.
+description: Cadrage progressif de projets numériques au moyen de questionnaires HTML interactifs bilingues français/anglais, depuis une idée vague ou déjà précise jusqu'à une spécification traçable et, si demandé, un plan de réalisation pilotable en Kanban ou lisible en roadmap. Utiliser ce skill pour explorer une idée d'application, site, jeu, service en ligne, outil interne, automatisation, produit connecté ou projet IA/data; adapter le nombre et le type de questions, traduire les fiches en français ou en anglais, conserver les réponses entre plusieurs tours, comparer des options fonctionnelles ou techniques, arbitrer le périmètre, consolider les décisions et ordonner le développement par dépendances sans imposer un parcours complet inutile.
 ---
 
 # Concevoir un projet numérique interactif
@@ -18,6 +18,7 @@ Transformer une idée numérique en décisions explicites et en artefacts mainte
 - Séparer faits vérifiés, décisions acceptées, refus, hypothèses, décisions différées, contradictions et points ouverts.
 - Ne pas inventer de date cible, budget, capacité d'équipe, responsable ni estimation. Employer des phases relatives tant que ces données manquent.
 - Déduire un thème lisible du domaine; ne demander une préférence visuelle qu'en présence d'une charte, d'une marque ou d'une contrainte d'accessibilité.
+- Produire les fiches dans la langue de la demande, ou dans la langue explicitement choisie. Utiliser `locale: "fr"` ou `locale: "en"` et ne pas mélanger les langues dans les contenus destinés à l'utilisateur.
 - Ne jamais demander ni stocker de secret dans une fiche. Signaler que la sauvegarde navigateur et les exports ne sont pas chiffrés si les réponses peuvent être sensibles.
 - Ne jamais annoncer dans le journal ou la synthèse qu'un artefact est créé, validé ou testé avant que le fichier existe et que le contrôle correspondant ait réellement réussi.
 
@@ -62,6 +63,8 @@ python3 /chemin/du/skill/scripts/render_artifact.py questionnaire \
   --output /chemin/du/projet/conception/questionnaire-actif.html
 ```
 
+Pour une fiche anglaise, utiliser `locale: "en"` et `references/questionnaire-example.en.json`. Le modèle traduit automatiquement l'interface, les messages, les contrôles d'accessibilité et l'export Markdown; traduire aussi les titres, descriptions, choix et textes d'aide du JSON. Conserver les identifiants de questions et de choix lors de la traduction d'une fiche existante afin de préserver la compatibilité des réponses.
+
 Utiliser une nouvelle `round_id` et une nouvelle `storage_key` à chaque tour. Employer des identifiants stables et sûrs. Les choix personnalisés doivent rester visuellement neutres sauf si leur couleur exprime réellement un état; utiliser `needs_clarification` indépendamment de `tone`.
 
 ### 3. Consolider et archiver
@@ -105,6 +108,8 @@ Rester proportionné : détailler ce qui influence le produit ou un segment, mai
 
 Après validation, lire `references/delivery-framework.md`. Construire un JSON conforme à `references/planning.schema.json` et à `references/planning-example.json`.
 
+Pour un plan anglais, utiliser `locale: "en"` et `references/planning-example.en.json`. Conserver les identifiants techniques de statuts et de sévérités (`a-preciser`, `avant-segment`, etc.); la fiche les présente automatiquement en anglais.
+
 Chaque segment doit produire un résultat vérifiable et référencer les décisions qu'il réalise. Déclarer objectif, livrables, prérequis, dépendances, ordre, critères d'acceptation, risques et questions ouvertes. Favoriser une première tranche utilisable de bout en bout; intégrer sécurité, accessibilité, sauvegarde et observabilité dans les segments concernés.
 
 Déduire la vue initiale : Kanban pour piloter l'état, roadmap pour expliquer la trajectoire. Ne pas imposer une question supplémentaire, car la fiche permet de basculer entre les deux vues.
@@ -121,6 +126,7 @@ Le Kanban permet de changer les états et de les sauvegarder localement. La road
 
 - Exécuter les tests : `python3 -m unittest discover -s tests -v`.
 - Générer les deux exemples et les ouvrir dans un navigateur moderne.
+- Générer aussi les exemples `.en.json` et vérifier que `html[lang]`, l'interface, les messages et les exports sont en anglais.
 - Vérifier qu'aucune question, carte, dépendance ou information d'export ne disparaît silencieusement.
 - Vérifier clavier, mobile, impression, import/export, stockage refusé et cohérence des archives.
 - Exécuter le validateur de skill après toute modification structurelle.
@@ -130,7 +136,7 @@ Le Kanban permet de changer les états et de les sauvegarder localement. La road
 - `references/question-framework.md` : routage des questions et types de réponses.
 - `references/delivery-framework.md` : segmentation, ordre, vues et critères de qualité.
 - `references/artifact-conventions.md` : arborescence, registre de décisions, sources et cycle de vie.
-- `references/*.schema.json` : contrats V2 exécutables pour questionnaire et planning.
+- `references/*.schema.json` : contrats V2 exécutables pour questionnaire et planning, avec `locale` français ou anglais.
 - `scripts/render_artifact.py` : validation et génération des HTML autonomes.
 - `scripts/project_artifacts.py` : initialisation et archivage sans écrasement.
 - `assets/*-template.*` : fiches et documents canoniques.

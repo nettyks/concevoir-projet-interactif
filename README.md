@@ -2,6 +2,8 @@
 
 Ce dossier contient un skill Codex complet pour explorer, cadrer et planifier un projet numérique au moyen de questionnaires interactifs, d'un registre de décisions et d'un planning Kanban/roadmap.
 
+Les fiches sont disponibles en français et en anglais. La propriété JSON `locale` vaut `"fr"` ou `"en"`; l'interface, les messages, l'accessibilité et les exports s'adaptent automatiquement.
+
 ## Aperçu
 
 ### Questionnaire interactif
@@ -15,6 +17,12 @@ Ce dossier contient un skill Codex complet pour explorer, cadrer et planifier un
 ### Kanban pilotable
 
 ![Kanban interactif du projet](assets/screenshots/planning-kanban.png)
+
+### English mode
+
+![Interactive questionnaire in English](assets/screenshots/questionnaire-en.png)
+
+![Actionable Kanban in English](assets/screenshots/planning-kanban-en.png)
 
 ## Installation depuis le ZIP
 
@@ -54,6 +62,12 @@ Dans une nouvelle demande, mentionner explicitement le skill :
 
 ```text
 Utilise $concevoir-projet-interactif pour m'aider à cadrer ce projet numérique : [décrire le projet].
+```
+
+Pour demander explicitement l'anglais :
+
+```text
+Use $concevoir-projet-interactif to frame this digital project. Generate every interactive sheet and export in English.
 ```
 
 ## Contenu du dossier

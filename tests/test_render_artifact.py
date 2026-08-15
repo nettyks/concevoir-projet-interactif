@@ -191,6 +191,19 @@ class QuestionnaireValidationTests(unittest.TestCase):
     def test_valid_questionnaire_covers_all_question_types(self) -> None:
         render_artifact.validate_questionnaire(valid_questionnaire())
 
+    def test_questionnaire_locale_accepts_english_and_rejects_unknown_values(self) -> None:
+        english = valid_questionnaire()
+        english["locale"] = "en"
+        render_artifact.validate_questionnaire(english)
+        normalized = render_artifact.normalized_for_render("questionnaire", english)
+        decision = normalized["sections"][0]["questions"][1]
+        self.assertEqual([item["label"] for item in decision["choices"]], ["Yes", "No", "Maybe"])
+
+        invalid = valid_questionnaire()
+        invalid["locale"] = "de"
+        with self.assertRaisesRegex(render_artifact.ConfigError, "fr ou en"):
+            render_artifact.validate_questionnaire(invalid)
+
     def test_scalar_section_is_a_clean_config_error(self) -> None:
         data = valid_questionnaire()
         data["sections"] = ["invalide"]
@@ -271,6 +284,16 @@ class PlanningValidationTests(unittest.TestCase):
             normalized["segments"][2]["summary"],
             "Rendre le service prêt pour son premier public.",
         )
+
+    def test_planning_locale_accepts_english_and_rejects_unknown_values(self) -> None:
+        english = valid_planning()
+        english["locale"] = "en"
+        render_artifact.validate_planning(english)
+
+        invalid = valid_planning()
+        invalid["locale"] = "es"
+        with self.assertRaisesRegex(render_artifact.ConfigError, "fr ou en"):
+            render_artifact.validate_planning(invalid)
 
     def test_scalar_segment_is_a_clean_config_error(self) -> None:
         data = valid_planning()
@@ -383,10 +406,15 @@ class RenderingTests(unittest.TestCase):
     def test_bundled_v2_examples_validate_and_render(self) -> None:
         with tempfile.TemporaryDirectory() as raw_directory:
             directory = Path(raw_directory)
-            for kind in ("questionnaire", "planning"):
-                with self.subTest(kind=kind):
-                    source = SKILL_ROOT / "references" / f"{kind}-example.json"
-                    output = directory / f"{kind}.html"
+            for kind, suffix in (
+                ("questionnaire", ""),
+                ("planning", ""),
+                ("questionnaire", ".en"),
+                ("planning", ".en"),
+            ):
+                with self.subTest(kind=kind, suffix=suffix):
+                    source = SKILL_ROOT / "references" / f"{kind}-example{suffix}.json"
+                    output = directory / f"{kind}{suffix}.html"
                     render_artifact.render(kind, source, output)
                     self.assertTrue(output.is_file())
                     self.assertNotIn(
@@ -439,6 +467,8 @@ class RenderingTests(unittest.TestCase):
                 )
                 self.assertEqual(schema["properties"]["schema"]["const"], schema_name)
                 self.assertEqual(schema["$schema"], "https://json-schema.org/draft/2020-12/schema")
+                self.assertEqual(schema["properties"]["locale"]["enum"], ["fr", "en"])
+                self.assertEqual(schema["properties"]["locale"]["default"], "fr")
 
     def test_safe_json_neutralizes_script_end_tags(self) -> None:
         encoded = render_artifact.safe_json({"value": "</script><script>"})

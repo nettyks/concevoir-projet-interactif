@@ -29,78 +29,100 @@
     <h1 id="title"></h1>
     <p class="subtitle" id="subtitle"></p>
     <div class="metrics">
-      <span class="metric"><strong id="segmentCount">0</strong> segments</span>
-      <span class="metric"><strong id="phaseCount">0</strong> phases</span>
-      <span class="metric"><strong id="openCount">0</strong> points à préciser</span>
-      <span class="metric"><strong id="doneCount">0</strong> terminés</span>
+      <span class="metric"><strong id="segmentCount">0</strong> <span data-i18n="segmentsMetric">segments</span></span>
+      <span class="metric"><strong id="phaseCount">0</strong> <span data-i18n="phasesMetric">phases</span></span>
+      <span class="metric"><strong id="openCount">0</strong> <span data-i18n="openMetric">points à préciser</span></span>
+      <span class="metric"><strong id="doneCount">0</strong> <span data-i18n="doneMetric">terminés</span></span>
     </div>
   </header>
   <div class="toolbar">
     <div class="shell tools">
-      <span class="plan-label" id="planStateLabel">Plan de réalisation</span>
-      <div class="view-switch" role="group" aria-label="Choisir la vue du plan">
-        <button class="view-button" id="kanbanButton" type="button" data-view="kanban" aria-pressed="false">Kanban<span class="recommendation" id="kanbanRecommendation" hidden>Vue recommandée</span></button>
-        <button class="view-button" id="roadmapButton" type="button" data-view="roadmap" aria-pressed="false">Roadmap<span class="recommendation" id="roadmapRecommendation" hidden>Vue recommandée</span></button>
+      <span class="plan-label" id="planStateLabel" data-i18n="deliveryPlan">Plan de réalisation</span>
+      <div class="view-switch" role="group" aria-label="Choisir la vue du plan" data-i18n-aria-label="chooseView">
+        <button class="view-button" id="kanbanButton" type="button" data-view="kanban" aria-pressed="false">Kanban<span class="recommendation" id="kanbanRecommendation" hidden data-i18n="recommendedView">Vue recommandée</span></button>
+        <button class="view-button" id="roadmapButton" type="button" data-view="roadmap" aria-pressed="false">Roadmap<span class="recommendation" id="roadmapRecommendation" hidden data-i18n="recommendedView">Vue recommandée</span></button>
       </div>
-      <label class="tool-field search-field"><span class="sr-only">Rechercher un segment</span><input class="control" id="search" type="search" placeholder="Rechercher un segment…"></label>
-      <label class="tool-field"><span class="sr-only">Filtrer par phase</span><select class="control" id="phaseFilter"><option value="all">Toutes les phases</option></select></label>
+      <label class="tool-field search-field"><span class="sr-only" data-i18n="searchLabel">Rechercher un segment</span><input class="control" id="search" type="search" placeholder="Rechercher un segment…" data-i18n-placeholder="searchPlaceholder"></label>
+      <label class="tool-field"><span class="sr-only" data-i18n="phaseFilterLabel">Filtrer par phase</span><select class="control" id="phaseFilter"><option value="all" data-i18n="allPhases">Toutes les phases</option></select></label>
     </div>
     <div class="shell action-row">
-      <span class="save-state" id="saveState" aria-live="polite">État local prêt</span>
-      <button class="button" id="jsonExportButton" type="button">Exporter l’état JSON</button>
-      <button class="button" id="importButton" type="button">Importer un état JSON</button>
-      <button class="button" id="resetButton" type="button">Réinitialiser l’état</button>
-      <button class="button" id="printButton" type="button">Imprimer / PDF</button>
-      <button class="button primary" id="markdownButton" type="button">Exporter le plan Markdown</button>
+      <span class="save-state" id="saveState" aria-live="polite" data-i18n="localReady">État local prêt</span>
+      <button class="button" id="jsonExportButton" type="button" data-i18n="exportJson">Exporter l’état JSON</button>
+      <button class="button" id="importButton" type="button" data-i18n="importJson">Importer un état JSON</button>
+      <button class="button" id="resetButton" type="button" data-i18n="resetState">Réinitialiser l’état</button>
+      <button class="button" id="printButton" type="button" data-i18n="printPdf">Imprimer / PDF</button>
+      <button class="button primary" id="markdownButton" type="button" data-i18n="exportMarkdown">Exporter le plan Markdown</button>
       <input id="fileInput" type="file" accept="application/json,.json" hidden tabindex="-1" aria-hidden="true">
     </div>
   </div>
   <main class="shell">
     <p class="data-warning" id="dataWarning" hidden></p>
     <section class="open-questions" id="openPanel" aria-labelledby="openTitle">
-      <h2 id="openTitle">À préciser avec l’utilisateur</h2>
+      <h2 id="openTitle" data-i18n="clarifyWithUser">À préciser avec l’utilisateur</h2>
       <ul id="openQuestions"></ul>
     </section>
     <section class="view" id="view"></section>
   </main>
-  <button class="back-to-top" id="backToTop" type="button" aria-label="Remonter tout en haut de la fiche" aria-hidden="true" tabindex="-1">↑ Haut</button>
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Remonter tout en haut de la fiche" data-i18n-aria-label="backToTopAria" aria-hidden="true" tabindex="-1">↑ <span data-i18n="backToTop">Haut</span></button>
   <script>
     const DATA=__PROJECT_DATA__;
     const PLAN_SCHEMA="project-workshop-planning-v2";
     const STATE_SCHEMA="project-workshop-planning-state-v2";
+    const I18N={
+      fr:{
+        dateLocale:"fr-FR",untitledProject:"Projet sans titre",projectSlug:"projet",segmentsMetric:"segments",phasesMetric:"phases",openMetric:"points à préciser",doneMetric:"terminés",deliveryPlan:"Plan de réalisation",chooseView:"Choisir la vue du plan",recommendedView:"Vue recommandée",searchLabel:"Rechercher un segment",searchPlaceholder:"Rechercher un segment…",phaseFilterLabel:"Filtrer par phase",allPhases:"Toutes les phases",localReady:"État local prêt",exportJson:"Exporter l’état JSON",importJson:"Importer un état JSON",resetState:"Réinitialiser l’état",printPdf:"Imprimer / PDF",exportMarkdown:"Exporter le plan Markdown",clarifyWithUser:"À préciser avec l’utilisateur",backToTop:"Haut",backToTopAria:"Remonter tout en haut de la fiche",
+        defaultSubtitle:"Vue complète de la réalisation et de son ordre logique.",kanbanLabel:"Kanban pilotable",roadmapLabel:"Roadmap horizontale",planNeedsFraming:"Plan de réalisation — cadrage à compléter",phase:"Phase",segment:"Segment",milestone:"Jalon",objective:"Objectif",summary:"Résumé",state:"État",order:"Ordre",owner:"Responsable",effort:"Effort",priority:"Priorité",dependencies:"Dépendances",decisions:"Décisions couvertes",deliverables:"Livrables",acceptance:"Critères d’acceptation",prerequisites:"Prérequis externes",risks:"Risques",segmentQuestions:"Questions du segment",openPoints:"Points ouverts",none:"Aucun",notProvided:"Non renseigné",viewDisplayed:"Vue affichée lors de l’export",initialView:"Vue initiale recommandée",
+        defaultColumns:["À préciser","Prêt","En cours","Vérification","Terminé"],missingState:"Statut non renseigné",unknownState:value=>`Statut non reconnu : ${value}`,missingPhase:"Phase non renseignée",unknownPhase:value=>`Phase non référencée : ${value}`,untitledState:index=>`État ${index}`,untitledSegment:"Segment sans titre",missingObjective:"Objectif non renseigné",openWithoutLabel:"Point ouvert sans libellé",toClarify:"à préciser",severity:{bloquant:"bloquant","avant-segment":"avant-segment",differable:"différable"},
+        invalidJsonObject:"le fichier ne contient pas un objet JSON",incompatibleStateSchema:"schéma d’état incompatible",incompatibleSourceSchema:"schéma du plan source incompatible",otherProject:"cet état appartient à un autre projet",wrongStorageKey:"la clé de plan ne correspond pas",unknownView:"vue inconnue",invalidStatuses:"la liste des statuts est invalide",segmentMismatch:"la liste des segments ne correspond pas à ce plan",invalidStatus:id=>`statut invalide pour ${id}`,missingStorageKey:"Sauvegarde locale indisponible : storage_key absent.",savedAt:time=>`Sauvegardé localement à ${time}`,saveImpossible:error=>`Sauvegarde locale impossible : ${error}`,noLocalState:"Aucun état local enregistré.",localRestored:"État local restauré.",localUnreadable:error=>`État local illisible : ${error}`,
+        unexpectedSchema:value=>`Schéma inattendu : ${value||"absent"}. La fiche affiche les données avec ses mécanismes de repli.`,orphanSegments:count=>`${count} segment(s) utilisent une phase absente du référentiel.`,after:id=>`Après ${id}`,noInternalDependency:"Aucune dépendance interne",statusOf:id=>`État de ${id}`,details:"Voir les livrables et validations",kanbanHint:"Le tableau défile horizontalement. Placez le focus ici puis utilisez les flèches ou le défilement de votre appareil.",kanbanAria:"Tableau Kanban du plan de réalisation",roadmapHint:"La roadmap défile horizontalement. Placez le focus ici puis utilisez les flèches ou le défilement de votre appareil.",roadmapAria:"Roadmap horizontale du plan de réalisation",empty:"Aucun segment ne correspond aux filtres.",imported:"État JSON importé et sauvegardé localement.",importImpossible:error=>`Import impossible : ${error}`,confirmReset:"Réinitialiser tous les statuts et revenir à la vue recommandée ?",resetDone:"État réinitialisé. Les valeurs du plan source sont affichées.",resetMemory:error=>`État réinitialisé en mémoire, mais la sauvegarde locale n’a pas pu être effacée : ${error}`,planningSuffix:"plan",stateSuffix:"etat-planning"
+      },
+      en:{
+        dateLocale:"en-GB",untitledProject:"Untitled project",projectSlug:"project",segmentsMetric:"segments",phasesMetric:"phases",openMetric:"points to clarify",doneMetric:"completed",deliveryPlan:"Delivery plan",chooseView:"Choose the plan view",recommendedView:"Recommended view",searchLabel:"Search for a segment",searchPlaceholder:"Search for a segment…",phaseFilterLabel:"Filter by phase",allPhases:"All phases",localReady:"Local state ready",exportJson:"Export JSON state",importJson:"Import JSON state",resetState:"Reset state",printPdf:"Print / PDF",exportMarkdown:"Export Markdown plan",clarifyWithUser:"To clarify with the user",backToTop:"Top",backToTopAria:"Back to the top of the sheet",
+        defaultSubtitle:"Complete view of the delivery work and its logical order.",kanbanLabel:"Actionable Kanban",roadmapLabel:"Horizontal roadmap",planNeedsFraming:"Delivery plan — framing to complete",phase:"Phase",segment:"Segment",milestone:"Milestone",objective:"Objective",summary:"Summary",state:"Status",order:"Order",owner:"Owner",effort:"Effort",priority:"Priority",dependencies:"Dependencies",decisions:"Covered decisions",deliverables:"Deliverables",acceptance:"Acceptance criteria",prerequisites:"External prerequisites",risks:"Risks",segmentQuestions:"Segment questions",openPoints:"Open points",none:"None",notProvided:"Not provided",viewDisplayed:"View displayed in this export",initialView:"Recommended initial view",
+        defaultColumns:["To clarify","Ready","In progress","Verification","Done"],missingState:"Status not provided",unknownState:value=>`Unknown status: ${value}`,missingPhase:"Phase not provided",unknownPhase:value=>`Unreferenced phase: ${value}`,untitledState:index=>`Status ${index}`,untitledSegment:"Untitled segment",missingObjective:"Objective not provided",openWithoutLabel:"Open point without a label",toClarify:"to clarify",severity:{bloquant:"blocking","avant-segment":"before segment",differable:"deferrable"},
+        invalidJsonObject:"the file does not contain a JSON object",incompatibleStateSchema:"incompatible state schema",incompatibleSourceSchema:"incompatible source plan schema",otherProject:"this state belongs to another project",wrongStorageKey:"the plan key does not match",unknownView:"unknown view",invalidStatuses:"the status list is invalid",segmentMismatch:"the segment list does not match this plan",invalidStatus:id=>`invalid status for ${id}`,missingStorageKey:"Local storage unavailable: storage_key is missing.",savedAt:time=>`Saved locally at ${time}`,saveImpossible:error=>`Local save failed: ${error}`,noLocalState:"No local state saved.",localRestored:"Local state restored.",localUnreadable:error=>`Unreadable local state: ${error}`,
+        unexpectedSchema:value=>`Unexpected schema: ${value||"missing"}. The sheet is displaying the data with fallback mechanisms.`,orphanSegments:count=>`${count} segment(s) use a phase missing from the reference data.`,after:id=>`After ${id}`,noInternalDependency:"No internal dependency",statusOf:id=>`Status of ${id}`,details:"View deliverables and checks",kanbanHint:"The board scrolls horizontally. Focus this area, then use arrow keys or your device’s scrolling controls.",kanbanAria:"Delivery plan Kanban board",roadmapHint:"The roadmap scrolls horizontally. Focus this area, then use arrow keys or your device’s scrolling controls.",roadmapAria:"Horizontal delivery roadmap",empty:"No segment matches the filters.",imported:"JSON state imported and saved locally.",importImpossible:error=>`Import failed: ${error}`,confirmReset:"Reset all statuses and return to the recommended view?",resetDone:"State reset. Values from the source plan are displayed.",resetMemory:error=>`State reset in memory, but local storage could not be cleared: ${error}`,planningSuffix:"plan",stateSuffix:"planning-state"
+      }
+    };
+    const locale=DATA.locale==="en"?"en":"fr";
+    const t=I18N[locale];
+    document.documentElement.lang=locale;
     const byId=id=>document.getElementById(id);
     const esc=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+    document.querySelectorAll("[data-i18n]").forEach(element=>{element.textContent=t[element.dataset.i18n]});
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(element=>{element.placeholder=t[element.dataset.i18nPlaceholder]});
+    document.querySelectorAll("[data-i18n-aria-label]").forEach(element=>{element.setAttribute("aria-label",t[element.dataset.i18nAriaLabel])});
     const array=value=>Array.isArray(value)?value:[];
     const text=value=>typeof value==="string"?value.trim():"";
     const metricText=value=>typeof value==="number"&&Number.isFinite(value)?String(value):text(value);
     const orderOf=value=>Number.isFinite(Number(value))?Number(value):Number.MAX_SAFE_INTEGER;
     const validView=value=>value==="kanban"||value==="roadmap";
     const project=DATA.project&&typeof DATA.project==="object"?DATA.project:{};
-    const projectTitle=text(project.title)||"Projet sans titre";
-    const projectSlug=text(project.slug)||"projet";
+    const projectTitle=text(project.title)||t.untitledProject;
+    const projectSlug=text(project.slug)||t.projectSlug;
     const storageKey=text(DATA.storage_key);
     const initialView=validView(DATA.view)?DATA.view:"roadmap";
     const defaultColumns=[
-      {id:"a-preciser",title:"À préciser"},
-      {id:"pret",title:"Prêt"},
-      {id:"en-cours",title:"En cours"},
-      {id:"verification",title:"Vérification"},
-      {id:"termine",title:"Terminé"}
+      {id:"a-preciser",title:t.defaultColumns[0]},
+      {id:"pret",title:t.defaultColumns[1]},
+      {id:"en-cours",title:t.defaultColumns[2]},
+      {id:"verification",title:t.defaultColumns[3]},
+      {id:"termine",title:t.defaultColumns[4]}
     ];
-    const baseColumns=(array(DATA.columns).length?DATA.columns:defaultColumns).map((item,index)=>({id:text(item?.id)||`etat-${index+1}`,title:text(item?.title)||text(item?.id)||`État ${index+1}`}));
+    const baseColumns=(array(DATA.columns).length?DATA.columns:defaultColumns).map((item,index)=>({id:text(item?.id)||`etat-${index+1}`,title:text(item?.title)||text(item?.id)||t.untitledState(index+1)}));
     const normalizeSegment=(item,index)=>{
       const source=item&&typeof item==="object"?item:{};
-      return {...source,id:text(source.id)||`segment-sans-id-${index+1}`,title:text(source.title)||"Segment sans titre",phase:text(source.phase)||"__phase_non_renseignee",status:text(source.status)||"__statut_non_renseigne",order:orderOf(source.order),__index:index};
+      return {...source,id:text(source.id)||`segment-sans-id-${index+1}`,title:text(source.title)||t.untitledSegment,phase:text(source.phase)||"__phase_non_renseignee",status:text(source.status)||"__statut_non_renseigne",order:orderOf(source.order),__index:index};
     };
     const segments=array(DATA.segments).map(normalizeSegment);
     const declaredPhases=array(DATA.phases).filter(item=>item&&typeof item==="object"&&text(item.id)).map((item,index)=>({...item,id:text(item.id),title:text(item.title)||text(item.id),order:orderOf(item.order),__declared:true,__index:index}));
     const declaredPhaseIds=new Set(declaredPhases.map(item=>item.id));
     const orphanPhaseIds=[...new Set(segments.map(item=>item.phase).filter(id=>!declaredPhaseIds.has(id)))];
-    const orphanPhases=orphanPhaseIds.map((id,index)=>({id,title:id==="__phase_non_renseignee"?"Phase non renseignée":`Phase non référencée : ${id}`,order:Number.MAX_SAFE_INTEGER,__declared:false,__index:index}));
-    const phases=[...declaredPhases,...orphanPhases].sort((a,b)=>a.order-b.order||a.__index-b.__index||a.title.localeCompare(b.title,"fr"));
+    const orphanPhases=orphanPhaseIds.map((id,index)=>({id,title:id==="__phase_non_renseignee"?t.missingPhase:t.unknownPhase(id),order:Number.MAX_SAFE_INTEGER,__declared:false,__index:index}));
+    const phases=[...declaredPhases,...orphanPhases].sort((a,b)=>a.order-b.order||a.__index-b.__index||a.title.localeCompare(b.title,locale));
     const phaseIndex=new Map(phases.map((phase,index)=>[phase.id,index]));
-    const phaseById=id=>phases.find(phase=>phase.id===id)||{id,title:`Phase non référencée : ${id}`,__declared:false};
-    const sortedSegments=()=>[...segments].sort((a,b)=>(phaseIndex.get(a.phase)??Number.MAX_SAFE_INTEGER)-(phaseIndex.get(b.phase)??Number.MAX_SAFE_INTEGER)||a.order-b.order||a.id.localeCompare(b.id,"fr")||a.__index-b.__index);
+    const phaseById=id=>phases.find(phase=>phase.id===id)||{id,title:t.unknownPhase(id),__declared:false};
+    const sortedSegments=()=>[...segments].sort((a,b)=>(phaseIndex.get(a.phase)??Number.MAX_SAFE_INTEGER)-(phaseIndex.get(b.phase)??Number.MAX_SAFE_INTEGER)||a.order-b.order||a.id.localeCompare(b.id,locale)||a.__index-b.__index);
     const initialStatuses=Object.fromEntries(segments.map(segment=>[segment.id,segment.status]));
     const segmentIds=new Set(segments.map(segment=>segment.id));
     const allowedStatusIds=new Set(baseColumns.map(column=>column.id));
@@ -109,15 +131,16 @@
     Object.entries(theme).forEach(([key,value])=>document.documentElement.style.setProperty("--"+key.replaceAll("_","-"),value));
 
     function normalizeOpenQuestion(item,index,sourceSegment=""){
-      if(item&&typeof item==="object")return {id:text(item.id)||`Q${index+1}`,text:text(item.text)||"Point ouvert sans libellé",severity:text(item.severity)||"à préciser",segment:text(item.segment)||sourceSegment};
-      return {id:sourceSegment?`${sourceSegment}-Q${index+1}`:`Q${index+1}`,text:text(item)||"Point ouvert sans libellé",severity:"à préciser",segment:sourceSegment};
+      if(item&&typeof item==="object")return {id:text(item.id)||`Q${index+1}`,text:text(item.text)||t.openWithoutLabel,severity:text(item.severity)||"unspecified",segment:text(item.segment)||sourceSegment};
+      return {id:sourceSegment?`${sourceSegment}-Q${index+1}`:`Q${index+1}`,text:text(item)||t.openWithoutLabel,severity:"unspecified",segment:sourceSegment};
     }
     const globalQuestions=array(DATA.open_questions).map((item,index)=>normalizeOpenQuestion(item,index));
     const segmentQuestions=segments.flatMap(segment=>array(segment.questions).map((item,index)=>normalizeOpenQuestion(item,index,segment.id)));
     const allQuestions=[...globalQuestions,...segmentQuestions];
 
     function statusOf(segment){return text(state.statuses[segment.id])||"__statut_non_renseigne"}
-    function statusLabel(status){return baseColumns.find(column=>column.id===status)?.title||(status==="__statut_non_renseigne"?"Statut non renseigné":`Statut non reconnu : ${status}`)}
+    function statusLabel(status){return baseColumns.find(column=>column.id===status)?.title||(status==="__statut_non_renseigne"?t.missingState:t.unknownState(status))}
+    function severityLabel(severity){return t.severity[severity]||t.toClarify}
     function columnsForState(){
       const known=new Set(baseColumns.map(column=>column.id));
       const extras=[...new Set(segments.map(statusOf).filter(status=>!known.has(status)))].map(status=>({id:status,title:statusLabel(status),fallback:true}));
@@ -131,48 +154,48 @@
       return {schema:STATE_SCHEMA,source_schema:DATA.schema||"",exported_at:new Date().toISOString(),project:{title:projectTitle,slug:projectSlug},storage_key:storageKey,view:state.view,statuses:Object.fromEntries(segments.map(segment=>[segment.id,statusOf(segment)]))};
     }
     function validateStatePayload(saved){
-      if(!saved||typeof saved!=="object"||Array.isArray(saved))throw new Error("le fichier ne contient pas un objet JSON");
-      if(saved.schema!==STATE_SCHEMA)throw new Error("schéma d’état incompatible");
-      if(saved.source_schema!==PLAN_SCHEMA)throw new Error("schéma du plan source incompatible");
-      if(!saved.project||saved.project.slug!==projectSlug)throw new Error("cet état appartient à un autre projet");
-      if(saved.storage_key!==storageKey)throw new Error("la clé de plan ne correspond pas");
-      if(!validView(saved.view))throw new Error("vue inconnue");
-      if(!saved.statuses||typeof saved.statuses!=="object"||Array.isArray(saved.statuses))throw new Error("la liste des statuts est invalide");
+      if(!saved||typeof saved!=="object"||Array.isArray(saved))throw new Error(t.invalidJsonObject);
+      if(saved.schema!==STATE_SCHEMA)throw new Error(t.incompatibleStateSchema);
+      if(saved.source_schema!==PLAN_SCHEMA)throw new Error(t.incompatibleSourceSchema);
+      if(!saved.project||saved.project.slug!==projectSlug)throw new Error(t.otherProject);
+      if(saved.storage_key!==storageKey)throw new Error(t.wrongStorageKey);
+      if(!validView(saved.view))throw new Error(t.unknownView);
+      if(!saved.statuses||typeof saved.statuses!=="object"||Array.isArray(saved.statuses))throw new Error(t.invalidStatuses);
       const keys=Object.keys(saved.statuses);
-      if(keys.length!==segmentIds.size||keys.some(id=>!segmentIds.has(id)))throw new Error("la liste des segments ne correspond pas à ce plan");
+      if(keys.length!==segmentIds.size||keys.some(id=>!segmentIds.has(id)))throw new Error(t.segmentMismatch);
       const statuses=Object.create(null);
       segments.forEach(segment=>{
         const status=saved.statuses[segment.id];
-        if(typeof status!=="string"||!allowedStatusIds.has(status))throw new Error(`statut invalide pour ${segment.id}`);
+        if(typeof status!=="string"||!allowedStatusIds.has(status))throw new Error(t.invalidStatus(segment.id));
         statuses[segment.id]=status;
       });
       return {view:saved.view,statuses};
     }
     function persist(message=""){
-      if(!storageKey){setSaveState("Sauvegarde locale indisponible : storage_key absent.","error");return false}
+      if(!storageKey){setSaveState(t.missingStorageKey,"error");return false}
       try{
         localStorage.setItem(storageKey,JSON.stringify({...statePayload(),saved_at:new Date().toISOString()}));
-        setSaveState(message||`Sauvegardé localement à ${new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})}`);
+        setSaveState(message||t.savedAt(new Date().toLocaleTimeString(t.dateLocale,{hour:"2-digit",minute:"2-digit"})));
         return true;
-      }catch(error){setSaveState(`Sauvegarde locale impossible : ${error.message}`,"error");return false}
+      }catch(error){setSaveState(t.saveImpossible(error.message),"error");return false}
     }
     function loadState(){
-      if(!storageKey){setSaveState("Sauvegarde locale indisponible : storage_key absent.","error");return}
+      if(!storageKey){setSaveState(t.missingStorageKey,"error");return}
       try{
         const raw=localStorage.getItem(storageKey);
-        if(!raw){setSaveState("Aucun état local enregistré.");return}
+        if(!raw){setSaveState(t.noLocalState);return}
         const saved=validateStatePayload(JSON.parse(raw));
         state.statuses={...saved.statuses};
         state.view=saved.view;
-        setSaveState("État local restauré.");
-      }catch(error){setSaveState(`État local illisible : ${error.message}`,"error")}
+        setSaveState(t.localRestored);
+      }catch(error){setSaveState(t.localUnreadable(error.message),"error")}
     }
     function updateHeader(){
-      document.title=projectTitle+" — plan";
+      document.title=projectTitle+" — "+t.planningSuffix;
       byId("title").textContent=projectTitle;
-      byId("subtitle").textContent=text(project.subtitle)||"Vue complète de la réalisation et de son ordre logique.";
-      byId("viewLabel").textContent=state.view==="kanban"?"Kanban pilotable":"Roadmap horizontale";
-      byId("planStateLabel").textContent=allQuestions.length?"Plan de réalisation — cadrage à compléter":"Plan de réalisation";
+      byId("subtitle").textContent=text(project.subtitle)||t.defaultSubtitle;
+      byId("viewLabel").textContent=state.view==="kanban"?t.kanbanLabel:t.roadmapLabel;
+      byId("planStateLabel").textContent=allQuestions.length?t.planNeedsFraming:t.deliveryPlan;
       byId("segmentCount").textContent=segments.length;
       byId("phaseCount").textContent=phases.length;
       byId("openCount").textContent=allQuestions.length;
@@ -184,13 +207,13 @@
     function renderOpenQuestions(){
       if(!allQuestions.length){byId("openPanel").hidden=true;return}
       byId("openPanel").hidden=false;
-      byId("openQuestions").innerHTML=allQuestions.map(item=>`<li><strong>${esc(item.id)}</strong> — ${esc(item.text)} <span class="question-meta">${item.segment?`Segment ${esc(item.segment)} · `:""}${esc(item.severity)}</span></li>`).join("");
+      byId("openQuestions").innerHTML=allQuestions.map(item=>`<li><strong>${esc(item.id)}</strong> — ${esc(item.text)} <span class="question-meta">${item.segment?`${esc(t.segment)} ${esc(item.segment)} · `:""}${esc(severityLabel(item.severity))}</span></li>`).join("");
     }
     function renderWarnings(){
       const warnings=[];
-      if(DATA.schema!==PLAN_SCHEMA)warnings.push(`Schéma inattendu : ${text(DATA.schema)||"absent"}. La fiche affiche les données avec ses mécanismes de repli.`);
+      if(DATA.schema!==PLAN_SCHEMA)warnings.push(t.unexpectedSchema(text(DATA.schema)));
       const orphanCount=segments.filter(segment=>!declaredPhaseIds.has(segment.phase)).length;
-      if(orphanCount)warnings.push(`${orphanCount} segment(s) utilisent une phase absente du référentiel.`);
+      if(orphanCount)warnings.push(t.orphanSegments(orphanCount));
       const warning=byId("dataWarning");
       warning.hidden=!warnings.length;
       warning.textContent=warnings.join(" ");
@@ -200,9 +223,9 @@
     }
     function metadata(segment){
       const items=[];
-      if(text(segment.owner))items.push(`Responsable : ${segment.owner}`);
-      if(metricText(segment.effort))items.push(`Effort : ${metricText(segment.effort)}`);
-      if(metricText(segment.priority))items.push(`Priorité : ${metricText(segment.priority)}`);
+      if(text(segment.owner))items.push(`${t.owner} : ${segment.owner}`);
+      if(metricText(segment.effort))items.push(`${t.effort} : ${metricText(segment.effort)}`);
+      if(metricText(segment.priority))items.push(`${t.priority} : ${metricText(segment.priority)}`);
       return items.length?`<div class="metadata">${items.map(item=>`<span class="meta">${esc(item)}</span>`).join("")}</div>`:"";
     }
     function statusOptions(current){
@@ -215,39 +238,39 @@
       const currentStatus=statusOf(segment);
       const phase=phaseById(segment.phase);
       const searchable=[segment.id,segment.title,segment.objective,segment.summary,segment.phase,currentStatus,segment.owner,segment.effort,segment.priority,...array(segment.decision_refs),...deps,...array(segment.deliverables),...array(segment.acceptance),...array(segment.prerequisites),...array(segment.risks),...array(segment.questions)].join(" ").toLowerCase();
-      const statusControl=editable?`<div class="status-editor"><label for="status-${segment.__index}">État de ${esc(segment.id)}</label><select class="control" id="status-${segment.__index}" data-status-segment="${esc(segment.id)}">${statusOptions(currentStatus)}</select></div>`:`<span class="status-badge">${esc(statusLabel(currentStatus))}</span>`;
+      const statusControl=editable?`<div class="status-editor"><label for="status-${segment.__index}">${esc(t.statusOf(segment.id))}</label><select class="control" id="status-${segment.__index}" data-status-segment="${esc(segment.id)}">${statusOptions(currentStatus)}</select></div>`:`<span class="status-badge">${esc(statusLabel(currentStatus))}</span>`;
       return `<article class="card" data-phase="${esc(segment.phase)}" data-search="${esc(searchable)}">
         <div class="card-top"><span class="id">${esc(segment.id)}</span><span class="phase">${esc(phase.title)}</span></div>
         <h3>${esc(segment.title)}</h3>
-        <p class="objective"><strong>Objectif :</strong> ${esc(text(segment.objective)||"Objectif non renseigné")}</p>
+        <p class="objective"><strong>${esc(t.objective)} :</strong> ${esc(text(segment.objective)||t.missingObjective)}</p>
         ${text(segment.summary)?`<p class="summary">${esc(segment.summary)}</p>`:""}
         ${metadata(segment)}
         ${statusControl}
-        <div class="deps">${deps.length?deps.map(dep=>`<span class="dep">Après ${esc(dep)}</span>`).join(""):`<span class="dep none">Aucune dépendance interne</span>`}</div>
-        <details><summary>Voir les livrables et validations</summary><div class="detail">
-          ${list("Décisions couvertes",segment.decision_refs)}
-          ${list("Livrables",segment.deliverables)}
-          ${list("Critères d’acceptation",segment.acceptance)}
-          ${list("Prérequis externes",segment.prerequisites)}
-          ${list("Risques",segment.risks)}
-          ${list("À préciser",segment.questions,"question-list")}
+        <div class="deps">${deps.length?deps.map(dep=>`<span class="dep">${esc(t.after(dep))}</span>`).join(""):`<span class="dep none">${esc(t.noInternalDependency)}</span>`}</div>
+        <details><summary>${esc(t.details)}</summary><div class="detail">
+          ${list(t.decisions,segment.decision_refs)}
+          ${list(t.deliverables,segment.deliverables)}
+          ${list(t.acceptance,segment.acceptance)}
+          ${list(t.prerequisites,segment.prerequisites)}
+          ${list(t.risks,segment.risks)}
+          ${list(t.toClarify,segment.questions,"question-list")}
         </div></details>
       </article>`;
     }
     function renderKanban(){
       const columns=columnsForState();
       const ordered=sortedSegments();
-      return `<p class="scroll-hint">Le tableau défile horizontalement. Placez le focus ici puis utilisez les flèches ou le défilement de votre appareil.</p><div class="kanban scroll-region" tabindex="0" role="region" aria-label="Tableau Kanban du plan de réalisation">${columns.map(column=>{
+      return `<p class="scroll-hint">${esc(t.kanbanHint)}</p><div class="kanban scroll-region" tabindex="0" role="region" aria-label="${esc(t.kanbanAria)}">${columns.map(column=>{
         const items=ordered.filter(segment=>statusOf(segment)===column.id);
         return `<section class="column ${column.fallback?"fallback":""}"><header class="column-head"><h2>${esc(column.title)}</h2><span class="count">${items.length}</span></header><div class="cards">${items.map(segment=>card(segment,true)).join("")}</div></section>`;
-      }).join("")}</div><p class="empty" id="empty" hidden>Aucun segment ne correspond aux filtres.</p>`;
+      }).join("")}</div><p class="empty" id="empty" hidden>${esc(t.empty)}</p>`;
     }
     function renderRoadmap(){
       const ordered=sortedSegments();
-      return `<p class="scroll-hint">La roadmap défile horizontalement. Placez le focus ici puis utilisez les flèches ou le défilement de votre appareil.</p><div class="roadmap scroll-region" tabindex="0" role="region" aria-label="Roadmap horizontale du plan de réalisation">${phases.map((phase,index)=>{
+      return `<p class="scroll-hint">${esc(t.roadmapHint)}</p><div class="roadmap scroll-region" tabindex="0" role="region" aria-label="${esc(t.roadmapAria)}">${phases.map((phase,index)=>{
         const items=ordered.filter(segment=>segment.phase===phase.id);
-        return `<section class="lane ${phase.__declared?"":"fallback"}"><header class="lane-head"><span class="index">Phase ${index+1}</span><h2>${esc(phase.title)}</h2></header>${text(phase.milestone)?`<div class="milestone">Jalon : ${esc(phase.milestone)}</div>`:""}<div class="cards">${items.map(segment=>card(segment,false)).join("")}</div></section>`;
-      }).join("")}</div><p class="empty" id="empty" hidden>Aucun segment ne correspond aux filtres.</p>`;
+        return `<section class="lane ${phase.__declared?"":"fallback"}"><header class="lane-head"><span class="index">${esc(t.phase)} ${index+1}</span><h2>${esc(phase.title)}</h2></header>${text(phase.milestone)?`<div class="milestone">${esc(t.milestone)} : ${esc(phase.milestone)}</div>`:""}<div class="cards">${items.map(segment=>card(segment,false)).join("")}</div></section>`;
+      }).join("")}</div><p class="empty" id="empty" hidden>${esc(t.empty)}</p>`;
     }
     function filter(){
       const search=byId("search").value.trim().toLowerCase();
@@ -267,36 +290,36 @@
       filter();
     }
     function populatePhaseFilter(){
-      byId("phaseFilter").innerHTML='<option value="all">Toutes les phases</option>'+phases.map(phase=>`<option value="${esc(phase.id)}">${esc(phase.title)}</option>`).join("");
+      byId("phaseFilter").innerHTML=`<option value="all">${esc(t.allPhases)}</option>`+phases.map(phase=>`<option value="${esc(phase.id)}">${esc(phase.title)}</option>`).join("");
     }
     function markdownList(lines,title,items){
       lines.push(`${title} :`);
       if(array(items).length)lines.push(...items.map(item=>`- ${item&&typeof item==="object"?(item.text||JSON.stringify(item)):item}`));
-      else lines.push("- Aucun");
+      else lines.push(`- ${t.none}`);
     }
     function markdown(){
-      const lines=[`# ${projectTitle} — plan de réalisation`,"",`Vue affichée lors de l’export : ${state.view==="kanban"?"Kanban":"Roadmap horizontale"}`,`Vue initiale recommandée : ${initialView==="kanban"?"Kanban":"Roadmap horizontale"}`,`Points ouverts : ${allQuestions.length}`,""];
+      const lines=[`# ${projectTitle} — ${t.deliveryPlan.toLowerCase()}`,"",`${t.viewDisplayed} : ${state.view==="kanban"?"Kanban":t.roadmapLabel}`,`${t.initialView} : ${initialView==="kanban"?"Kanban":t.roadmapLabel}`,`${t.openPoints} : ${allQuestions.length}`,""];
       phases.forEach((phase,index)=>{
-        lines.push(`## Phase ${index+1} — ${phase.title}`,"");
-        lines.push(`Jalon : ${text(phase.milestone)||"Non renseigné"}`,"");
+        lines.push(`## ${t.phase} ${index+1} — ${phase.title}`,"");
+        lines.push(`${t.milestone} : ${text(phase.milestone)||t.notProvided}`,"");
         sortedSegments().filter(segment=>segment.phase===phase.id).forEach(segment=>{
-          lines.push(`### ${segment.id} — ${segment.title}`,`Objectif : ${text(segment.objective)||"Non renseigné"}`,`Résumé : ${text(segment.summary)||"Non renseigné"}`,`État : ${statusLabel(statusOf(segment))}`,`Ordre : ${segment.order===Number.MAX_SAFE_INTEGER?"Non renseigné":segment.order}`);
-          if(text(segment.owner))lines.push(`Responsable : ${segment.owner}`);
-          if(metricText(segment.effort))lines.push(`Effort : ${metricText(segment.effort)}`);
-          if(metricText(segment.priority))lines.push(`Priorité : ${metricText(segment.priority)}`);
-          markdownList(lines,"Dépendances",segment.dependencies);
-          markdownList(lines,"Décisions couvertes",segment.decision_refs);
-          markdownList(lines,"Livrables",segment.deliverables);
-          markdownList(lines,"Critères d’acceptation",segment.acceptance);
-          markdownList(lines,"Prérequis externes",segment.prerequisites);
-          markdownList(lines,"Risques",segment.risks);
-          markdownList(lines,"Questions du segment",segment.questions);
+          lines.push(`### ${segment.id} — ${segment.title}`,`${t.objective} : ${text(segment.objective)||t.notProvided}`,`${t.summary} : ${text(segment.summary)||t.notProvided}`,`${t.state} : ${statusLabel(statusOf(segment))}`,`${t.order} : ${segment.order===Number.MAX_SAFE_INTEGER?t.notProvided:segment.order}`);
+          if(text(segment.owner))lines.push(`${t.owner} : ${segment.owner}`);
+          if(metricText(segment.effort))lines.push(`${t.effort} : ${metricText(segment.effort)}`);
+          if(metricText(segment.priority))lines.push(`${t.priority} : ${metricText(segment.priority)}`);
+          markdownList(lines,t.dependencies,segment.dependencies);
+          markdownList(lines,t.decisions,segment.decision_refs);
+          markdownList(lines,t.deliverables,segment.deliverables);
+          markdownList(lines,t.acceptance,segment.acceptance);
+          markdownList(lines,t.prerequisites,segment.prerequisites);
+          markdownList(lines,t.risks,segment.risks);
+          markdownList(lines,t.segmentQuestions,segment.questions);
           lines.push("");
         });
       });
-      lines.push("## Points ouverts","");
-      if(allQuestions.length)allQuestions.forEach(item=>lines.push(`- ${item.id} — ${item.text} [${item.severity}${item.segment?` · ${item.segment}`:""}]`));
-      else lines.push("- Aucun");
+      lines.push(`## ${t.openPoints}`,"");
+      if(allQuestions.length)allQuestions.forEach(item=>lines.push(`- ${item.id} — ${item.text} [${severityLabel(item.severity)}${item.segment?` · ${item.segment}`:""}]`));
+      else lines.push(`- ${t.none}`);
       lines.push("");
       return lines.join("\n");
     }
@@ -311,7 +334,7 @@
       const imported=validateStatePayload(saved);
       state.statuses={...imported.statuses};
       state.view=imported.view;
-      persist("État JSON importé et sauvegardé localement.");
+      persist(t.imported);
       render();
     }
 
@@ -340,20 +363,20 @@
     byId("search").addEventListener("input",filter);
     byId("phaseFilter").addEventListener("change",filter);
     byId("printButton").addEventListener("click",()=>window.print());
-    byId("markdownButton").addEventListener("click",()=>downloadFile(`${projectSlug}-plan-${state.view}.md`,markdown(),"text/markdown;charset=utf-8"));
-    byId("jsonExportButton").addEventListener("click",()=>downloadFile(`${projectSlug}-etat-planning.json`,JSON.stringify(statePayload(),null,2),"application/json;charset=utf-8"));
+    byId("markdownButton").addEventListener("click",()=>downloadFile(`${projectSlug}-${t.planningSuffix}-${state.view}.md`,markdown(),"text/markdown;charset=utf-8"));
+    byId("jsonExportButton").addEventListener("click",()=>downloadFile(`${projectSlug}-${t.stateSuffix}.json`,JSON.stringify(statePayload(),null,2),"application/json;charset=utf-8"));
     byId("importButton").addEventListener("click",()=>byId("fileInput").click());
     byId("fileInput").addEventListener("change",async event=>{
       const file=event.target.files[0];
       if(!file)return;
-      try{importState(JSON.parse(await file.text()))}catch(error){setSaveState(`Import impossible : ${error.message}`,"error")}
+      try{importState(JSON.parse(await file.text()))}catch(error){setSaveState(t.importImpossible(error.message),"error")}
       event.target.value="";
     });
     byId("resetButton").addEventListener("click",()=>{
-      if(!window.confirm("Réinitialiser tous les statuts et revenir à la vue recommandée ?"))return;
+      if(!window.confirm(t.confirmReset))return;
       state.view=initialView;
       state.statuses={...initialStatuses};
-      try{if(storageKey)localStorage.removeItem(storageKey);setSaveState("État réinitialisé. Les valeurs du plan source sont affichées.")}catch(error){setSaveState(`État réinitialisé en mémoire, mais la sauvegarde locale n’a pas pu être effacée : ${error.message}`,"error")}
+      try{if(storageKey)localStorage.removeItem(storageKey);setSaveState(t.resetDone)}catch(error){setSaveState(t.resetMemory(error.message),"error")}
       render();
     });
     let printDetails=[];

@@ -3,6 +3,7 @@
 ## Sommaire
 
 - Dimensionner le parcours
+- Choisir la langue de la fiche
 - Choisir le type de réponse
 - Rechercher sans fragiliser une décision
 - Tour d'orientation
@@ -23,6 +24,14 @@ Ne jamais appliquer une taille fixe ni supposer que le parcours complet est néc
 - **Demande courte** : limiter le premier tour aux décisions qui changent le plus le résultat et accepter de s'arrêter après l'exploration.
 
 La longueur dépend du risque, du nombre de publics, des plateformes, des intégrations et de l'exploitation visée. Expliquer brièvement la raison de chaque nouveau tour.
+
+## Choisir la langue de la fiche
+
+Utiliser `locale: "fr"` pour le français et `locale: "en"` pour l'anglais. Sans propriété `locale`, le rendu reste en français pour compatibilité.
+
+La locale traduit automatiquement l'interface, les messages, les contrôles d'accessibilité et l'export. Rédiger aussi dans cette langue tous les contenus fournis par le JSON : projet, introduction, sections, questions, descriptions, choix, échelles et textes d'aide. Lorsqu'une fiche existante est traduite, préserver `round_id`, `storage_key`, les identifiants de questions et les identifiants de choix afin que les réponses restent compatibles.
+
+Les exemples `questionnaire-example.json` et `questionnaire-example.en.json` montrent les deux langues.
 
 ## Choisir le type de réponse
 

@@ -16,6 +16,10 @@
     "schema": {
       "const": "project-workshop-questionnaire-v2"
     },
+    "locale": {
+      "enum": ["fr", "en"],
+      "default": "fr"
+    },
     "project": {
       "$ref": "#/$defs/project"
     },
