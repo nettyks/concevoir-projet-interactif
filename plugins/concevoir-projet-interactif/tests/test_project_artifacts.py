@@ -7,7 +7,8 @@ import unittest
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parent.parent
+PLUGIN_ROOT = Path(__file__).resolve().parent.parent
+ROOT = PLUGIN_ROOT / "skills" / "concevoir-projet-interactif"
 SPEC = importlib.util.spec_from_file_location(
     "project_artifacts", ROOT / "scripts" / "project_artifacts.py"
 )

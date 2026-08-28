@@ -4,9 +4,9 @@
 
 [Français](#francais) · [English](#english)
 
-Un skill Codex bilingue pour transformer une idée numérique en décisions traçables, spécification exploitable et plan de réalisation interactif.
+Un plugin Codex bilingue pour transformer une idée numérique en décisions traçables, spécification exploitable et plan de réalisation interactif.
 
-A bilingual Codex skill that turns a digital idea into traceable decisions, an actionable specification and an interactive delivery plan.
+A bilingual Codex plugin that turns a digital idea into traceable decisions, an actionable specification and an interactive delivery plan.
 
 ---
 
@@ -14,77 +14,45 @@ A bilingual Codex skill that turns a digital idea into traceable decisions, an a
 
 ## Français
 
-### À quoi sert ce skill ?
+### Ce que fait le plugin
 
-Ce skill accompagne progressivement la conception de tout projet numérique :
+Le plugin accompagne progressivement la conception de sites, applications, jeux, services en ligne, outils internes, automatisations, produits connectés et projets IA/data. Il s’adapte à une idée vague comme à un brief déjà précis et ne pose que les questions qui peuvent réellement changer le produit.
 
-- site web ou application mobile/desktop ;
-- jeu vidéo ou expérience interactive ;
-- outil interne ou service en ligne ;
-- automatisation ou produit connecté ;
-- projet IA ou data.
+Il produit :
 
-Il s’adapte aussi bien à une idée vague qu’à un brief déjà précis. Il ne pose que les questions qui peuvent réellement changer le produit.
+- des questionnaires HTML interactifs avec six formats de réponse ;
+- un registre de décisions traçable avec hypothèses et décisions différées ;
+- une spécification consolidée reliée aux décisions ;
+- un plan unique basculable entre Kanban pilotable et roadmap horizontale ;
+- un bouton dans le plan pour revenir directement aux questions ;
+- des exports JSON et Markdown, une sauvegarde locale et des archives vérifiables.
 
-### Ce qu’il produit
+Les fiches fonctionnent hors ligne, n’envoient aucune donnée vers un service externe et sont ouvertes dans le navigateur intégré à Codex lors de leur génération.
 
-- Des questionnaires HTML interactifs adaptés au niveau de maturité du projet.
-- Six formats de réponse : texte libre, décision, choix simple, choix multiple, échelle et classement.
-- Un registre de décisions traçable avec sources, hypothèses et décisions différées.
-- Une spécification consolidée reliée aux décisions.
-- Un plan unique consultable en Kanban pilotable ou en roadmap horizontale.
-- Des exports JSON et Markdown, une sauvegarde locale et des archives vérifiables.
-
-Les fiches fonctionnent hors ligne et n’envoient aucune donnée vers un service externe.
-
-### Aperçu en français
+### Aperçu
 
 #### Questionnaire interactif
 
-![Questionnaire interactif de cadrage](assets/screenshots/questionnaire.png)
+![Questionnaire interactif de cadrage](plugins/concevoir-projet-interactif/assets/screenshots/questionnaire.png)
 
 #### Roadmap
 
-![Roadmap horizontale du projet](assets/screenshots/planning-roadmap.png)
+![Roadmap horizontale du projet](plugins/concevoir-projet-interactif/assets/screenshots/planning-roadmap.png)
 
 #### Kanban pilotable
 
-![Kanban interactif du projet](assets/screenshots/planning-kanban.png)
-
-### Français et anglais
-
-La propriété JSON `locale` choisit la langue :
-
-~~~json
-{
-  "locale": "fr"
-}
-~~~
-
-Utiliser `"en"` pour l’anglais. L’interface, les messages, l’accessibilité, les statuts et les exports Markdown sont traduits automatiquement. Le skill rédige également les questions et le contenu dans la langue demandée.
+![Kanban interactif du projet](plugins/concevoir-projet-interactif/assets/screenshots/planning-kanban.png)
 
 ### Installation depuis GitHub
 
-Donner l’adresse de ce dépôt à Codex avec ce prompt :
+Ajouter le dépôt comme marketplace Git puis installer le plugin :
 
-~~~text
-Installe le skill Codex disponible dans ce dépôt GitHub :
-https://github.com/nettyks/concevoir-projet-interactif
-
-Installe le dépôt complet dans ~/.codex/skills/concevoir-projet-interactif sans écraser une installation existante. Vérifie ensuite le skill, lance ses tests et confirme qu’il sera disponible au prochain tour.
+~~~bash
+codex plugin marketplace add nettyks/concevoir-projet-interactif --ref main
+codex plugin add concevoir-projet-interactif@nettyks
 ~~~
 
-### Installation depuis un ZIP
-
-Ajouter le ZIP à une conversation Codex, puis utiliser :
-
-~~~text
-Installe le skill contenu dans ce fichier ZIP.
-
-Décompresse et copie le dossier complet concevoir-projet-interactif dans ~/.codex/skills/ en conservant SKILL.md et tous ses sous-dossiers.
-
-Si une installation existe déjà, ne l’écrase pas sans me demander. Vérifie ensuite le skill, lance python3 -B -m unittest discover -s tests -v et confirme le chemin installé.
-~~~
+Ouvrir ensuite une nouvelle tâche Codex pour charger le skill du plugin.
 
 ### Utilisation
 
@@ -92,79 +60,49 @@ Si une installation existe déjà, ne l’écrase pas sans me demander. Vérifie
 Utilise $concevoir-projet-interactif pour m’aider à cadrer ce projet numérique : [décrire le projet].
 ~~~
 
+Le contenu généré utilise `locale: "fr"` par défaut. Utiliser `"en"` pour produire l’interface, les questions, les statuts, l’accessibilité et les exports en anglais.
+
 ---
 
 <a id="english"></a>
 
 ## English
 
-### What is this skill for?
+### What the plugin does
 
-This skill progressively guides the design of any digital project:
+The plugin progressively frames websites, applications, games, online services, internal tools, automations, connected products and AI/data projects. It works with an early idea or a detailed brief and asks only questions that can materially change the product.
 
-- website, mobile app or desktop application;
-- video game or interactive experience;
-- internal tool or online service;
-- automation or connected product;
-- AI or data project.
+It produces:
 
-It works with both early ideas and detailed briefs. It asks only the questions that can materially change the product.
-
-### What it produces
-
-- Interactive HTML questionnaires adapted to the project’s maturity.
-- Six answer formats: open text, decision, single choice, multiple choice, scale and ranking.
-- A traceable decision register with sources, assumptions and deferred decisions.
-- A consolidated specification linked to the decisions.
-- One delivery plan that switches between an actionable Kanban and a horizontal roadmap.
+- interactive HTML questionnaires with six answer formats;
+- a traceable decision register with assumptions and deferred decisions;
+- a consolidated specification linked to decisions;
+- one delivery plan that switches between an actionable Kanban and a horizontal roadmap;
+- a button in the plan to return directly to the questions;
 - JSON and Markdown exports, local saving and verifiable archives.
 
-The sheets work offline and do not send data to any external service.
+The sheets work offline, do not send data to any external service and open in Codex's integrated browser when generated.
 
-### English preview
+### Preview
 
 #### Interactive questionnaire
 
-![Interactive project questionnaire](assets/screenshots/questionnaire-en.png)
+![Interactive project questionnaire](plugins/concevoir-projet-interactif/assets/screenshots/questionnaire-en.png)
 
 #### Actionable Kanban
 
-![Interactive project Kanban](assets/screenshots/planning-kanban-en.png)
-
-### French and English
-
-The JSON `locale` property selects the language:
-
-~~~json
-{
-  "locale": "en"
-}
-~~~
-
-Use `"fr"` for French. The interface, messages, accessibility labels, statuses and Markdown exports are translated automatically. The skill also writes the questions and project content in the requested language.
+![Interactive project Kanban](plugins/concevoir-projet-interactif/assets/screenshots/planning-kanban-en.png)
 
 ### Install from GitHub
 
-Give this repository URL to Codex with the following prompt:
+Add the repository as a Git marketplace, then install the plugin:
 
-~~~text
-Install the Codex skill available in this GitHub repository:
-https://github.com/nettyks/concevoir-projet-interactif
-
-Install the complete repository into ~/.codex/skills/concevoir-projet-interactif without overwriting an existing installation. Then validate the skill, run its tests and confirm that it will be available on the next turn.
+~~~bash
+codex plugin marketplace add nettyks/concevoir-projet-interactif --ref main
+codex plugin add concevoir-projet-interactif@nettyks
 ~~~
 
-### Install from a ZIP file
-
-Attach the ZIP file to a Codex conversation, then use:
-
-~~~text
-Install the skill contained in this ZIP file.
-
-Extract and copy the complete concevoir-projet-interactif folder into ~/.codex/skills/ while preserving SKILL.md and every subfolder.
-
-If an installation already exists, do not overwrite it without asking me. Then validate the skill, run python3 -B -m unittest discover -s tests -v and confirm the installed path.
-~~~
+Start a new Codex task afterwards so the plugin skill is loaded.
 
 ### Usage
 
@@ -172,26 +110,29 @@ If an installation already exists, do not overwrite it without asking me. Then v
 Use $concevoir-projet-interactif to frame this digital project: [describe the project].
 ~~~
 
+Use `locale: "en"` for English output or `"fr"` for French output. Technical identifiers remain stable between both languages.
+
 ---
 
 ## Structure
 
 ~~~text
 concevoir-projet-interactif/
-├── SKILL.md
-├── agents/
-├── assets/
-│   └── screenshots/
-├── references/
-├── scripts/
-└── tests/
+├── .agents/plugins/marketplace.json
+├── .github/workflows/tests.yml
+├── plugins/
+│   └── concevoir-projet-interactif/
+│       ├── .codex-plugin/plugin.json
+│       ├── assets/
+│       ├── skills/
+│       │   └── concevoir-projet-interactif/
+│       │       ├── SKILL.md
+│       │       ├── agents/
+│       │       ├── assets/
+│       │       ├── references/
+│       │       └── scripts/
+│       └── tests/
+└── README.md
 ~~~
 
-- `SKILL.md`: main Codex instructions.
-- `agents/`: Codex display metadata.
-- `assets/`: HTML templates, document templates and screenshots.
-- `references/`: methodology, examples and JSON schemas.
-- `scripts/`: artifact generation and validation.
-- `tests/`: automated tests.
-
-The complete folder is required; `SKILL.md` alone is not enough.
+The repository is a Git marketplace containing one skill-only plugin. It does not require an MCP server or a remote application.

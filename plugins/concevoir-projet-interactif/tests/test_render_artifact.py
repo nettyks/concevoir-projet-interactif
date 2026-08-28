@@ -8,7 +8,8 @@ import unittest
 from pathlib import Path
 
 
-SKILL_ROOT = Path(__file__).resolve().parents[1]
+PLUGIN_ROOT = Path(__file__).resolve().parents[1]
+SKILL_ROOT = PLUGIN_ROOT / "skills" / "concevoir-projet-interactif"
 MODULE_PATH = SKILL_ROOT / "scripts" / "render_artifact.py"
 SPEC = importlib.util.spec_from_file_location("render_artifact", MODULE_PATH)
 assert SPEC is not None and SPEC.loader is not None
@@ -402,6 +403,13 @@ class RenderingTests(unittest.TestCase):
                     self.assertNotIn("__PROJECT_DATA__", rendered)
                     self.assertIn(data["schema"], rendered)
                     self.assertTrue(rendered.startswith("<!doctype html>"))
+                    if kind == "planning":
+                        self.assertIn(".recommendation[hidden]{display:none}", rendered)
+                        self.assertIn('id="questionnaireButton"', rendered)
+                        self.assertIn('href="../questionnaire-actif.html"', rendered)
+                        self.assertIn(":where(button,.button,input,select,summary,.scroll-region):focus-visible", rendered)
+                        self.assertIn('viewQuestions:"Afficher les questions"', rendered)
+                        self.assertIn('viewQuestions:"View questions"', rendered)
 
     def test_bundled_v2_examples_validate_and_render(self) -> None:
         with tempfile.TemporaryDirectory() as raw_directory:

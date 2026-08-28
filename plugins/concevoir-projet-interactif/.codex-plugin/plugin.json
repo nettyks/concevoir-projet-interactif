@@ -1,0 +1,45 @@
+{
+  "name": "concevoir-projet-interactif",
+  "version": "1.0.0",
+  "description": "Cadre un projet numérique avec des questionnaires interactifs, des décisions traçables, un Kanban et une roadmap.",
+  "author": {
+    "name": "Nettyks",
+    "url": "https://github.com/nettyks"
+  },
+  "homepage": "https://github.com/nettyks/concevoir-projet-interactif",
+  "repository": "https://github.com/nettyks/concevoir-projet-interactif",
+  "keywords": [
+    "codex",
+    "project-planning",
+    "questionnaire",
+    "kanban",
+    "roadmap",
+    "bilingual"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Concevoir un projet numérique",
+    "shortDescription": "Questionnaires, décisions, Kanban et roadmap",
+    "longDescription": "Transforme une idée numérique en décisions traçables, spécification exploitable et plan interactif bilingue français/anglais.",
+    "developerName": "Nettyks",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/nettyks/concevoir-projet-interactif",
+    "defaultPrompt": [
+      "Cadre mon idée de projet numérique en français.",
+      "Transforme ce brief en spécification traçable.",
+      "Crée le Kanban et la roadmap de ce projet."
+    ],
+    "brandColor": "#155F50",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/icon.svg",
+    "screenshots": [
+      "./assets/screenshots/questionnaire.png",
+      "./assets/screenshots/planning-roadmap.png",
+      "./assets/screenshots/planning-kanban.png"
+    ]
+  }
+}

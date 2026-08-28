@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title description">
+  <title id="title">Concevoir un projet numérique</title>
+  <desc id="description">Trois cartes reliées représentant un questionnaire, un Kanban et une roadmap.</desc>
+  <rect width="512" height="512" rx="112" fill="#155F50"/>
+  <path d="M150 174h212M150 256h126M276 256h86M150 338h212" fill="none" stroke="#DCEBE6" stroke-width="34" stroke-linecap="round"/>
+  <circle cx="112" cy="174" r="26" fill="#F2B36F"/>
+  <circle cx="112" cy="256" r="26" fill="#F2B36F"/>
+  <circle cx="112" cy="338" r="26" fill="#F2B36F"/>
+  <path d="M276 256l44-42m-44 42 44 42" fill="none" stroke="#F2B36F" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

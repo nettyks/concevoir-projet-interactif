@@ -45,6 +45,15 @@ python3 /chemin/du/skill/scripts/project_artifacts.py init \
 
 Le dossier `conception/` contient le journal, le registre de décisions, les sources, la spécification, les tours et le planning. Si le projet possède déjà une organisation équivalente, la conserver et documenter la correspondance au lieu de créer un doublon.
 
+## Afficher obligatoirement les fiches dans Codex
+
+Après chaque génération ou mise à jour réussie d'une fiche HTML, l'ouvrir immédiatement dans le navigateur intégré à Codex. Dans Codex Desktop, appeler `open_in_codex` avec une cible `browser` et l'URL `file://` absolue de la fiche. Ne pas se contenter d'un chemin ou d'un lien dans la réponse et ne pas utiliser un navigateur externe à la place.
+
+- Après la génération d'un questionnaire, afficher `conception/questionnaire-actif.html`.
+- Après le remplacement d'un questionnaire actif, afficher la nouvelle version afin que l'onglet visible corresponde au fichier courant.
+- Après la génération du plan final, afficher `conception/planning/plan.html` dans le navigateur intégré et laisser cet onglet accessible à l'utilisateur.
+- Si le navigateur intégré est indisponible, le signaler explicitement et fournir le lien local ouvrable; ne jamais prétendre que la fiche a été affichée.
+
 ## Conduire les tours de cadrage
 
 ### 1. Examiner le contexte et les risques
@@ -62,6 +71,8 @@ python3 /chemin/du/skill/scripts/render_artifact.py questionnaire \
   --input /chemin/du/projet/questionnaire.json \
   --output /chemin/du/projet/conception/questionnaire-actif.html
 ```
+
+Après le contrôle du fichier généré, l'ouvrir immédiatement dans le navigateur intégré à Codex selon la section « Afficher obligatoirement les fiches dans Codex ».
 
 Pour une fiche anglaise, utiliser `locale: "en"` et `references/questionnaire-example.en.json`. Le modèle traduit automatiquement l'interface, les messages, les contrôles d'accessibilité et l'export Markdown; traduire aussi les titres, descriptions, choix et textes d'aide du JSON. Conserver les identifiants de questions et de choix lors de la traduction d'une fiche existante afin de préserver la compatibilité des réponses.
 
@@ -122,10 +133,14 @@ python3 /chemin/du/skill/scripts/render_artifact.py planning \
 
 Le Kanban permet de changer les états et de les sauvegarder localement. La roadmap expose phases, jalons, ordre et dépendances. Sans calendrier validé, utiliser des phases relatives.
 
+La fiche de planning contient un bouton bilingue « Afficher les questions » / « View questions » qui ouvre `../questionnaire-actif.html`. Respecter l'arborescence canonique afin que ce retour direct vers le questionnaire fonctionne hors ligne. Après génération et contrôle, ouvrir immédiatement le plan dans le navigateur intégré à Codex.
+
 ## Vérifier avant remise
 
 - Exécuter les tests : `python3 -m unittest discover -s tests -v`.
 - Générer les deux exemples et les ouvrir dans un navigateur moderne.
+- Ouvrir les fiches remises dans le navigateur intégré à Codex et vérifier que l'onglet est réellement visible.
+- Depuis le planning canonique, activer « Afficher les questions » et vérifier que `questionnaire-actif.html` s'ouvre correctement.
 - Générer aussi les exemples `.en.json` et vérifier que `html[lang]`, l'interface, les messages et les exports sont en anglais.
 - Vérifier qu'aucune question, carte, dépendance ou information d'export ne disparaît silencieusement.
 - Vérifier clavier, mobile, impression, import/export, stockage refusé et cohérence des archives.

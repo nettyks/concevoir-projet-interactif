@@ -77,6 +77,8 @@ La roadmap montre trajectoire, jalons, ordre et dépendances. Sans dates ou esti
 
 Kanban et roadmap partagent exactement les mêmes segments. La propriété `view` choisit seulement la vue initiale; l'utilisateur peut basculer dans la fiche sans générer un second plan.
 
+La barre d'actions du plan propose aussi « Afficher les questions » / « View questions ». Ce bouton revient vers `conception/questionnaire-actif.html` avec le lien relatif `../questionnaire-actif.html`; conserver l'arborescence canonique pour garantir ce fonctionnement hors ligne.
+
 ## Questions ouvertes
 
 Afficher un panneau « À préciser avec l'utilisateur ». Utiliser les sévérités :

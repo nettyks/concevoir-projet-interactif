@@ -42,7 +42,7 @@ Ne pas créer une seconde source de vérité si le dépôt possède déjà des A
 - `specification.md` : vue consolidée et lisible de l'état actuel; peut être brouillon ou validée.
 - `questionnaire-actif.html` : fiche du tour en cours; jamais source de vérité après archivage.
 - `tours/` : questionnaires et réponses brutes immuables.
-- `planning/` : plan source JSON et fiche générée.
+- `planning/` : plan source JSON et fiche générée; `plan.html` revient vers le questionnaire actif au moyen du lien relatif `../questionnaire-actif.html`.
 
 Ne pas ajouter de `README.md`, de duplicata du brief ou de document auxiliaire sauf demande explicite ou convention déjà présente dans le projet. Les artefacts canoniques ci-dessus suffisent normalement.
 
@@ -140,3 +140,5 @@ Le plan JSON est canonique pour sa structure. Les changements d'état effectués
 - Préférer une écriture atomique et refuser un conflit de fichier plutôt que deviner l'intention.
 
 Les fiches ciblent un navigateur moderne prenant en charge JavaScript ES2021, `localStorage`, `Blob`, `URL.createObjectURL`, `CSS.escape` et l'élément `<dialog>`. Elles doivent rester utilisables sans réseau; le stockage local doit disposer d'un mode dégradé explicite lorsqu'il est refusé ou saturé.
+
+Dans Codex Desktop, toute fiche générée ou mise à jour doit être ouverte dans le navigateur intégré à Codex après validation. Un simple lien de fichier dans la réponse ne constitue pas un affichage vérifié.

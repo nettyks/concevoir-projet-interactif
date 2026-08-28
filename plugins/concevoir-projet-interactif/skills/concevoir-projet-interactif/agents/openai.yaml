@@ -1,0 +1,4 @@
+interface:
+  display_name: "Concevoir un projet numérique"
+  short_description: "Cadre un projet numérique en français ou en anglais"
+  default_prompt: "Utilise $concevoir-projet-interactif pour cadrer progressivement ce projet numérique, dans la langue de ma demande, produire uniquement le niveau d’artefacts utile et ouvrir chaque fiche HTML générée dans le navigateur intégré à Codex."

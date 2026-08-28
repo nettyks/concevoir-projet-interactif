@@ -1,0 +1,20 @@
+{
+  "name": "nettyks",
+  "interface": {
+    "displayName": "Nettyks Plugins"
+  },
+  "plugins": [
+    {
+      "name": "concevoir-projet-interactif",
+      "source": {
+        "source": "local",
+        "path": "./plugins/concevoir-projet-interactif"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
