@@ -21,11 +21,13 @@ conception/
 ├── decisions.json
 ├── sources.md
 ├── specification.md
-├── questionnaire-actif.html
+├── questionnaire.json
+├── questionnaire-actif.html     # lecture complémentaire si utile
+├── reponses-T01.md
 ├── tours/
 │   └── T01/
 │       ├── questionnaire.html
-│       ├── reponses-01.json
+│       ├── reponses-01.md       # ou JSON reçu depuis le formulaire
 │       └── archive.json
 └── planning/
     ├── plan.json
@@ -40,7 +42,9 @@ Ne pas créer une seconde source de vérité si le dépôt possède déjà des A
 - `decisions.json` : historique structuré, append-only par identifiant; seule source de vérité des décisions brutes et interprétées.
 - `sources.md` : références externes, dates de vérification et distinction entre fait et inférence.
 - `specification.md` : vue consolidée et lisible de l'état actuel; peut être brouillon ou validée.
-- `questionnaire-actif.html` : fiche du tour en cours; jamais source de vérité après archivage.
+- `questionnaire.json` : source structurée des questions du tour courant. Le formulaire Visualize généré avec `--inline` réside dans le répertoire de visualisation explicitement disponible pour le fil ; archiver ce fragment à la clôture du tour.
+- `questionnaire-actif.html` : fiche de lecture complémentaire des propositions et questions du tour en cours, générée avec `--read-only` si utile ; jamais source de vérité après archivage.
+- `reponses-T01.md` : messages bruts reçus dans le chat pour ce tour, conservés sans reformulation jusqu’à leur archivage. Le répondant ne produit aucun fichier lui-même.
 - `tours/` : questionnaires et réponses brutes immuables.
 - `planning/` : plan source JSON et fiche générée; `plan.html` revient vers le questionnaire actif au moyen du lien relatif `../questionnaire-actif.html`.
 
@@ -101,10 +105,13 @@ Utiliser une `round_id` stable (`T01`, `T02`...) et une `storage_key` différent
 Le script `project_artifacts.py archive` :
 
 - refuse un identifiant dangereux ou un dossier d'archive déjà existant;
-- copie la fiche et un ou plusieurs exports;
+- copie la fiche effectivement présentée et un ou plusieurs fichiers de réponses brutes Markdown ou JSON reçus depuis le formulaire;
 - calcule les empreintes SHA-256;
 - écrit `archive.json` avec la date réelle d'archivage;
 - ajoute l'événement au journal.
+
+Le fragment Visualize contient le JSON des questions du tour : son archivage conserve donc
+aussi cette source, sans dépendre du prochain `conception/questionnaire.json`.
 
 Ne pas modifier le contenu d'un tour archivé. En cas de correction, créer un nouveau tour ou une note explicite dans le journal.
 
@@ -128,17 +135,24 @@ La spécification porte un statut visible : `brouillon`, `à valider` ou `valid�
 
 Chaque exigence reçoit un identifiant stable (`REQ-001`) et référence les décisions qui la justifient. Chaque segment du planning utilise `decision_refs` ou les identifiants d'exigence correspondants.
 
-Le plan JSON est canonique pour sa structure. Les changements d'état effectués dans le Kanban sont une couche locale jusqu'à leur export et leur consolidation dans `plan.json`.
+Le plan JSON est canonique pour sa structure et ses états. Le Kanban et la roadmap sont des
+vues de lecture régénérées après les changements demandés dans le chat. Dans l’ancien mode
+interactif demandé explicitement, les états locaux restent à consolider dans `plan.json`.
 
 ## Règles de sécurité et de reprise
 
-- La sauvegarde navigateur et les exports ne sont pas chiffrés.
+- Les sauvegardes navigateur et les exports des formulaires ne sont pas chiffrés ; la lecture seule n’en crée pas.
 - Ne jamais demander de mot de passe, clé privée, jeton ou secret dans un questionnaire.
-- Exporter le JSON à la fin de chaque tour important; `localStorage` n'est pas une sauvegarde durable.
+- Archiver les réponses reçues dans le chat à la fin du tour. Pour les formulaires Visualize et autonomes, `localStorage` n’est pas une sauvegarde durable.
 - Vérifier projet, tour, schéma et clé de stockage avant tout import.
 - Ne jamais écraser un original avec un HTML généré; utiliser des chemins distincts.
 - Préférer une écriture atomique et refuser un conflit de fichier plutôt que deviner l'intention.
 
-Les fiches ciblent un navigateur moderne prenant en charge JavaScript ES2021, `localStorage`, `Blob`, `URL.createObjectURL`, `CSS.escape` et l'élément `<dialog>`. Elles doivent rester utilisables sans réseau; le stockage local doit disposer d'un mode dégradé explicite lorsqu'il est refusé ou saturé.
+Les fiches de lecture sont du HTML autonome utilisable sans JavaScript ni réseau. Les formulaires
+Visualize ou autonomes nécessitent JavaScript ES2021 et utilisent le stockage local au mieux,
+avec un mode dégradé lorsque celui-ci est refusé ou saturé.
 
-Dans Codex Desktop, toute fiche générée ou mise à jour doit être ouverte dans le navigateur intégré à Codex après validation. Un simple lien de fichier dans la réponse ne constitue pas un affichage vérifié.
+Dans Codex Desktop, ouvrir les fiches de lecture dans le navigateur intégré après validation
+lorsque sa politique l’autorise. Une demande d’ouverture ne constitue pas un affichage vérifié.
+Visualize est le mode par défaut des questionnaires, décrit dans `conversation-delivery.md`.
+Afficher son fragment dans la réponse finale du même tour, sans l’ouvrir dans un onglet navigateur.

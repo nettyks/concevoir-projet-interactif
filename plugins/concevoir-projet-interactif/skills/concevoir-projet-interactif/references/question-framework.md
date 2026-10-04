@@ -17,10 +17,10 @@
 
 Ne jamais appliquer une taille fixe ni supposer que le parcours complet est nécessaire.
 
-- **Idée vague** : commencer par 5 à 12 questions d'orientation, majoritairement ouvertes. Attendre les réponses avant de proposer des fonctions.
-- **Idée intermédiaire** : poser généralement 8 à 25 questions ciblées sur les zones manquantes.
-- **Idée précise** : reformuler les acquis, puis approfondir les 5 à 20 décisions réellement ouvertes.
-- **Projet complexe ou demande approfondie** : répartir les questions en plusieurs tours, idéalement moins de 40 par fiche.
+- **Idée vague** : commencer par quelques questions ouvertes pour comprendre l’usage, dans le formulaire Visualize par défaut.
+- **Idée intermédiaire** : cibler les zones manquantes, puis adapter la suite aux réponses.
+- **Idée précise** : reformuler les acquis, puis approfondir uniquement les décisions réellement ouvertes.
+- **Projet complexe ou demande approfondie** : répartir les sujets en courts tours Visualize, avec une fiche de lecture complémentaire si utile.
 - **Demande courte** : limiter le premier tour aux décisions qui changent le plus le résultat et accepter de s'arrêter après l'exploration.
 
 La longueur dépend du risque, du nombre de publics, des plateformes, des intégrations et de l'exploitation visée. Expliquer brièvement la raison de chaque nouveau tour.
@@ -35,7 +35,10 @@ Les exemples `questionnaire-example.json` et `questionnaire-example.en.json` mon
 
 ## Choisir le type de réponse
 
-Le format V2 accepte six types. Toujours renseigner `type` dans le JSON.
+Le format V2 accepte six types. Toujours renseigner `type` dans le JSON. Dans le formulaire
+Visualize par défaut, choisir le contrôle adapté et ajouter un champ de précision aux questions
+à choix (`allow_note: true`). Une réponse libre dans le chat reste recevable sans syntaxe imposée.
+En mode lecture complémentaire, ces types organisent seulement les propositions.
 
 | Type | Usage | Valeur exportée |
 |---|---|---|

@@ -69,7 +69,10 @@ Valeurs par défaut :
 
 Des colonnes personnalisées sont possibles si elles sont déclarées. Chaque segment doit appartenir à une colonne existante. Une carte bloquée nomme son blocage dans les questions ou prérequis.
 
-La fiche Kanban V2 permet de changer un état au clavier, le sauvegarde localement et exporte l'état. Le JSON de plan reste le point de départ canonique; un export d'état doit être consolidé avant de remplacer ce fichier.
+Par défaut, générer le plan avec `--read-only` : les statuts reflètent `plan.json` et les
+changements se demandent dans le chat. L’agent consolide la source puis régénère la fiche.
+L’ancien Kanban modifiable reste disponible sur demande explicite ; ses états sauvegardés
+localement doivent être consolidés avant de remplacer le JSON canonique.
 
 ## Roadmap horizontale
 
@@ -77,7 +80,8 @@ La roadmap montre trajectoire, jalons, ordre et dépendances. Sans dates ou esti
 
 Kanban et roadmap partagent exactement les mêmes segments. La propriété `view` choisit seulement la vue initiale; l'utilisateur peut basculer dans la fiche sans générer un second plan.
 
-La barre d'actions du plan propose aussi « Afficher les questions » / « View questions ». Ce bouton revient vers `conception/questionnaire-actif.html` avec le lien relatif `../questionnaire-actif.html`; conserver l'arborescence canonique pour garantir ce fonctionnement hors ligne.
+Le plan propose un lien pour relire les questions dans `conception/questionnaire-actif.html`,
+avec le chemin relatif `../questionnaire-actif.html`. Conserver l’arborescence canonique.
 
 ## Questions ouvertes
 
@@ -96,7 +100,7 @@ Ne pas bloquer tout le projet pour une question localisée. Rattacher la questio
 - Chaque segment produit un résultat vérifiable et possède au moins un livrable et un critère d'acceptation.
 - Chaque dépendance pointe vers un segment existant et respecte l'ordre des phases.
 - Aucun segment ne disparaît d'une vue à cause d'une phase ou d'un état inconnu.
-- Les prérequis, risques, questions, jalons et références restent présents dans l'export Markdown et JSON.
+- Les prérequis, risques, questions, jalons et références restent présents dans la fiche de lecture et le JSON source, ainsi que dans les exports des modes optionnels.
 - Les hypothèses et points ouverts restent visibles.
 - Le premier jalon produit une preuve utile, pas uniquement une pile technique.
 - Le plan n'affirme pas être validé tant que le cadrage ne l'est pas explicitement.

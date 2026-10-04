@@ -1,0 +1,194 @@
+<div id="__ROOT_ID__">
+  <style>
+    /* Keep text and its canvas paired when the mobile host passes mismatched theme colors. */
+    #__ROOT_ID__ {
+      --background:Canvas;--foreground:CanvasText;
+      --primary:CanvasText;--primary-foreground:Canvas;
+      --secondary:Canvas;--secondary-foreground:CanvasText;
+      --card:ButtonFace;--card-foreground:ButtonText;
+      --muted-foreground:GrayText;--border:GrayText;--input:GrayText;--ring:Highlight;
+      --color-background-primary:Canvas;--color-text-primary:CanvasText;--color-border-secondary:GrayText;
+      color:var(--foreground);background-color:var(--background)
+    }
+    #__ROOT_ID__ .workshop-sections, #__ROOT_ID__ .workshop-questions {display:grid;gap:20px}
+    #__ROOT_ID__ .workshop-answer, #__ROOT_ID__ .workshop-note {display:grid;gap:8px;margin-top:12px}
+    #__ROOT_ID__ fieldset {border:0;padding:0;margin:0;min-width:0}
+    #__ROOT_ID__ legend {margin-bottom:8px}
+    #__ROOT_ID__ .workshop-ranking {display:grid;gap:8px;padding-left:24px}
+    #__ROOT_ID__ .workshop-actions {margin-top:20px}
+    #__ROOT_ID__ .workshop-backup {margin-top:16px}
+    #__ROOT_ID__ [hidden] {display:none!important}
+  </style>
+  <div class="workshop-sections" data-sections></div>
+  <div class="workshop-actions viz-row">
+    <button class="btn btn-primary" type="button" data-send></button>
+    <span class="text-small" data-progress aria-live="polite"></span>
+  </div>
+  <p class="text-small" data-privacy></p>
+  <p role="status" aria-live="polite" data-status></p>
+  <p role="alert" data-error hidden></p>
+  <div data-partial hidden>
+    <p data-partial-text></p>
+    <div class="viz-row">
+      <button class="btn btn-primary" type="button" data-partial-send></button>
+      <button class="btn" type="button" data-continue></button>
+    </div>
+  </div>
+  <div data-retry hidden>
+    <p data-retry-text></p>
+    <button class="btn" type="button" data-retry-send></button>
+  </div>
+  <details class="workshop-backup">
+    <summary data-backup-title></summary>
+    <div class="viz-row">
+      <button class="btn" type="button" data-json></button>
+      <button class="btn" type="button" data-copy></button>
+      <label class="form-label"><span data-import-label></span><input class="form-control" type="file" accept=".json,application/json" data-import></label>
+    </div>
+    <label class="form-label" data-manual-label hidden><span data-manual-text></span><textarea class="form-control" rows="6" readonly data-manual></textarea></label>
+  </details>
+  <script>
+  (() => {
+    'use strict';
+    const root = document.getElementById('__ROOT_ID__');
+    const data = __PROJECT_DATA__;
+    __CONVERSATION_RUNTIME__
+    const session = createQuestionnaireSession(data);
+    const en = data.locale === 'en';
+    root.lang = en ? 'en' : 'fr';
+    const t = en ? {
+      send:'Send my answers',sending:'Sending…',privacy:'Answers are sent to this conversation only when you press Send.',
+      backup:'Backup and other options',json:'JSON backup',copy:'Copy for the conversation',import:'Restore a JSON backup',manual:'Copy this text into the conversation',
+      partial:'Some answers are missing or need clarification. Send the current answers?',anyway:'Send these answers',continue:'Keep answering',
+      unavailable:'Direct sending is unavailable here. Copy the answers into the conversation, or use the JSON backup.',
+      submitted:'Message submitted to the conversation. Your answers remain available here.',cancelled:'Sending cancelled. Your answers are kept.',
+      requested:'Sending requested. Check that the message appears in the conversation; your answers are kept.',retry:'If no message appeared, you can send these answers again.',retrySend:'Send again',
+      failed:'Sending was not confirmed. Check the conversation before trying again; your answers are kept.',duplicate:'These answers have already been submitted.',
+      copied:'Answers copied. Paste them into the conversation.',storage:'Automatic saving is unavailable. Keep this form open or use a JSON backup.',
+      invalid:'This backup is incompatible or contains invalid answers. Your current answers were kept.',
+      note:'Additional detail',unanswered:'Unanswered',ranking:'Rank the choices, then confirm.',confirm:'Confirm this ranking',confirmed:'Ranking confirmed',
+      up:'Move up',down:'Move down',restored:'Answers restored.',choose:'Choose an answer',progress:(n,total)=>n+' / '+total+' answered'
+    } : {
+      send:'Envoyer mes réponses',sending:'Envoi en cours…',privacy:'Les réponses sont transmises à cette conversation seulement au clic sur Envoyer.',
+      backup:'Sauvegarde et autres options',json:'Sauvegarde JSON',copy:'Copier pour la conversation',import:'Restaurer une sauvegarde JSON',manual:'Copie ce texte dans la conversation',
+      partial:'Certaines réponses manquent ou demandent une précision. Envoyer les réponses actuelles ?',anyway:'Envoyer ces réponses',continue:'Continuer à répondre',
+      unavailable:'L’envoi direct n’est pas disponible ici. Copie les réponses dans la conversation ou utilise la sauvegarde JSON.',
+      submitted:'Message transmis à la conversation. Tes réponses restent disponibles ici.',cancelled:'Envoi annulé. Tes réponses sont conservées.',
+      requested:'Envoi demandé. Vérifie que le message apparaît dans la conversation ; tes réponses sont conservées.',retry:'Si aucun message n’est apparu, tu peux renvoyer ces réponses.',retrySend:'Renvoyer les réponses',
+      failed:'L’envoi n’a pas été confirmé. Vérifie la conversation avant de réessayer ; tes réponses sont conservées.',duplicate:'Ces réponses ont déjà été transmises.',
+      copied:'Réponses copiées. Colle-les dans la conversation.',storage:'La sauvegarde automatique est indisponible. Garde ce formulaire ouvert ou utilise une sauvegarde JSON.',
+      invalid:'Cette sauvegarde est incompatible ou contient des réponses invalides. Tes réponses actuelles sont conservées.',
+      note:'Précision complémentaire',unanswered:'Sans réponse',ranking:'Classe les propositions, puis valide.',confirm:'Valider ce classement',confirmed:'Classement validé',
+      up:'Monter',down:'Descendre',restored:'Réponses restaurées.',choose:'Choisir une réponse',progress:(n,total)=>n+' / '+total+' réponses'
+    };
+    const find = key => root.querySelector('[data-'+key+']');
+    const node = (tag, text, cls) => {const el=document.createElement(tag);if(text!=null)el.textContent=text;if(cls)el.className=cls;return el;};
+    const drafts = Object.create(null);
+    let pending = false;
+    const storageKey = 'conversation:'+data.storage_key;
+    const notify = text => {find('status').textContent=text;};
+    function error(text) {find('error').textContent=text;find('error').hidden=!text;}
+    function update() {
+      const c=session.completion();find('progress').textContent=t.progress(session.questions.length-c.unanswered.length,session.questions.length);
+      find('partial').hidden=true;find('retry').hidden=true;
+    }
+    function save() {
+      update();
+      try {localStorage.setItem(storageKey,JSON.stringify(session.payload()));} catch {notify(t.storage);}
+    }
+    function answer(question,value) {session.setAnswer(question.id,value);save();}
+    function render() {
+      const values=session.payload();find('sections').replaceChildren();
+      data.sections.forEach(section=>{
+        const area=node('section');area.append(node('h3',section.title));
+        const list=node('div',null,'workshop-questions');area.append(list);
+        section.questions.forEach(q=>{
+          const field=node('fieldset'),legend=node('legend',q.title);field.append(legend);list.append(field);
+          if(q.description)field.append(node('p',q.description,'text-small'));
+          const control=node('div',null,'workshop-answer');field.append(control);
+          const inputId=root.id+'-'+q.id;
+          if(q.type==='open') {
+            const input=node('textarea',null,'form-control');input.id=inputId;input.rows=3;
+            const label=node('label',q.title,'sr-only');label.htmlFor=inputId;control.append(label,input);
+            input.value=values.answers[q.id]||'';input.placeholder=q.answer_placeholder||'';
+            input.addEventListener('input',()=>answer(q,input.value));
+          } else if(['decision','single_choice','multi_choice'].includes(q.type)) {
+            q.choices.forEach(c=>{
+              const label=node('label',null,'form-check'),input=node('input',null,'form-check-input');
+              input.type=q.type==='multi_choice'?'checkbox':'radio';input.name=inputId;input.value=c.id;
+              const selected=values.answers[q.id];input.checked=Array.isArray(selected)?selected.includes(c.id):selected===c.id;
+              label.append(input,node('span',c.label,'form-check-label'));control.append(label);
+              input.addEventListener('change',()=>answer(q,q.type==='multi_choice'?
+                Array.from(control.querySelectorAll('input:checked')).map(item=>item.value):input.value));
+            });
+          } else if(q.type==='scale') {
+            const scale=q.scale||{},min=scale.min??1,max=scale.max??5,step=scale.step??1;
+            const label=node('label',q.title,'form-label');label.htmlFor=inputId;
+            const output=node('output',values.answers[q.id]??t.unanswered);output.htmlFor=inputId;
+            const input=node('input',null,'form-range');input.id=inputId;input.type='range';input.min=min;input.max=max;input.step=step;
+            input.value=values.answers[q.id]??scale.default??min;input.setAttribute('aria-valuetext',String(values.answers[q.id]??t.unanswered));
+            control.append(label,output,input,node('span',(scale.min_label||min)+' — '+(scale.max_label||max),'text-small'));
+            input.addEventListener('input',()=>{output.textContent=input.value;input.setAttribute('aria-valuetext',input.value);answer(q,Number(input.value));});
+          } else {
+            let order=drafts[q.id]||values.answers[q.id]||q.choices.map(c=>c.id);drafts[q.id]=order;
+            control.append(node('p',t.ranking,'text-small'));
+            const ol=node('ol',null,'workshop-ranking'),status=node('span',values.answers[q.id]?t.confirmed:t.unanswered,'text-small');
+            function draw() {ol.replaceChildren();order.forEach((id,index)=>{
+              const li=node('li'),row=node('div',null,'viz-row'),label=q.choices.find(c=>c.id===id).label;row.append(node('span',label));
+              [[-1,t.up],[1,t.down]].forEach(([delta,text])=>{
+                const button=node('button',text,'btn');button.type='button';button.disabled=index+delta<0||index+delta>=order.length;
+                button.setAttribute('aria-label',text+' '+label);
+                button.addEventListener('click',()=>{[order[index],order[index+delta]]=[order[index+delta],order[index]];answer(q,null);status.textContent=t.unanswered;draw();
+                  const moved=ol.children[index+delta];(moved.querySelector('button:not(:disabled)')||confirm).focus();});
+                row.append(button);
+              });li.append(row);ol.append(li);
+            });}
+            const confirm=node('button',t.confirm,'btn');confirm.type='button';confirm.addEventListener('click',()=>{answer(q,[...order]);status.textContent=t.confirmed;});
+            control.append(ol,confirm,status);draw();
+          }
+          if(q.allow_note===true||typeof q.note_placeholder==='string'||(q.choices||[]).some(c=>c.needs_clarification)) {
+            const label=node('label',t.note,'workshop-note form-label'),input=node('textarea',null,'form-control');input.rows=2;
+            input.value=values.notes[q.id]||'';input.placeholder=q.note_placeholder||'';label.append(input);field.append(label);
+            input.addEventListener('input',()=>{session.setNote(q.id,input.value);save();});
+          }
+        });find('sections').append(area);
+      });update();
+    }
+    function manualCopy(text) {root.querySelector('details').open=true;find('manual-label').hidden=false;find('manual').value=text;find('manual').focus();find('manual').select();}
+    async function send(partial=false,retry=false) {
+      if(pending)return;error('');
+      const c=session.completion();
+      if(!partial&&(c.unanswered.length||c.clarification.length)){find('partial').hidden=false;return;}
+      pending=true;find('send').disabled=true;find('partial-send').disabled=true;find('send').textContent=t.sending;
+      try {
+        const result=await session.send(window.openai,{retry});
+        if(result.status==='unavailable'){notify(t.unavailable);manualCopy(session.message());}
+        else if(result.status==='already-sent')notify(t.duplicate);
+        else if(result.status==='cancelled')notify(t.cancelled);
+        else if(result.status==='submitted'){notify(t.submitted);find('partial').hidden=true;}
+        else if(result.status==='requested'){notify(t.requested);find('partial').hidden=true;find('retry').hidden=true;}
+        else if(result.status==='check-before-retry'){find('retry').hidden=false;}
+      } catch {error(t.failed);}
+      finally {pending=false;find('send').disabled=false;find('partial-send').disabled=false;find('send').textContent=t.send;}
+    }
+    [['send','send'],['privacy','privacy'],['backup-title','backup'],['json','json'],['copy','copy'],['import-label','import'],
+      ['manual-text','manual'],['partial-text','partial'],['partial-send','anyway'],['continue','continue'],['retry-text','retry'],['retry-send','retrySend']].forEach(([key,text])=>find(key).textContent=t[text]);
+    find('send').addEventListener('click',()=>send());find('partial-send').addEventListener('click',()=>send(true));
+    find('continue').addEventListener('click',()=>{find('partial').hidden=true;});
+    find('retry-send').addEventListener('click',()=>send(true,true));
+    find('copy').addEventListener('click',async()=>{error('');try{const text=session.message();try{await navigator.clipboard.writeText(text);notify(t.copied);}catch{manualCopy(text);}}catch(e){error(e.message);}});
+    find('json').addEventListener('click',()=>{
+      const value={...session.payload(),exported_at:new Date().toISOString()};
+      const url=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:'application/json'}));
+      const link=node('a');link.href=url;link.download=data.project.slug+'-'+data.round_id+'-answers.json';root.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    });
+    find('import').addEventListener('change',async event=>{
+      const file=event.target.files[0];if(!file)return;
+      try{session.restore(JSON.parse(await file.text()));Object.keys(drafts).forEach(id=>delete drafts[id]);render();save();notify(t.restored);error('');}
+      catch{error(t.invalid);}finally{event.target.value='';}
+    });
+    try{const saved=localStorage.getItem(storageKey);if(saved)session.restore(JSON.parse(saved));}catch{notify(t.storage);}
+    render();
+  })();
+  </script>
+</div>

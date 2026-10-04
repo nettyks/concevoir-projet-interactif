@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+from html import escape
 import json
 import os
 import re
@@ -704,9 +705,90 @@ def normalized_for_render(kind: str, data: dict[str, Any]) -> dict[str, Any]:
     return normalized
 
 
-def render(kind: str, source: Path, output: Path) -> None:
+def reading_html(kind: str, data: dict[str, Any]) -> str:
+    """Render a static reading sheet; replies and changes belong in the chat."""
+    en = data.get("locale", "fr") == "en"
+    def tr(fr: str, english: str) -> str:
+        return english if en else fr
+    def esc(value: Any) -> str:
+        return escape(str(value), quote=True)
+    def paragraph(value: Any, cls: str = "") -> str:
+        return f'<p class="{cls}">{esc(value)}</p>' if value else ""
+    def listing(values: list[str]) -> str:
+        return '<ul>' + ''.join(f'<li>{esc(value)}</li>' for value in values) + '</ul>'
+    title = data["project"]["title"]
+    content = '<header>' + paragraph(tr('Fiche de lecture', 'Reading sheet'), 'eyebrow')
+    content += f'<h1>{esc(title)}</h1>' + paragraph(data["project"].get("subtitle"))
+    content += paragraph(tr('Lis les propositions ici, puis réponds directement dans le chat. La fiche sera mise à jour à partir de tes réponses.',
+                            'Read the proposals here, then reply directly in the chat. The sheet will be updated from your answers.')) + '</header>'
+    if kind == "questionnaire":
+        content += paragraph(data.get("round", data["round_id"]), 'eyebrow')
+        content += f'<h2>{esc(data.get("intro_title", ""))}</h2>' + paragraph(data.get("intro"))
+        content += '<nav>' + ''.join(f'<a href="#section-{esc(s["id"])}">{esc(s["title"])}</a>' for s in data["sections"]) + '</nav>'
+        types = {"open": tr('Réponse libre', 'Open answer'), "decision": tr('Proposition à discuter', 'Proposal to discuss'),
+                 "single_choice": tr('Une option à choisir', 'Choose one option'), "multi_choice": tr('Plusieurs options possibles', 'Multiple options allowed'),
+                 "scale": tr('Échelle à discuter', 'Rating to discuss'), "ranking": tr('Éléments à classer', 'Items to rank')}
+        for section in data["sections"]:
+            content += f'<section id="section-{esc(section["id"])}"><h2>{esc(section["title"])}</h2>' + paragraph(section.get("description"))
+            for q in section["questions"]:
+                content += f'<article id="question-{esc(q["id"])}">' + paragraph(q["id"], 'id')
+                content += f'<h3>{esc(q["title"])}</h3>' + paragraph(q.get("description")) + paragraph(types[q["type"]], 'type')
+                if q.get("choices"):
+                    content += listing([c["label"] + (tr(' — à préciser', ' — add detail') if c["needs_clarification"] else '') for c in q["choices"]])
+                if q["type"] == "scale":
+                    s = q["scale"]
+                    content += paragraph(f'{s["min"]} — {s["min_label"]} / {s["max"]} — {s["max_label"]}')
+                    content += paragraph(tr('Pas : ', 'Step: ') + str(s["step"]), 'hint')
+                content += paragraph(q.get("answer_placeholder"), 'hint') + paragraph(q.get("note_placeholder"), 'hint')
+                content += '</article>'
+            content += '</section>'
+    else:
+        phases = sorted(data["phases"], key=lambda phase: phase["order"])
+        phase_titles = {p["id"]: p["title"] for p in phases}
+        defaults = list(zip(['a-preciser', 'pret', 'en-cours', 'verification', 'termine'],
+                            ['To clarify', 'Ready', 'In progress', 'Verification', 'Done'] if en else ['À préciser', 'Prêt', 'En cours', 'Vérification', 'Terminé']))
+        columns = data.get("columns", [{"id": key, "title": value} for key, value in defaults])
+        statuses = {column["id"]: column["title"] for column in columns}
+        segments = sorted(data["segments"], key=lambda s: (next(p["order"] for p in phases if p["id"] == s["phase"]), s["order"]))
+        severity = {'bloquant': tr('Bloquant', 'Blocking'), 'avant-segment': tr('Avant le segment', 'Before the segment'), 'differable': tr('Différable', 'Deferrable')}
+        content += '<a href="../questionnaire-actif.html">' + tr('Lire les propositions et questions', 'Read proposals and questions') + '</a>'
+        content += '<h2>' + tr('Points ouverts', 'Open questions') + '</h2>'
+        content += listing([' · '.join(filter(None, [q.get('id'), q['text'], severity[q['severity']], q.get('segment')])) for q in data['open_questions']])
+        def card(s: dict[str, Any], view: str) -> str:
+            result = f'<article id="{view}-{esc(s["id"])}">' + paragraph(s['id'], 'id') + f'<h3>{esc(s["title"])}</h3>'
+            result += paragraph(s.get('summary')) + paragraph(s['objective']) + '<dl>'
+            for label, value in [(tr('Phase', 'Phase'), phase_titles[s['phase']]), (tr('État', 'Status'), statuses[s['status']]),
+                                 (tr('Ordre', 'Order'), s['order']), (tr('Responsable', 'Owner'), s.get('owner')),
+                                 (tr('Effort', 'Effort'), s.get('effort')), (tr('Priorité', 'Priority'), s.get('priority'))]:
+                if value is not None:
+                    result += f'<dt>{esc(label)}</dt><dd>{esc(value)}</dd>'
+            result += '</dl><details><summary>' + tr('Détails du segment', 'Segment details') + '</summary>'
+            for key, label in [('dependencies', tr('Dépendances', 'Dependencies')), ('decision_refs', tr('Décisions', 'Decisions')),
+                               ('deliverables', tr('Livrables', 'Deliverables')), ('acceptance', tr('Critères de réussite', 'Acceptance criteria')),
+                               ('prerequisites', tr('Prérequis', 'Prerequisites')), ('risks', tr('Risques', 'Risks')), ('questions', tr('Questions', 'Questions'))]:
+                result += f'<h4>{esc(label)}</h4>' + (listing(s[key]) if s[key] else paragraph(tr('Aucun', 'None')))
+            return result + '</details></article>'
+        for view, groups in [('roadmap', phases), ('kanban', columns)]:
+            opened = ' open' if data['view'] == view else ''
+            content += f'<details{opened}><summary>{view.capitalize()}</summary><div class="columns">'
+            for group in groups:
+                content += f'<section><h2>{esc(group["title"])}</h2>' + paragraph(group.get('milestone'))
+                content += ''.join(card(s, view) for s in segments if s['phase' if view == 'roadmap' else 'status'] == group['id']) + '</section>'
+            content += '</div></details>'
+    theme = ';'.join('--' + key.replace('_', '-') + ':' + value for key, value in data.get('theme', {}).items()
+                     if re.fullmatch(r'#[0-9a-fA-F]{3,8}|[0-9]+(?:\.[0-9]+)?(?:px|rem)', value))
+    replacements = {'LOCALE': 'en' if en else 'fr', 'TITLE': esc(title), 'THEME': esc(theme), 'CONTENT': content}
+    template = (ASSETS / 'reading-template.html').read_text(encoding='utf-8')
+    return re.sub(r'__READING_(LOCALE|TITLE|THEME|CONTENT)__', lambda match: replacements[match[1]], template)
+
+
+def render(kind: str, source: Path, output: Path, *, inline: bool = False, read_only: bool = False) -> None:
     if kind not in {"questionnaire", "planning"}:
         raise ConfigError("kind doit valoir questionnaire ou planning")
+    if inline and kind != "questionnaire":
+        raise ConfigError("--inline est réservé aux questionnaires")
+    if inline and read_only:
+        raise ConfigError("--inline et --read-only sont incompatibles")
     if paths_refer_to_same_file(source, output):
         raise ConfigError("Le fichier d'entrée et le fichier de sortie doivent être distincts")
 
@@ -714,10 +796,17 @@ def render(kind: str, source: Path, output: Path) -> None:
         data = require_object(json.load(handle), "racine")
     if kind == "questionnaire":
         validate_questionnaire(data)
-        template_path = ASSETS / "questionnaire-template.html"
+        template_path = ASSETS / (
+            "questionnaire-inline.html" if inline else "questionnaire-template.html"
+        )
     else:
         validate_planning(data)
         template_path = ASSETS / "planning-template.html"
+
+    if read_only:
+        atomic_write_text(output, reading_html(kind, normalized_for_render(kind, data)))
+        print(f"Créé: {output}")
+        return
 
     template = template_path.read_text(encoding="utf-8")
     marker = "__PROJECT_DATA__"
@@ -726,7 +815,21 @@ def render(kind: str, source: Path, output: Path) -> None:
             f"Le modèle {template_path.name} doit contenir exactement un marqueur {marker}"
         )
     rendered_data = normalized_for_render(kind, data)
-    atomic_write_text(output, template.replace(marker, safe_json(rendered_data)))
+    if inline:
+        # Insert maintained code before user data, so data cannot act as a marker.
+        template = template.replace(
+            "__CONVERSATION_RUNTIME__",
+            (ASSETS / "questionnaire-conversation.js").read_text(encoding="utf-8"),
+        )
+        import hashlib
+        root_id = "questionnaire-" + hashlib.sha256(
+            (data["project"]["slug"] + ":" + data["round_id"] + ":" + data["storage_key"]).encode()
+        ).hexdigest()[:16]
+        template = template.replace("__ROOT_ID__", root_id)
+    rendered = template.replace(marker, safe_json(rendered_data))
+    if inline and len(rendered.encode("utf-8")) >= 1_000_000:
+        raise ConfigError("Questionnaire trop grand pour la conversation ; diviser le tour")
+    atomic_write_text(output, rendered)
     print(f"Créé: {output}")
 
 
@@ -735,9 +838,12 @@ def main() -> int:
     parser.add_argument("kind", choices=("questionnaire", "planning"))
     parser.add_argument("--input", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--inline", action="store_true", help="questionnaire dans la conversation avec envoi des réponses")
+    modes.add_argument("--read-only", action="store_true", help="fiche de lecture ; réponses et modifications dans le chat")
     args = parser.parse_args()
     try:
-        render(args.kind, args.input, args.output)
+        render(args.kind, args.input, args.output, inline=args.inline, read_only=args.read_only)
     except (ConfigError, OSError, json.JSONDecodeError) as exc:
         print(f"Erreur: {exc}", file=sys.stderr)
         return 2

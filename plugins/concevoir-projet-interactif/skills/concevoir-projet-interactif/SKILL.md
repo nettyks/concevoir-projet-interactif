@@ -1,6 +1,6 @@
 ---
 name: concevoir-projet-interactif
-description: Cadrage progressif de projets numériques au moyen de questionnaires HTML interactifs bilingues français/anglais, depuis une idée vague ou déjà précise jusqu'à une spécification traçable et, si demandé, un plan de réalisation pilotable en Kanban ou lisible en roadmap. Utiliser ce skill pour explorer une idée d'application, site, jeu, service en ligne, outil interne, automatisation, produit connecté ou projet IA/data; adapter le nombre et le type de questions, traduire les fiches en français ou en anglais, conserver les réponses entre plusieurs tours, comparer des options fonctionnelles ou techniques, arbitrer le périmètre, consolider les décisions et ordonner le développement par dépendances sans imposer un parcours complet inutile.
+description: Cadrer progressivement un projet numérique avec des questionnaires Visualize directement dans la conversation, en français ou en anglais. Utiliser pour explorer une idée de site, application, jeu, service, automatisation ou projet IA, comparer des options, consolider les décisions et produire une spécification traçable puis un plan Kanban ou roadmap si demandé.
 ---
 
 # Concevoir un projet numérique interactif
@@ -28,7 +28,9 @@ Déduire le niveau attendu de la demande et accepter explicitement les points d'
 
 1. **Exploration** : clarifier le problème, le public, la valeur et les inconnues principales. Produire le journal, le registre de décisions et les tours archivés.
 2. **Cadrage** : ajouter le périmètre fonctionnel, les arbitrages, les risques structurants et les choix techniques; produire une spécification marquée brouillon ou validée.
-3. **Réalisation** : après validation du cadrage, segmenter le développement et produire la fiche Kanban/roadmap.
+3. **Réalisation** : lorsque le cadrage est validé ou que la demande actuelle fournit un brief
+   suffisamment précis et demande explicitement l’implémentation, segmenter le développement et
+   produire uniquement le pilotage utile.
 
 Sans demande explicite, commencer en exploration et proposer la suite seulement si elle apporte une valeur immédiate. Une demande courte ne doit pas déclencher automatiquement tout le parcours.
 
@@ -45,14 +47,30 @@ python3 /chemin/du/skill/scripts/project_artifacts.py init \
 
 Le dossier `conception/` contient le journal, le registre de décisions, les sources, la spécification, les tours et le planning. Si le projet possède déjà une organisation équivalente, la conserver et documenter la correspondance au lieu de créer un doublon.
 
-## Afficher obligatoirement les fiches dans Codex
+## Recueillir les réponses dans la conversation
 
-Après chaque génération ou mise à jour réussie d'une fiche HTML, l'ouvrir immédiatement dans le navigateur intégré à Codex. Dans Codex Desktop, appeler `open_in_codex` avec une cible `browser` et l'URL `file://` absolue de la fiche. Ne pas se contenter d'un chemin ou d'un lien dans la réponse et ne pas utiliser un navigateur externe à la place.
+Par défaut, présenter les questions dans un **formulaire Visualize intégré à la conversation**,
+avec des choix à cocher lorsque le sujet s’y prête et un champ de précision (`allow_note: true`).
+Utiliser un champ ouvert lorsqu’il faut découvrir un besoin. Lire les instructions du skill
+Visualize disponible avant de créer le fragment et employer le rendu `--inline`.
 
-- Après la génération d'un questionnaire, afficher `conception/questionnaire-actif.html`.
-- Après le remplacement d'un questionnaire actif, afficher la nouvelle version afin que l'onglet visible corresponde au fichier courant.
-- Après la génération du plan final, afficher `conception/planning/plan.html` dans le navigateur intégré et laisser cet onglet accessible à l'utilisateur.
-- Si le navigateur intégré est indisponible, le signaler explicitement et fournir le lien local ouvrable; ne jamais prétendre que la fiche a été affichée.
+Avancer par petits tours centrés sur les décisions utiles ; poser une seule question si la suite
+en dépend. Le répondant peut aussi écrire librement dans le chat, nuancer ou regrouper ses réponses,
+sans syntaxe ni identifiants imposés. Ne pas précocher une décision ni exiger un export manuel.
+
+Si Visualize est indisponible ou si l’utilisateur demande un autre mode, employer les questions
+natives visibles du chat ou une question en texte simple. Ne pas imposer d’installation ni
+remplacer silencieusement le formulaire intégré par une page dans le navigateur.
+Les fiches `--read-only` restent des supports complémentaires de lecture, notamment pour le plan.
+
+Conserver les messages bruts, les relier aux questions concernées puis mettre à jour décisions,
+spécification et fiches à partir des réponses certaines. Clarifier uniquement les ambiguïtés qui
+changeraient une décision. L’utilisateur n’a pas à produire lui-même de JSON.
+
+Lire [references/conversation-delivery.md](references/conversation-delivery.md) pour l’affichage,
+l’envoi, les replis et l’archivage. Afficher le fragment dans la réponse finale du même tour.
+Pour les fiches de lecture complémentaires, utiliser `open_in_codex`, cible `browser` et URL `file://` absolue,
+lorsque la politique l’autorise. En cas de blocage, fournir le lien local sans contournement.
 
 ## Conduire les tours de cadrage
 
@@ -66,13 +84,19 @@ Lire `references/question-framework.md`, puis sélectionner uniquement les caté
 
 Construire un JSON conforme à `references/questionnaire.schema.json` et s'inspirer de `references/questionnaire-example.json` :
 
+Conserver les questions structurées dans `conception/questionnaire.json` et générer le formulaire
+Visualize avec `--inline` dans le répertoire de visualisation explicitement disponible pour le fil.
+Une question autonome sans choix peut être posée directement si un formulaire n’apporte rien.
+
 ```bash
 python3 /chemin/du/skill/scripts/render_artifact.py questionnaire \
-  --input /chemin/du/projet/questionnaire.json \
-  --output /chemin/du/projet/conception/questionnaire-actif.html
+  --input /chemin/du/projet/conception/questionnaire.json \
+  --output /repertoire/de/visualisation/explicitement/disponible/questions-projet.html --inline
 ```
 
-Après le contrôle du fichier généré, l'ouvrir immédiatement dans le navigateur intégré à Codex selon la section « Afficher obligatoirement les fiches dans Codex ».
+Relire le fragment généré puis l’afficher selon `references/conversation-delivery.md`, sans ouvrir
+d’onglet navigateur. Une fiche complémentaire `conception/questionnaire-actif.html` peut être
+générée avec `--read-only`, notamment comme destination du lien de retour depuis le planning.
 
 Pour une fiche anglaise, utiliser `locale: "en"` et `references/questionnaire-example.en.json`. Le modèle traduit automatiquement l'interface, les messages, les contrôles d'accessibilité et l'export Markdown; traduire aussi les titres, descriptions, choix et textes d'aide du JSON. Conserver les identifiants de questions et de choix lors de la traduction d'une fiche existante afin de préserver la compatibilité des réponses.
 
@@ -80,10 +104,10 @@ Utiliser une nouvelle `round_id` et une nouvelle `storage_key` à chaque tour. E
 
 ### 3. Consolider et archiver
 
-À chaque export reçu :
+À chaque message de réponses reçu :
 
-1. archiver la fiche et l'export avant de les remplacer;
-2. conserver la réponse brute dans le dossier du tour;
+1. conserver le texte exact du message dans les réponses brutes du tour, sans le remplacer par une reformulation;
+2. relier les passages aux questions et distinguer cette interprétation de la réponse brute; conserver les réponses non sollicitées pertinentes;
 3. mettre à jour `decisions.json` avec source, justification, preuve, confiance et éventuel remplacement d'une décision antérieure;
 4. mettre à jour le journal, les sources et les points ouverts;
 5. relever contradictions et réponses différées;
@@ -92,11 +116,14 @@ Utiliser une nouvelle `round_id` et une nouvelle `storage_key` à chaque tour. E
 ```bash
 python3 /chemin/du/skill/scripts/project_artifacts.py archive \
   --project-dir /chemin/du/projet --round-id T01 \
-  --questionnaire /chemin/du/projet/conception/questionnaire-actif.html \
-  --answers /chemin/du/projet/reponses.json
+  --questionnaire /repertoire/de/visualisation/explicitement/disponible/questions-projet.html \
+  --answers /chemin/du/projet/conception/reponses-T01.md
 ```
 
-Une fiche active ou remplacée n'est jamais la source de vérité : le registre de décisions et la spécification le deviennent après consolidation.
+Archiver le fragment effectivement présenté pour ce tour, le JSON de questions et les réponses
+brutes reçues avant de préparer le suivant. Un clic ou un test du pont d’envoi ne prouve pas la
+réception : attendre le message dans la conversation. Une fiche active ou remplacée n'est jamais
+la source de vérité : le registre de décisions et la spécification le deviennent après consolidation.
 
 ## Cadrer la réalisation technique
 
@@ -109,7 +136,13 @@ Ne pas attendre artificiellement la fin du fonctionnel lorsqu'une contrainte tec
 
 ## Valider et spécifier
 
-Présenter une synthèse courte séparant : décidé, refusé, à confirmer, hypothèses et contradictions. Demander une validation explicite avant de marquer la spécification comme validée ou de lancer l'implémentation. Un brouillon peut être produit sans cette validation s'il est clairement étiqueté.
+Présenter une synthèse courte séparant : décidé, refusé, à confirmer, hypothèses et contradictions.
+Demander une validation explicite avant de marquer une spécification comme validée. Pour lancer
+l’implémentation, une demande explicite fondée sur un brief précis ou une spécification déjà
+acceptée constitue cette autorisation ; ne pas imposer un tour de confirmation supplémentaire.
+Lorsqu’une décision manquante change matériellement le produit, réaliser d’abord ce qui n’en dépend
+pas puis demander uniquement l’arbitrage nécessaire. Un brouillon peut être produit sans validation
+s’il est clairement étiqueté.
 
 La spécification doit relier chaque exigence à une ou plusieurs décisions du registre et contenir vision, utilisateurs, parcours essentiels, périmètre, hors périmètre, exigences techniques, risques, hypothèses, décisions différées et critères de réussite.
 
@@ -128,22 +161,25 @@ Déduire la vue initiale : Kanban pour piloter l'état, roadmap pour expliquer l
 ```bash
 python3 /chemin/du/skill/scripts/render_artifact.py planning \
   --input /chemin/du/projet/conception/planning/plan.json \
-  --output /chemin/du/projet/conception/planning/plan.html
+  --output /chemin/du/projet/conception/planning/plan.html --read-only
 ```
 
-Le Kanban permet de changer les états et de les sauvegarder localement. La roadmap expose phases, jalons, ordre et dépendances. Sans calendrier validé, utiliser des phases relatives.
+Le Kanban et la roadmap affichent l’état issu de `plan.json` en lecture seule. Les changements
+se demandent dans le chat ; l’agent met à jour la source puis régénère la fiche. Sans calendrier
+validé, utiliser des phases relatives.
 
-La fiche de planning contient un bouton bilingue « Afficher les questions » / « View questions » qui ouvre `../questionnaire-actif.html`. Respecter l'arborescence canonique afin que ce retour direct vers le questionnaire fonctionne hors ligne. Après génération et contrôle, ouvrir immédiatement le plan dans le navigateur intégré à Codex.
+La fiche de planning contient un lien bilingue vers `../questionnaire-actif.html` pour relire
+les propositions et questions. Respecter l’arborescence canonique pour que ce lien fonctionne.
 
 ## Vérifier avant remise
 
 - Exécuter les tests : `python3 -m unittest discover -s tests -v`.
-- Générer les deux exemples et les ouvrir dans un navigateur moderne.
-- Ouvrir les fiches remises dans le navigateur intégré à Codex et vérifier que l'onglet est réellement visible.
-- Depuis le planning canonique, activer « Afficher les questions » et vérifier que `questionnaire-actif.html` s'ouvre correctement.
-- Générer aussi les exemples `.en.json` et vérifier que `html[lang]`, l'interface, les messages et les exports sont en anglais.
+- Générer les exemples de questionnaire avec `--inline` ; vérifier les choix, champs de précision, langue et conservation des réponses. Vérifier aussi les vues complémentaires `--read-only` si elles sont modifiées.
+- Vérifier que le texte brut d’une réponse libre s’archive intact, sans imposer un choix ou une validation qui n’a pas été exprimé.
+- Afficher les questionnaires Visualize dans la réponse finale ; ne pas ouvrir leurs fragments dans un navigateur. Ouvrir les fiches de lecture complémentaires lorsque la politique l’autorise ; distinguer contrôles statiques et vérification visuelle.
+- Vérifier le lien du planning vers `questionnaire-actif.html` et les exemples français/anglais.
 - Vérifier qu'aucune question, carte, dépendance ou information d'export ne disparaît silencieusement.
-- Vérifier clavier, mobile, impression, import/export, stockage refusé et cohérence des archives.
+- Vérifier clavier, mobile, impression et cohérence des archives selon le changement. Tester les fonctions de saisie et d’envoi lorsqu’elles sont modifiées, sans confondre un pont simulé avec une réception réelle.
 - Exécuter le validateur de skill après toute modification structurelle.
 
 ## Ressources
@@ -151,7 +187,8 @@ La fiche de planning contient un bouton bilingue « Afficher les questions » / 
 - `references/question-framework.md` : routage des questions et types de réponses.
 - `references/delivery-framework.md` : segmentation, ordre, vues et critères de qualité.
 - `references/artifact-conventions.md` : arborescence, registre de décisions, sources et cycle de vie.
+- `references/conversation-delivery.md` : questionnaires Visualize par défaut, réponses libres, envoi et archivage.
 - `references/*.schema.json` : contrats V2 exécutables pour questionnaire et planning, avec `locale` français ou anglais.
-- `scripts/render_artifact.py` : validation et génération des HTML autonomes.
+- `scripts/render_artifact.py` : questionnaires Visualize (`--inline`), fiches de lecture (`--read-only`) et formulaires autonomes sur demande.
 - `scripts/project_artifacts.py` : initialisation et archivage sans écrasement.
 - `assets/*-template.*` : fiches et documents canoniques.

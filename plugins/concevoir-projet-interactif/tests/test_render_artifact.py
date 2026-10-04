@@ -403,6 +403,11 @@ class RenderingTests(unittest.TestCase):
                     self.assertNotIn("__PROJECT_DATA__", rendered)
                     self.assertIn(data["schema"], rendered)
                     self.assertTrue(rendered.startswith("<!doctype html>"))
+                    if kind == "questionnaire":
+                        self.assertIn(
+                            "@media(max-width:820px),(max-height:600px)", rendered
+                        )
+                        self.assertIn(".footer{position:static", rendered)
                     if kind == "planning":
                         self.assertIn(".recommendation[hidden]{display:none}", rendered)
                         self.assertIn('id="questionnaireButton"', rendered)

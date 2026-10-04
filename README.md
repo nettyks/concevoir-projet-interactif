@@ -20,16 +20,23 @@ Le plugin accompagne progressivement la conception de sites, applications, jeux,
 
 Il produit :
 
-- des questionnaires HTML interactifs avec six formats de réponse ;
+- des questionnaires Visualize dans la conversation, avec choix à cocher et champs de précision ;
+- des réponses libres dans le chat également conservées par l’agent, et des fiches de lecture complémentaires si utiles ;
 - un registre de décisions traçable avec hypothèses et décisions différées ;
 - une spécification consolidée reliée aux décisions ;
-- un plan unique basculable entre Kanban pilotable et roadmap horizontale ;
+- un plan lisible en Kanban et roadmap, mis à jour à partir des échanges ;
 - un bouton dans le plan pour revenir directement aux questions ;
-- des exports JSON et Markdown, une sauvegarde locale et des archives vérifiables.
+- des archives vérifiables des réponses brutes et des décisions.
 
-Les fiches fonctionnent hors ligne, n’envoient aucune donnée vers un service externe et sont ouvertes dans le navigateur intégré à Codex lors de leur génération.
+Le fonctionnement par défaut : répondre au questionnaire Visualize directement dans la conversation,
+avec des choix à cocher et un champ de précision, puis laisser l’agent consolider les décisions.
+Les réponses libres restent acceptées. Si Visualize est indisponible, l’agent utilise les questions
+natives visibles ou le texte du chat. Les fiches `--read-only` complètent la lecture et le planning ;
+elles n’ont ni champ de réponse ni bouton d’envoi et fonctionnent sans JavaScript.
 
 ### Aperçu
+
+Les captures suivantes illustrent les fiches autonomes ; le questionnaire par défaut s’affiche désormais dans la conversation via Visualize.
 
 #### Questionnaire interactif
 
@@ -74,16 +81,23 @@ The plugin progressively frames websites, applications, games, online services, 
 
 It produces:
 
-- interactive HTML questionnaires with six answer formats;
+- Visualize questionnaires inside the conversation, with selectable choices and clarification fields;
+- free-form chat replies preserved by the agent, with complementary reading sheets when useful;
 - a traceable decision register with assumptions and deferred decisions;
 - a consolidated specification linked to decisions;
-- one delivery plan that switches between an actionable Kanban and a horizontal roadmap;
+- one delivery plan with Kanban and roadmap reading views updated from the conversation;
 - a button in the plan to return directly to the questions;
-- JSON and Markdown exports, local saving and verifiable archives.
+- verifiable archives of original replies and decisions.
 
-The sheets work offline, do not send data to any external service and open in Codex's integrated browser when generated.
+The default workflow is to answer a Visualize questionnaire directly in the conversation using
+selectable choices and clarification fields, then let the agent consolidate decisions. Free-form
+chat replies are also accepted. If Visualize is unavailable, the agent uses visible native
+questions or plain chat. Complementary `--read-only` sheets support reading and planning;
+they have no answer fields or Send button and work without JavaScript.
 
 ### Preview
+
+These screenshots illustrate standalone sheets; the default questionnaire now appears inside the conversation through Visualize.
 
 #### Interactive questionnaire
 
